@@ -1,0 +1,33 @@
+
+public\index.html	css样式引入
+
+组件
+components/Breadcrumb	业务导航	localStorage.eleRouter
+components/ActionTool	业务功能（查询，新增编辑删除，保存，确认等）	localStorage.eleAction
+
+菜单界面配置
+select * from Mid_gform where sysid='ToolsAssets'
+
+select * from Mid_gform where formname like '%公司%'
+
+insert into Mid_gform (formid,formname,ProgFormName,sysid,ModuleID) values('1001','公司列表','SalesBase1001','SalesAssets','SalesBase')
+
+select * from Mid_Module where applicationid='ToolsAssets'
+
+insert into Mid_Module(ApplicationID,ModuleID,ModuleName,seqn,Areas,parentmenu) values('SalesAssets','SalesBase','基础资料',0,'SalesBase',1000)
+
+select * from Mid_Menu where applicationid='ToolsAssets' and moduleid='ToolsBase'
+
+insert into Mid_Menu (menuid,menuname,formid,parentmenu,moduleid,seq,iconclass,applicationid) values('1128',	'基础资料',	0,0,'SalesBase',0,'el-icon-discount','SalesAssets')
+insert into Mid_Menu (menuid,menuname,formid,parentmenu,moduleid,seq,iconclass,applicationid) values('1129',	'公司资料',	1001,1128,'SalesBase',1,'el-icon-discount',	'SalesAssets')
+
+
+--------------------------------------业务功能新增--------------------------------------------------------
+select  TOP (100) PERCENT a.*,b.seqn,b.formid from Mid_ActionType a join Mid_GformAction b on a.type=b.ActionType where   applicationid='toolsAssets' order by formid
+
+select * from Mid_ActionType
+
+select applicationid,ActionType, * from Mid_GformAction  where applicationid='ToolsAssets' and formid=1001 order by formid
+
+insert into Mid_GformAction (guid,formid,seqn,formtype,linkformid,linkformtype,formfields,linkformfields, actiontype,memo,isrefresh, usrgroupcode, usrgroupname,applicationid)
+ values( newid(),	1001,	2,	0,	0,	NULL,	NULL,	NULL	,7,	'查询',	NULL,	100,	NULL,	'salesAssets') 

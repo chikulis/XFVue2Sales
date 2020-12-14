@@ -1,0 +1,48 @@
+/* 组件主体样式 */
+
+.container2 {
+    /* margin: 0px 10px 0px 0px; */
+    background-color: #d5eaf7
+}
+
+
+/* 工具栏样式 */
+
+.self-margin-down {
+    text-align: left;
+    padding: 0px, 0px, 0px, 10px;
+}
+
+.content-box {
+    position: absolute;
+    left: 250px;
+    right: 0;
+    top: 60px;
+    bottom: 0;
+    padding-bottom: 30px;
+    -webkit-transition: left .3s ease-in-out;
+    transition: left .3s ease-in-out;
+    background: #d5eaf7;
+}
+
+.content-collapse {
+    left: 65px;
+}
+
+.content {
+    width: auto;
+    height: 100%;
+    /* overflow-y: scroll; */
+    box-sizing: border-box;
+}
+
+
+/* 必录样式 */
+
+.entertrue .el-input__inner {
+    background-color: #c1e0c5;
+}
+
+.zZindex {
+    margin-top: 50px;
+}
