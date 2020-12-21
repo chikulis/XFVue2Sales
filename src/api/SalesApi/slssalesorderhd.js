@@ -10,44 +10,44 @@ const slssalesorderhd = {
 
     // 分页查询数据
     getbypage(page, rows, sort, order, searchs) {
-        return axios.post(`${base.iSalesurl}/sls_salesorderhd/getbypage?page=` + page +
+        return axios.post(`${base.iSalesUrl}/sls_salesorderhd/getbypage?page=` + page +
             '&rows=' + rows + '&sort=' + sort + '&order=' + order, searchs);
     },
     //单条根据条件查询
     getby(doccode) {
-        return axios.get(`${base.iSalesurl}/sls_salesorderhd/GetSingle?doccode=` + doccode);
+        return axios.get(`${base.iSalesUrl}/sls_salesorderhd/GetSingle?doccode=` + doccode);
 
     },
     // 保存数据
     updatedata(dataform) {
-        return axios.put(`${base.iSalesurl}/sls_salesorderhd`, dataform);
+        return axios.put(`${base.iSalesUrl}/sls_salesorderhd`, dataform);
     },
 
     // 根据收藏篮生成主表和明细表
     quicksave(dataform) {
-		return axios.post(`${base.iSalesurl}/sls_salesorderhd/quicksave`, dataform);
+		return axios.post(`${base.iSalesUrl}/sls_salesorderhd/quicksave`, dataform);
 	},
 	
 	save(dataform) {
-		return axios.post(`${base.iSalesurl}/sls_salesorderhd/save`, dataform);
+		return axios.post(`${base.iSalesUrl}/sls_salesorderhd/save`, dataform);
 	},
 	
 	add(dataform) {
-		return axios.post(`${base.iSalesurl}/sls_salesorderhd/add`, dataform);
+		return axios.post(`${base.iSalesUrl}/sls_salesorderhd/add`, dataform);
 	},
 	
 	update(dataform) {
-		return axios.put(`${base.iSalesurl}/sls_salesorderhd/update`, dataform);
+		return axios.put(`${base.iSalesUrl}/sls_salesorderhd/update`, dataform);
     },
 
     // 确认申请单
     conifrmdoc(doccode, type, usercode, memo) {
-        return axios.post(`${base.iSalesurl}/sls_salesorderhd/conifrmdoc?doccode=` + doccode + '&type=' + type + '&usercode=' + usercode + '&memo=' + memo);
+        return axios.post(`${base.iSalesUrl}/sls_salesorderhd/conifrmdoc?doccode=` + doccode + '&type=' + type + '&usercode=' + usercode + '&memo=' + memo);
     },
     //审核/反审核采购申请单
     examinedoc(doccode,usercode,nextdocstatus,memo,dcflag)
     {
-        return axios.post(`${base.iSalesurl}/sls_salesorderhd/examinedoc?doccode=` + doccode + '&usercode=' + usercode + '&nextdocstatus=' + nextdocstatus + '&memo=' + memo+ '&dcflag=' + dcflag);
+        return axios.post(`${base.iSalesUrl}/sls_salesorderhd/examinedoc?doccode=` + doccode + '&usercode=' + usercode + '&nextdocstatus=' + nextdocstatus + '&memo=' + memo+ '&dcflag=' + dcflag);
     },
     // 实体类
     addFormData() {

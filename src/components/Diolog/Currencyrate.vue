@@ -1,4 +1,4 @@
-<!-- 公司列表 组件 -->
+<!-- 币种汇率列表 组件 -->
 <template>
     <div class="dialog">
         <!-- input框 -->
@@ -17,16 +17,17 @@
             ></i>
         </el-input>
         <!-- dialog组件 -->
-        <el-dialog ref="dialogs" title="公司列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="800px">
+        <el-dialog ref="dialogs" title="币种汇率列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="800px">
             <el-row :gutter="10">
                 <el-col :span="9">
-                    <el-form-item label="公司代码" prop="companyid">
-                        <el-input v-model="searchform.companyid" @input="fetchTableData"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="9">
-                    <el-form-item label="公司名称" prop="companyname">
-                        <el-input v-model="searchform.companyname" @input="fetchTableData"></el-input>
+                    <el-form-item label="时间" prop="settlemethodid">
+                        <el-date-picker
+                            v-model="searchform.settlemethodid"
+                            style="width: 100%"
+                            type="date"
+                            value-format="yyyy-MM-dd"
+                            @change="fetchTableData"
+                        ></el-date-picker>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -71,14 +72,31 @@ export default {
 
             //搜索
             searchform: {
-                companyid: '',
-                companyname: ''
+                settlemethodid: this.$moment().format('YYYY-MM-DD')
             },
 
             // 表格字段
             tableColumn: [
-                { field: 'companyid', title: '公司代码' },
-                { field: 'companyname', title: '公司名称' }
+                {
+                    field: 'currency',
+                    title: '币种编号'
+                },
+                {
+                    field: 'currencyname',
+                    title: '币种名称'
+                },
+                {
+                    field: 'beginday',
+                    title: '开始日期',
+                },
+                {
+                    field: 'endday',
+                    title: '结束日期'
+                },
+                {
+                    field: 'exchange_rate',
+                    title: '汇率'
+                }
             ],
 
             // 选中的数据
@@ -95,9 +113,7 @@ export default {
     },
 
     // 创建完成
-    created() {
-        this.fetchTableData();
-    },
+    created() {},
 
     // 执行方法
     methods: {
@@ -105,7 +121,7 @@ export default {
         fetchTableData() {
             this.commEntity.options.loading = true;
             //this.str 查询参数
-            this.$api.ocompany.getData(this.searchform).then((res) => {
+            this.$api.currencyrate.getGLCurrencyRate(this.searchform).then((res) => {
                 this.tableData = res.rows;
                 this.commEntity.pagination.total = res.total;
                 this.commEntity.options.loading = false;
@@ -129,8 +145,8 @@ export default {
 
         // 回车事件
         inputEnterEvent() {
-            this.$api.ocompany.getData(this.searchform).then((res) => {
-                if (res.data.total != 1) {
+            this.$api.currencyrate.getGLCurrencyRate(this.searchform).then((res) => {
+                if (res.total != 1) {
                     this.fetchTableData();
                     this.show = true;
                     return;

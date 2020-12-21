@@ -1,24 +1,42 @@
 /** 
  * api接口的统一出口
  */
+import currencyrate from '../api/cmmApi/currencyrate';
+import gopcodesystem from '../api/cmmApi/gopcodesystem';
+import gsettlemethod from '../api/cmmApi/gsettlemethod';
+import identity from '../api/sysAdmin/identity';
+import mid_actiontype from '../api/sysAdmin/mid_actiontype';
+import mid_gform from '../api/sysAdmin/mid_gform';
+import mid_menu from '../api/sysAdmin/mid_menu';
+import mid_module from '../api/sysAdmin/mid_module';
+import ocompany from '../api/cmmApi/ocompany';
+import osdgroup from '../api/cmmApi/osdgroup';
+import ostorage from '../api/cmmApi/ostorage';
+import qmslevel from '../api/cmmApi/qmslevel';
+import scltgeneral from '../api/cmmApi/scltgeneral';
+import slscltproject from '../api/cmmApi/slscltproject';
+import slssalesorderhd from '../api/salesApi/slssalesorderhd';
+import slssalesorderitem from '../api/salesApi/slssalesorderitem';
+import spricelist from '../api/cmmApi/spricelist';
+import vcltcompany from '../api/cmmApi/vcltcompany';
 
-import mid_menu from '../api/sysAdmin/mid_menu'; 
-import mid_module from '../api/sysAdmin/mid_module'; 
-import mid_gform from '../api/sysAdmin/mid_gform'; 
-import mid_actiontype from '../api/sysAdmin/mid_actiontype'; 
-import ocompany from '../api/SalesApi/ocompany'; 
-import scltgeneral from '../api/SalesApi/scltgeneral';
-import identity from '../api/sysAdmin/identity'; 
-import slssalesorderhd from '../api/SalesApi/slssalesorderhd'; 
-import slssalesorderitem from '../api/SalesApi/slssalesorderitem'; 
 export default {
+    currencyrate,
+    gopcodesystem,
+    gsettlemethod,
+    identity,
+    mid_actiontype,
+    mid_gform,
     mid_menu,
     mid_module,
-    mid_gform,
-    mid_actiontype,
     ocompany,
+    osdgroup,
+    ostorage,
+    qmslevel,
     scltgeneral,
-    identity,
+    slscltproject,
     slssalesorderhd,
-    slssalesorderitem
+    slssalesorderitem,
+    spricelist,
+    vcltcompany
 }

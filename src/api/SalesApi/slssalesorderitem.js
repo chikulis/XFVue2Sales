@@ -10,19 +10,19 @@ const slssalesorderitem = {
 
     // 根据单号查询明细数据
     getbydoc(doccode) {
-        return axios.get(`${base.iSalesurl}/sls_salesorderitem/GetSingle?doccode=`+ doccode);
+        return axios.get(`${base.iSalesUrl}/sls_salesorderitem/GetSingle?doccode=`+ doccode);
     },
     add(doccode,dtos){
-        return axios.post(`${base.iSalesurl}/sls_salesorderitem/add?doccode=`+doccode, dtos);
+        return axios.post(`${base.iSalesUrl}/sls_salesorderitem/add?doccode=`+doccode, dtos);
     },
     //采购申请单明细编辑
     update(FormData)
     {
-        return axios.put(`${base.iSalesurl}/sls_salesorderitem/update`, FormData);    
+        return axios.put(`${base.iSalesUrl}/sls_salesorderitem/update`, FormData);    
     }, 
       // 删除数据
    delete(doccode, rowid) {
-        return axios.delete(`${base.iSalesurl}/sls_salesorderitem/deldata?doccode=` + doccode + '&rowid=' + rowid);
+        return axios.delete(`${base.iSalesUrl}/sls_salesorderitem/deldata?doccode=` + doccode + '&rowid=' + rowid);
     },
     //修改实体类
     FormData(){

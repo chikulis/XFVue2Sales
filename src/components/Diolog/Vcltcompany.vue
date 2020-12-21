@@ -1,4 +1,4 @@
-<!-- 公司列表 组件 -->
+<!-- 经销商列表 组件 -->
 <template>
     <div class="dialog">
         <!-- input框 -->
@@ -17,16 +17,26 @@
             ></i>
         </el-input>
         <!-- dialog组件 -->
-        <el-dialog ref="dialogs" title="公司列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="800px">
+        <el-dialog ref="dialogs" title="经销商列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="800px">
             <el-row :gutter="10">
-                <el-col :span="9">
+                <el-col :span="6">
                     <el-form-item label="公司代码" prop="companyid">
                         <el-input v-model="searchform.companyid" @input="fetchTableData"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="9">
-                    <el-form-item label="公司名称" prop="companyname">
-                        <el-input v-model="searchform.companyname" @input="fetchTableData"></el-input>
+                <el-col :span="6">
+                    <el-form-item label="经销商代码" prop="parentcltcode">
+                        <el-input v-model="searchform.parentcltcode" @input="fetchTableData"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                    <el-form-item label="经销商名称" prop="parentcltname">
+                        <el-input v-model="searchform.parentcltname" @input="fetchTableData"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="6">
+                    <el-form-item label="客户代码" prop="cltcode">
+                        <el-input v-model="searchform.cltcode" @input="fetchTableData"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -72,13 +82,45 @@ export default {
             //搜索
             searchform: {
                 companyid: '',
-                companyname: ''
+                parentcltcode: '',
+                parentcltname: '',
+                cltcode: ''
             },
 
             // 表格字段
             tableColumn: [
-                { field: 'companyid', title: '公司代码' },
-                { field: 'companyname', title: '公司名称' }
+                {
+                    field: 'parentcltcode',
+                    title: '经销商代码'
+                },
+                {
+                    field: 'parentcltname',
+                    title: '经销商名称'
+                },
+                {
+                    field: 'cltcode',
+                    title: '客户代码'
+                },
+                {
+                    field: 'cltname',
+                    title: '客户名称'
+                },
+                {
+                    field: 'plistid',
+                    title: '价目表代码'
+                },
+                {
+                    field: 'plistname',
+                    title: '价目表名称'
+                },
+                {
+                    field: 'sdorgid',
+                    title: '销区代码'
+                },
+                {
+                    field: 'sdorgname',
+                    title: '销区名称'
+                }
             ],
 
             // 选中的数据
@@ -95,9 +137,7 @@ export default {
     },
 
     // 创建完成
-    created() {
-        this.fetchTableData();
-    },
+    created() {},
 
     // 执行方法
     methods: {
@@ -105,7 +145,7 @@ export default {
         fetchTableData() {
             this.commEntity.options.loading = true;
             //this.str 查询参数
-            this.$api.ocompany.getData(this.searchform).then((res) => {
+            this.$api.vcltcompany.getdata(this.searchform).then((res) => {
                 this.tableData = res.rows;
                 this.commEntity.pagination.total = res.total;
                 this.commEntity.options.loading = false;
@@ -129,7 +169,7 @@ export default {
 
         // 回车事件
         inputEnterEvent() {
-            this.$api.ocompany.getData(this.searchform).then((res) => {
+            this.$api.vcltcompany.getdata(this.str).then((res) => {
                 if (res.data.total != 1) {
                     this.fetchTableData();
                     this.show = true;

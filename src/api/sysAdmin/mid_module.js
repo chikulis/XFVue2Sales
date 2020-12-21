@@ -9,30 +9,30 @@ import service from '@utils/request'; // 导入http中创建的service实例
 const mid_module = {
     // 获取目录数据
     getall() {
-        return service.get(`${base.sysadminurl}/mid_module/getall?dbid=a.weberp`);
+        return service.get(`${base.sysAdminUrl}/mid_module/getall?dbid=a.weberp`);
     },
     getdata(applicationid) {
-        return service.get(`${base.sysadminurl}/mid_module/getdata?dbid=a.weberp&applicationid=`+applicationid);
+        return service.get(`${base.sysAdminUrl}/mid_module/getdata?dbid=a.weberp&applicationid=`+applicationid);
     },
 
     // 查询单条数据
     getSingle(applicationid, menuid) {
-        return service.get(`${base.sysadminurl}/mid_module?menuid=` + menuid + '&applicationid=' + applicationid);
+        return service.get(`${base.sysAdminUrl}/mid_module?menuid=` + menuid + '&applicationid=' + applicationid);
     },
 
     // 新增数据
     addMenu(DtoMid_MenuAdd) {
-        return service.post(`${base.sysadminurl}/mid_module/`, DtoMid_MenuAdd);
+        return service.post(`${base.sysAdminUrl}/mid_module/`, DtoMid_MenuAdd);
     },
 
     // 保存数据
     saveMenu(formdata) {
-        return service.put(`${base.sysadminurl}/mid_module/`, formdata);
+        return service.put(`${base.sysAdminUrl}/mid_module/`, formdata);
     },
 
     // 删除数据
     delMenu(applicationid, menuid) {
-        return service.delete(`${base.sysadminurl}/mid_module/deldata?menuid=` + menuid + '&applicationid=' + applicationid);
+        return service.delete(`${base.sysAdminUrl}/mid_module/deldata?menuid=` + menuid + '&applicationid=' + applicationid);
     },
 
     // 新增实体类

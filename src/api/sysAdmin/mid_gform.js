@@ -5,10 +5,10 @@ import service from '@utils/request'; // 导入http中创建的service实例
 const mid_gform = {
     // 获取目录数据
     getall() {
-        return service.get(`${base.sysadminurl}/mid_gform/getall?dbid=a.weberp`);
+        return service.get(`${base.sysAdminUrl}/mid_gform/getall?dbid=a.weberp`);
     },
     getdata(applicationid) {
-        return service.get(`${base.sysadminurl}/mid_gform/getdata?dbid=a.weberp&applicationid=`+applicationid);
+        return service.get(`${base.sysAdminUrl}/mid_gform/getdata?dbid=a.weberp&applicationid=`+applicationid);
     },
 }
 export default mid_gform;

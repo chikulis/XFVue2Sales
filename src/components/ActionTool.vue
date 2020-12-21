@@ -63,6 +63,7 @@ export default {
       }
 
       var alldatas = JSON.parse(localStorage.eleAction || "[]");
+      console.log(alldatas);
       this.actiondata = alldatas
         .filter(x => x.formid === Number(this.formid))
         .sort();
