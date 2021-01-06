@@ -21,12 +21,12 @@
             <el-row :gutter="10">
                 <el-col :span="8">
                     <el-form-item label="客户编号" prop="cltcode">
-                        <el-input v-model="searchform.cltcode" @input="fetchTableData"></el-input>
+                        <el-input v-model="searchform.CltCode" @input="fetchTableData"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="客户名称" prop="cltname">
-                        <el-input v-model="searchform.cltname" @input="fetchTableData"></el-input>
+                        <el-input v-model="searchform.Cltname" @input="fetchTableData"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -74,9 +74,9 @@ export default {
             // 表格数据
             tableData: [],
             searchform: {
-                cltcode: '',
-                cltname: '',
-                parentcltcode: ''
+                CltCode: '',
+                Cltname: '',
+                Parentcltcode: ''
             },
             // 表格字段
             tableColumn: [
@@ -120,11 +120,19 @@ export default {
             //       this.$message.error('查询条件不能为空');
             //       return ;
             //   }
-            this.$api.scltgeneral.getDataLeftJoinOSDOrg(this.searchform).then((res) => {
-                this.tableData = res.rows;
-                this.commEntity.pagination.total = res.total;
-                this.commEntity.options.loading = false;
-            });
+            this.$api.scltgeneral
+                .getDataLeftJoinOSDOrgByPage(
+                    this.commEntity.pagination.pageIndex,
+                    this.commEntity.pagination.pageSize,
+                    this.commEntity.sort,
+                    this.commEntity.order,
+                    this.searchform
+                )
+                .then((res) => {
+                    this.tableData = res.rows;
+                    this.commEntity.pagination.total = res.total;
+                    this.commEntity.options.loading = false;
+                });
         },
 
         // 打开diolog
@@ -144,14 +152,24 @@ export default {
 
         // 回车事件
         inputEnterEvent() {
-            this.$api.scltgeneral.getDataLeftJoinOSDOrg(this.searchform).then((res) => {
-                if (res.total != 1) {
-                    this.fetchTableData();
-                    this.show = true;
-                    return;
-                }
-                this.$emit('inputEnterEvent', res.rows[0], this.fieldname);
-            });
+            this.$api.scltgeneral
+                .getDataLeftJoinOSDOrgByPage(
+                    this.commEntity.pagination.pageIndex,
+                    this.commEntity.pagination.pageSize,
+                    this.commEntity.sort,
+                    this.commEntity.order,
+                    this.searchform
+                )
+                .then((res) => {
+                    this.tableData = res.rows;
+                    this.commEntity.pagination.total = res.total;
+                    this.commEntity.options.loading = false;
+                    if (res.total != 1) {
+                        this.show = true;
+                        return;
+                    }
+                    this.$emit('inputEnterEvent', res.rows[0], this.fieldname);
+                });
         },
 
         // 单击事件

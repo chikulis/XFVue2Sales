@@ -6,13 +6,14 @@ import Currencyrate from "@components/Diolog/Currencyrate"; // 币种列表组�
 import Departmental from "@components/Diolog/Departmental"; // 部门组件
 import DocStatusImg from "@components/DocStatusImg";
 import EditTable from "@components/EditTable";
-import Gopcodesystem from "@components/Diolog/Gopcodesystem"; // 客编体系列表组件
+import Gopcodesystem from "@components/Diolog/Gopcodesystem"; // 客户对照系统列表组件
 import Gsettlemethod from "@components/Diolog/Gsettlemethod"; // 重量结算方式列表组件
 import Ocompany from "@components/Diolog/Ocompany"; // 公司列表组件
 import Osdgroup from "@components/Diolog/Osdgroup"; // 业务员列表组件
 import Ostorage from "@components/Diolog/Ostorage"; // 仓库列表组件
 import QMSlevel from "@components/Diolog/QMSlevel"; // 质量码清单列表组件
 import Scltgeneral from "@components/Diolog/Scltgeneral"; // 客户列表组件
+import Slscontracthd from "@components/Diolog/Slscontracthd"; // 合同组件
 import Slscltproject from "@components/Diolog/Slscltproject"; // 客户项目组件
 import Spricelist from "@components/Diolog/Spricelist"; // 物料价目表  
 import Vcltcompany from "@components/Diolog/Vcltcompany"; // 经销商列表组件
@@ -60,6 +61,7 @@ export default (Vue) => {
         Vue.component("Ostorage", Ostorage);
         Vue.component("QMSlevel", QMSlevel);
         Vue.component("Scltgeneral", Scltgeneral);
+        Vue.component("Slscontracthd", Slscontracthd);
         Vue.component("Slscltproject", Slscltproject);
         Vue.component("Spricelist", Spricelist);
         Vue.component("Vcltcompany", Vcltcompany);

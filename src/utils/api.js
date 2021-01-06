@@ -12,9 +12,10 @@ import mid_module from '../api/sysAdmin/mid_module';
 import ocompany from '../api/cmmApi/ocompany';
 import osdgroup from '../api/cmmApi/osdgroup';
 import ostorage from '../api/cmmApi/ostorage';
-import qmslevel from '../api/cmmApi/qmslevel'; 
+import qmslevel from '../api/cmmApi/qmslevel';
 import scltgeneral from '../api/cmmApi/scltgeneral';
 import slscltproject from '../api/cmmApi/slscltproject';
+import slscontracthd from '../api/SalesApi/slscontracthd';
 import slssalesorderhd from '../api/SalesApi/slssalesorderhd';
 import slssalesorderitem from '../api/SalesApi/slssalesorderitem';
 import spricelist from '../api/cmmApi/spricelist';
@@ -34,6 +35,7 @@ export default {
     ostorage,
     qmslevel,
     scltgeneral,
+    slscontracthd,
     slscltproject,
     slssalesorderhd,
     slssalesorderitem,

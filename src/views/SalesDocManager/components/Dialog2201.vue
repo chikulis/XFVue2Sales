@@ -494,15 +494,17 @@
                             <el-row :gutter="20">
                                 <el-col :span="6">
                                     <el-form-item label="合同号" prop="ContractNo">
-                                        <Osdgroup
+                                        <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
+                                        <Slscontracthd
                                             ref="ContractNo"
                                             :modelname="HDData.ContractNo"
                                             :entertrue="false"
-                                            @inputEnterEvent="FollowCodeEnterEvent"
-                                            @cellDBLClickEvent="FollowCodeEnterEvent"
-                                            @importClickEvent="FollowCodeEnterEvent"
-                                            @inputChangeEvent="FollowCodeChangeEvent"
-                                        ></Osdgroup>
+                                            fieldname="ContractNo"
+                                            @inputEnterEvent="inputEnterEvent"
+                                            @cellDBLClickEvent="inputEnterEvent"
+                                            @importClickEvent="inputEnterEvent"
+                                            @inputChangeEvent="inputChangeEvent"
+                                        ></Slscontracthd>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
@@ -760,6 +762,8 @@ export default {
                 ProjectName: '',
                 cprj: '',
                 ScrapRate: '',
+                citt: '',
+                cittname: '',
 
                 AlPriceDate: '',
                 AlPrice: '',
@@ -882,6 +886,11 @@ export default {
                     this.HDData.ProjectName = row.projectname;
                     this.HDData.cprj = row.cprj;
                     this.getDocType2();
+                    break;
+                case 'citt':
+                    this.$refs.citt.str = row.citt;
+                    this.HDData.citt = row.citt;
+                    this.HDData.cittname = row.cittname;
                     break;
             }
         },

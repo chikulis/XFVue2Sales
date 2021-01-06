@@ -153,7 +153,8 @@ export default {
     methods: {
         // 查询方法
         fetchTableData() {
-            if (this.searchform.cltcode == '') {
+
+            if (this.$refs.cltcode.str == '') {
                 this.$message.warning('请先输入客户信息');
                 return;
             }
@@ -184,9 +185,7 @@ export default {
         // 回车事件
         inputEnterEvent() {
             this.$api.slscltproject.getData(this.searchform).then((res) => {
-                console.log(res);
                 if (res.total != 1) {
-                    this.fetchTableData();
                     this.show = true;
                     return;
                 }
@@ -228,10 +227,12 @@ export default {
                     this.searchform.cltname = row.cltname;
                     break;
             }
-            this.fetchTableData();
+            // this.fetchTableData();
         },
         // 监听客户编号input事件
-        searchformInputChangeEvent(fieldname) {}
+        searchformInputChangeEvent(fieldname) {
+            // this.searchform.cltcode = this.str;
+        }
     },
     computed: {
         isEntertrue() {

@@ -69,10 +69,16 @@ export default {
             // 表格数据
             tableData: [],
 
+            tablePage: {
+                currentPage: 1,
+                pageSize: 10,
+                total: 0
+            },
+
             //搜索
             searchform: {
                 companyid: '',
-                companyname: ''
+                companyname: '',
             },
 
             // 表格字段
@@ -103,6 +109,7 @@ export default {
     methods: {
         // 查询方法
         fetchTableData() {
+            console.log(this.commEntity.pagination);
             this.commEntity.options.loading = true;
             //this.str 查询参数
             this.$api.ocompany.getData(this.searchform).then((res) => {
@@ -130,8 +137,10 @@ export default {
         // 回车事件
         inputEnterEvent() {
             this.$api.ocompany.getData(this.searchform).then((res) => {
-                if (res.data.total != 1) {
-                    this.fetchTableData();
+                this.tableData = res.rows;
+                this.commEntity.pagination.total = res.total;
+                this.commEntity.options.loading = false;
+                if (res.total != 1) {
                     this.show = true;
                     return;
                 }

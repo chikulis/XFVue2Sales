@@ -1,4 +1,4 @@
-<!-- 客编体系列表 组件 -->
+<!-- 客户对照系统列表 组件 -->
 <template>
     <div class="dialog">
         <!-- input框 -->
@@ -17,31 +17,16 @@
             ></i>
         </el-input>
         <!-- dialog组件 -->
-        <el-dialog ref="dialogs" title="客编体系列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="800px">
+        <el-dialog ref="dialogs" title="客户对照系统列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="800px">
             <el-row :gutter="10">
-                <el-col :span="8">
-                    <el-form-item label="客户代码" prop="cltcode">
-                        <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                        <Scltgeneral
-                            ref="cltcode"
-                            :modelname="searchform.cltcode"
-                            fieldname="cltcode"
-                            @inputEnterEvent="searchformInputEnterEvent"
-                            @cellDBLClickEvent="searchformInputEnterEvent"
-                            @importClickEvent="searchformInputEnterEvent"
-                            @inputChangeEvent="searchformInputChangeEvent"
-                            @input="fetchTableData"
-                        ></Scltgeneral>
+                <el-col :span="9">
+                    <el-form-item label="客户对照编号" prop="citt">
+                        <el-input v-model="searchform.citt" @input="fetchTableData"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                    <el-form-item label="客户名称" prop="cltname">
-                        <el-input disabled v-model="searchform.cltname"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="工程项目名称" prop="projectname">
-                        <el-input v-model="searchform.projectname" @input="fetchTableData"></el-input>
+                <el-col :span="9">
+                    <el-form-item label="客户对照名称" prop="cittname">
+                        <el-input v-model="searchform.cittname" @input="fetchTableData"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -86,49 +71,23 @@ export default {
 
             // 搜索
             searchform: {
-                cltcode: this.cltcode,
-                cltname: '',
-                projectno: '',
-                projectname: ''
+                citt: '',
+                cittname: '',
             },
 
             // 表格字段
             tableColumn: [
                 {
-                    field: 'projectcode',
+                    field: 'citt',
                     title: '工程项目编号'
                 },
                 {
-                    field: 'projectname',
+                    field: 'cittname',
                     title: '工程项目名称'
                 },
                 {
-                    field: 'cltcode',
-                    title: '客户编号'
-                },
-                {
-                    field: 'cltname',
-                    title: '客户名称'
-                },
-                {
-                    field: 'begindate',
-                    title: '开始日期'
-                },
-                {
-                    field: 'enddate',
-                    title: '结束日期'
-                },
-                {
-                    field: 'entername',
-                    title: '输入人员姓名'
-                },
-                {
-                    field: 'enterdate',
-                    title: '输入日期'
-                },
-                {
                     field: 'memo',
-                    title: '备注'
+                    title: '客户编号'
                 }
             ],
 
@@ -141,7 +100,6 @@ export default {
     props: {
         modelname: '',
         fieldname: '',
-        cltcode: '',
         entertrue: { default: true },
         disable: { default: false }
     },
@@ -153,13 +111,9 @@ export default {
     methods: {
         // 查询方法
         fetchTableData() {
-            if (this.searchform.cltcode == '') {
-                this.$message.warning('请先输入客户信息');
-                return;
-            }
             this.commEntity.options.loading = true;
             //this.str 查询参数
-            this.$api.slscltproject.getData(this.searchform).then((res) => {
+            this.$api.gopcodesystem.getData(this.searchform).then((res) => {
                 this.tableData = res.rows;
                 this.commEntity.pagination.total = res.total;
                 this.commEntity.options.loading = false;
@@ -183,8 +137,7 @@ export default {
 
         // 回车事件
         inputEnterEvent() {
-            this.$api.slscltproject.getData(this.searchform).then((res) => {
-                console.log(res);
+            this.$api.gopcodesystem.getData(this.searchform).then((res) => {
                 if (res.total != 1) {
                     this.fetchTableData();
                     this.show = true;
@@ -217,21 +170,7 @@ export default {
         // input值监听
         inputChangeEvent() {
             this.$emit('inputChangeEvent', this.fieldname);
-        },
-
-        // 选择客户编号事件
-        searchformInputEnterEvent(row, fieldname) {
-            switch (fieldname) {
-                case 'cltcode':
-                    this.$refs.cltcode.str = row.cltcode;
-                    this.searchform.cltcode = row.cltcode;
-                    this.searchform.cltname = row.cltname;
-                    break;
-            }
-            this.fetchTableData();
-        },
-        // 监听客户编号input事件
-        searchformInputChangeEvent(fieldname) {}
+        }
     },
     computed: {
         isEntertrue() {

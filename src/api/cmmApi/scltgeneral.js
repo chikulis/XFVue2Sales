@@ -2,8 +2,9 @@ import base from '@utils/base';
 import service from '@utils/request';
 
 const scltgeneral = {
-    getDataLeftJoinOSDOrg(searchform) {
-        return service.get(`${base.iCMMUrl}/scltgeneral/GetDataLeftJoinOSDOrg?cltcode=` + searchform.cltcode + `&cltname=` + searchform.cltname + `&parentcltcode=` + searchform.parentcltcode);
+    getDataLeftJoinOSDOrgByPage(index, size, sort, order, searchform) {
+        return service.post(`${base.iCMMUrl}/scltgeneral/GetDataLeftJoinOSDOrgByPage?page=` + index +
+            '&rows=' + size + '&sort=' + sort + '&order=' + order,  searchform );
     },
 }
 export default scltgeneral;
