@@ -153,18 +153,29 @@ export default {
     methods: {
         // 查询方法
         fetchTableData() {
+            // this.$refs.dialogs.open((s) => {
+            //     if (this.$refs.cltcode.str == '') {
+            //         // console.log(this.$refs.dialogs.);
 
-            if (this.$refs.cltcode.str == '') {
-                this.$message.warning('请先输入客户信息');
-                return;
-            }
+            //         this.$message.warning('请先输入客户信息');
+            //     }
+            // });
+
             this.commEntity.options.loading = true;
             //this.str 查询参数
-            this.$api.slscltproject.getData(this.searchform).then((res) => {
-                this.tableData = res.rows;
-                this.commEntity.pagination.total = res.total;
-                this.commEntity.options.loading = false;
-            });
+            this.$api.slscltproject
+                .getDataByPage(
+                    this.commEntity.pagination.pageIndex,
+                    this.commEntity.pagination.pageSize,
+                    this.commEntity.sort,
+                    this.commEntity.order,
+                    this.searchform
+                )
+                .then((res) => {
+                    this.tableData = res.rows;
+                    this.commEntity.pagination.total = res.total;
+                    this.commEntity.options.loading = false;
+                });
         },
 
         // 打开diolog
@@ -184,13 +195,24 @@ export default {
 
         // 回车事件
         inputEnterEvent() {
-            this.$api.slscltproject.getData(this.searchform).then((res) => {
-                if (res.total != 1) {
-                    this.show = true;
-                    return;
-                }
-                this.$emit('inputEnterEvent', res.rows[0], this.fieldname);
-            });
+            this.$api.slscltproject
+                .getDataByPage(
+                    this.commEntity.pagination.pageIndex,
+                    this.commEntity.pagination.pageSize,
+                    this.commEntity.sort,
+                    this.commEntity.order,
+                    this.searchform
+                )
+                .then((res) => {
+                    this.tableData = res.rows;
+                    this.commEntity.pagination.total = res.total;
+                    this.commEntity.options.loading = false;
+                    if (res.total != 1) {
+                        this.show = true;
+                        return;
+                    }
+                    this.$emit('inputEnterEvent', res.rows[0], this.fieldname);
+                });
         },
 
         // 单击事件
@@ -231,7 +253,11 @@ export default {
         },
         // 监听客户编号input事件
         searchformInputChangeEvent(fieldname) {
-            // this.searchform.cltcode = this.str;
+            this.$refs.cltcode.searchform.cltcode = '';
+            this.$refs.cltcode.searchform.cltname = '';
+            this.$refs.cltcode.searchform.parentcltcode = '';
+            this.searchform.cltname = '';
+            this.fetchTableData();
         }
     },
     computed: {

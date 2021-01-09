@@ -2,8 +2,8 @@ import base from '@utils/base';
 import service from '@utils/request';
 
 const gsettlemethod = {
-    getData(searchform) {
-        return service.get(`${base.iCMMUrl}/gsettlemethod/GetData?settlemethodid=` + searchform.settlemethodid + `&settlemethodname=` + searchform.settlemethodname);
+    getDataByPage(index, size, sort, order, searchform) {
+        return service.post(`${base.iCMMUrl}/gsettlemethod/GetDataByPage?page=` + index + '&rows=' + size + '&sort=' + sort + '&order=' + order, searchform);
     },
 }
 export default gsettlemethod;

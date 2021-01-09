@@ -764,6 +764,7 @@ export default {
                 ScrapRate: '',
                 citt: '',
                 cittname: '',
+                ContractNo: '',
 
                 AlPriceDate: '',
                 AlPrice: '',
@@ -892,12 +893,18 @@ export default {
                     this.HDData.citt = row.citt;
                     this.HDData.cittname = row.cittname;
                     break;
+                case 'ContractNo':
+                    this.$refs.ContractNo.str = row.doccode;
+                    this.HDData.ContractNo = row.doccode;
+                    this.$refs.settlemethodid.str = row.settlemethodid;
+                    this.HDData.settlemethodid = row.settlemethodid;
+                    this.HDData.settlemethodname = row.settlemethodname;
+                    break;
             }
         },
         // 监听input事件
         inputChangeEvent(fieldname) {
-            switch (
-                fieldname
+            switch (fieldname) {
                 //     case 'Companyid':
                 //         this.searchform.companyid = '';
                 //         this.searchform.companyname = '';
@@ -909,7 +916,32 @@ export default {
                 //         this.searchform.stname = '';
                 //         this.searchform.plantid = '';
                 //         break;
-            ) {
+                case 'citt':
+                    this.$refs.citt.searchform.citt = '';
+                    this.$refs.citt.searchform.cittname = '';
+                    this.HDData.cittname = '';
+                    break;
+                case 'ContractNo':
+                    console.log(this.$refs.ContractNo);
+                    this.$refs.ContractNo.searchform.docBeginDate = this.$moment().subtract(3, 'y').format('YYYY-MM-DD');
+                    this.$refs.ContractNo.searchform.docEndDate = this.$moment().format('YYYY-MM-DD');
+                    this.$refs.ContractNo.$refs.companyId.str = '';
+                    this.$refs.ContractNo.$refs.companyId.searchform.companyid = '';
+                    this.$refs.ContractNo.$refs.companyId.searchform.companyname = '';
+                    this.$refs.ContractNo.searchform.companyId = '';
+                    this.$refs.ContractNo.$refs.cltCode.str = '';
+                    this.$refs.ContractNo.$refs.cltCode.searchform.cltcode = '';
+                    this.$refs.ContractNo.$refs.cltCode.searchform.cltname = '';
+                    this.$refs.ContractNo.$refs.cltCode.searchform.parentcltcode = '';
+                    this.$refs.ContractNo.searchform.cltCode = '';
+                    this.$refs.ContractNo.$refs.settleMethodId.str = '';
+                    this.$refs.ContractNo.$refs.settleMethodId.searchform.settlemethodid = '';
+                    this.$refs.ContractNo.$refs.settleMethodId.searchform.settlemethodname = '';
+                    this.$refs.ContractNo.searchform.settleMethodId = '';
+                    this.$refs.ContractNo.searchform.settleMethodName = '';
+                    this.$refs.ContractNo.searchform.isNew = false;
+                    this.$refs.ContractNo.searchform.isAll = false;
+                    break;
             }
             console.log(fieldname);
         },
@@ -923,45 +955,6 @@ export default {
         FollowCodeChangeEvent() {
             this.searchform.FollowCode = '';
             this.searchform.FollowName = '';
-        },
-        // 选择仓库事件
-        stcodeEvent(row) {
-            this.$refs.stcode.str = row.stcode;
-            this.HDData.stcode = row.stcode;
-            this.HDData.stname = row.stname;
-        },
-        // 监听仓库事件
-        stcodeChangeEvent() {
-            this.HDData.stcode = '';
-            this.HDData.stcode = '';
-        },
-
-        // 选择仓库事件2
-        stcodeEvent2(row) {
-            this.$refs.stcode2.str = row.stcode;
-            this.HDData.stcode2 = row.stcode;
-            this.HDData.stname2 = row.stname;
-        },
-
-        // 监听仓库事件2
-        stcodeChangeEvent2() {
-            this.HDData.stcode2 = '';
-            this.HDData.stcode2 = '';
-            this.HDData.whcode2 = '';
-            this.HDData.whname2 = '';
-        },
-
-        // 选择库位事件
-        whcodeEvent(row) {
-            this.$refs.whcode2.str = row.whcode;
-            this.HDData.whcode2 = row.whcode;
-            this.HDData.whname2 = row.whname;
-        },
-
-        // 监听库位事件
-        whcodeChangeEvent() {
-            this.HDData.whcode2 = '';
-            this.HDData.whname2 = '';
         },
 
         getOptionsData() {

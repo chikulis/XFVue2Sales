@@ -21,12 +21,12 @@
             <el-row :gutter="10">
                 <el-col :span="8">
                     <el-form-item label="客户编号" prop="cltcode">
-                        <el-input v-model="searchform.CltCode" @input="fetchTableData"></el-input>
+                        <el-input v-model="searchform.cltcode" @input="fetchTableData"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="客户名称" prop="cltname">
-                        <el-input v-model="searchform.Cltname" @input="fetchTableData"></el-input>
+                        <el-input v-model="searchform.cltname" @input="fetchTableData"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
@@ -74,9 +74,9 @@ export default {
             // 表格数据
             tableData: [],
             searchform: {
-                CltCode: '',
-                Cltname: '',
-                Parentcltcode: ''
+                cltcode: '',
+                cltname: '',
+                parentcltcode: ''
             },
             // 表格字段
             tableColumn: [
@@ -110,16 +110,6 @@ export default {
         // 查询方法
         fetchTableData() {
             this.commEntity.options.loading = true;
-            // if(this.str!="")
-            // {
-            //   this.searchform.cccode=this.str
-            // }
-
-            //   if( this.searchform.cltcode!="")
-            //   {
-            //       this.$message.error('查询条件不能为空');
-            //       return ;
-            //   }
             this.$api.scltgeneral
                 .getDataLeftJoinOSDOrgByPage(
                     this.commEntity.pagination.pageIndex,
@@ -138,20 +128,21 @@ export default {
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
-                //一条数据直接赋值
-                if (this.tableData.length == 1) {
-                    this.show = false;
-                    this.$emit('importClickEvent', this.tableData[0]);
-                    this.tableData = [];
-                } else {
-                    this.show = true;
-                }
+                // //一条数据直接赋值
+                // if (this.tableData.length == 1) {
+                //     this.show = false;
+                //     this.$emit('importClickEvent', this.tableData[0]);
+                //     this.tableData = [];
+                // } else {
+                this.show = true;
+                // }
                 this.fetchTableData();
             }
         },
 
         // 回车事件
         inputEnterEvent() {
+            this.searchform.cltcode = this.str;
             this.$api.scltgeneral
                 .getDataLeftJoinOSDOrgByPage(
                     this.commEntity.pagination.pageIndex,

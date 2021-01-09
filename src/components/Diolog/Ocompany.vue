@@ -69,16 +69,10 @@ export default {
             // 表格数据
             tableData: [],
 
-            tablePage: {
-                currentPage: 1,
-                pageSize: 10,
-                total: 0
-            },
-
             //搜索
             searchform: {
                 companyid: '',
-                companyname: '',
+                companyname: ''
             },
 
             // 表格字段
@@ -109,43 +103,58 @@ export default {
     methods: {
         // 查询方法
         fetchTableData() {
-            console.log(this.commEntity.pagination);
             this.commEntity.options.loading = true;
-            //this.str 查询参数
-            this.$api.ocompany.getData(this.searchform).then((res) => {
-                this.tableData = res.rows;
-                this.commEntity.pagination.total = res.total;
-                this.commEntity.options.loading = false;
-            });
+            this.$api.ocompany
+                .getDataByPage(
+                    this.commEntity.pagination.pageIndex,
+                    this.commEntity.pagination.pageSize,
+                    this.commEntity.sort,
+                    this.commEntity.order,
+                    this.searchform
+                )
+                .then((res) => {
+                    this.tableData = res.rows;
+                    this.commEntity.pagination.total = res.total;
+                    this.commEntity.options.loading = false;
+                });
         },
 
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
-                //一条数据直接赋值
-                if (this.tableData.length == 1) {
-                    this.show = false;
-                    this.$emit('importClickEvent', this.tableData[0]);
-                    this.tableData = [];
-                } else {
-                    this.show = true;
-                }
+                // //一条数据直接赋值
+                // if (this.tableData.length == 1) {
+                //     this.show = false;
+                //     this.$emit('importClickEvent', this.tableData[0]);
+                //     this.tableData = [];
+                // } else {
+                this.show = true;
+                // }
                 this.fetchTableData();
             }
         },
 
         // 回车事件
         inputEnterEvent() {
-            this.$api.ocompany.getData(this.searchform).then((res) => {
-                this.tableData = res.rows;
-                this.commEntity.pagination.total = res.total;
-                this.commEntity.options.loading = false;
-                if (res.total != 1) {
-                    this.show = true;
-                    return;
-                }
-                this.$emit('inputEnterEvent', res.rows[0], this.fieldname);
-            });
+            this.searchform.companyid = this.str;
+            this.$api.ocompany
+                .getDataByPage(
+                    this.commEntity.pagination.pageIndex,
+                    this.commEntity.pagination.pageSize,
+                    this.commEntity.sort,
+                    this.commEntity.order,
+                    this.searchform
+                )
+                .then((res) => {
+                    this.tableData = res.rows;
+                    this.commEntity.pagination.total = res.total;
+                    this.commEntity.options.loading = false;
+                    if (res.total != 1) {
+                        this.show = true;
+                        return;
+                    }
+                    this.$emit('inputEnterEvent', res.rows[0], this.fieldname);
+                });
         },
 
         // 单击事件

@@ -14,7 +14,7 @@ import osdgroup from '../api/cmmApi/osdgroup';
 import ostorage from '../api/cmmApi/ostorage';
 import qmslevel from '../api/cmmApi/qmslevel';
 import scltgeneral from '../api/cmmApi/scltgeneral';
-import slscltproject from '../api/cmmApi/slscltproject';
+import slscltproject from '../api/SalesApi/slscltproject';
 import slscontracthd from '../api/SalesApi/slscontracthd';
 import slssalesorderhd from '../api/SalesApi/slssalesorderhd';
 import slssalesorderitem from '../api/SalesApi/slssalesorderitem';

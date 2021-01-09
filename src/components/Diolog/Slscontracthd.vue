@@ -68,6 +68,7 @@
                             @inputEnterEvent="searchformInputEnterEvent"
                             @cellDBLClickEvent="searchformInputEnterEvent"
                             @importClickEvent="searchformInputEnterEvent"
+                            @inputChangeEvent="searchformInputChangeEvent"
                         ></Scltgeneral>
                     </el-form-item>
                 </el-col>
@@ -84,6 +85,7 @@
                             @inputEnterEvent="searchformInputEnterEvent"
                             @cellDBLClickEvent="searchformInputEnterEvent"
                             @importClickEvent="searchformInputEnterEvent"
+                            @inputChangeEvent="searchformInputChangeEvent"
                         ></Gsettlemethod>
                     </el-form-item>
                 </el-col>
@@ -262,7 +264,7 @@ export default {
             this.commEntity.options.loading = true;
             //this.str 查询参数
             this.$api.slscontracthd
-                .getDataByPage(
+                .getDataLeftJoinSPricelistByPage(
                     this.commEntity.pagination.pageIndex,
                     this.commEntity.pagination.pageSize,
                     this.commEntity.sort,
@@ -279,14 +281,14 @@ export default {
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
-                //一条数据直接赋值
-                if (this.tableData.length == 1) {
-                    this.show = false;
-                    this.$emit('importClickEvent', this.tableData[0]);
-                    this.tableData = [];
-                } else {
-                    this.show = true;
-                }
+                // //一条数据直接赋值
+                // if (this.tableData.length == 1) {
+                //     this.show = false;
+                //     this.$emit('importClickEvent', this.tableData[0]);
+                //     this.tableData = [];
+                // } else {
+                this.show = true;
+                // }
                 this.fetchTableData();
             }
         },
@@ -294,7 +296,7 @@ export default {
         // 回车事件
         inputEnterEvent() {
             this.$api.slscontracthd
-                .getDataByPage(
+                .getDataLeftJoinSPricelistByPage(
                     this.commEntity.pagination.pageIndex,
                     this.commEntity.pagination.pageSize,
                     this.commEntity.sort,
@@ -302,6 +304,9 @@ export default {
                     this.searchform
                 )
                 .then((res) => {
+                    this.tableData = res.rows;
+                    this.commEntity.pagination.total = res.total;
+                    this.commEntity.options.loading = false;
                     if (res.total != 1) {
                         this.show = true;
                         return;
@@ -346,21 +351,32 @@ export default {
                     this.$refs.cltCode.str = row.cltcode;
                     this.searchform.cltCode = row.cltcode;
                     break;
-                // case 'cltCode':
-                //     this.$refs.cltCode.str = row.cltCode;
-                //     this.searchform.cltCode = row.cltCode;
-                //     this.searchform.cltname = row.cltname;
-                //     break;
+                case 'settleMethodId':
+                    this.$refs.settleMethodId.str = row.settlemethodid;
+                    this.searchform.settleMethodId = row.settlemethodid;
+                    this.searchform.settleMethodName = row.settlemethodname;
+                    break;
             }
         },
         // 监听客户编号input事件
         searchformInputChangeEvent(fieldname) {
             switch (fieldname) {
                 case 'companyId':
-                    this.$refs.companyId.searchform.companyid = this.$refs.companyId.str;
+                    this.$refs.companyId.searchform.companyid = '';
+                    this.$refs.companyId.searchform.companyname = '';
+                    this.searchform.companyId = this.$refs.companyId.str;
                     break;
                 case 'cltCode':
-                    this.$refs.cltCode.searchform.CltCode = this.$refs.cltCode.str;
+                    this.$refs.cltCode.searchform.cltcode = '';
+                    this.$refs.cltCode.searchform.cltname = '';
+                    this.$refs.cltCode.searchform.parentcltcode = '';
+                    this.searchform.cltCode = this.$refs.cltCode.str;
+                    break;
+                case 'settleMethodId':                 
+                    this.$refs.settleMethodId.searchform.settlemethodid = '';
+                    this.$refs.settleMethodId.searchform.settlemethodname = '';
+                    this.searchform.settleMethodId = this.$refs.settleMethodId.str;
+                    this.searchform.settleMethodName = '';
                     break;
             }
         }
