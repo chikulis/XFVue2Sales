@@ -2,8 +2,8 @@ import base from '@utils/base';
 import service from '@utils/request';
 
 const qmslevel = {
-    getData(searchform) {
-        return service.get(`${base.iCMMUrl}/qmslevel/GetData?levelcode=` + searchform.levelcode + `&levelname=` + searchform.levelname);
+    getDataByPage(index, size, sort, order, searchform) {
+        return service.post(`${base.iCMMUrl}/qmslevel/GetDataByPage?page=` + index + '&rows=' + size + '&sort=' + sort + '&order=' + order, searchform);
     },
 }
 export default qmslevel;

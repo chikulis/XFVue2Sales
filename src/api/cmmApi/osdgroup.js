@@ -2,8 +2,8 @@ import base from '@utils/base';
 import service from '@utils/request';
 
 const osdgroup = {
-    getData(searchform) {
-        return service.get(`${base.iCMMUrl}/osdgroup/GetData?sdgroup=` + searchform.sdgroup + `&sdgroupname=` + searchform.sdgroupname);
+    getDataByPage(index, size, sort, order, searchform) {
+        return service.post(`${base.iCMMUrl}/osdgroup/GetDataByPage?page=` + index + '&rows=' + size + '&sort=' + sort + '&order=' + order, searchform);
     },
 }
 export default osdgroup;

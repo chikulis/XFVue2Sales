@@ -618,7 +618,13 @@
                             <el-row :gutter="20">
                                 <el-col :span="6">
                                     <el-form-item label="省份" prop="a">
-                                        <el-select v-model="HDData.shipstate" filterable clearable placeholder="请选择省份">
+                                        <el-select
+                                            v-model="HDData.shipstate"
+                                            filterable
+                                            clearable
+                                            placeholder="请选择省份"
+                                            style="width: 100%"
+                                        >
                                             <el-option
                                                 v-for="item in shipstateOptions"
                                                 :key="item.value"
@@ -632,7 +638,7 @@
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="城市" prop="b">
-                                        <el-select v-model="HDData.b" filterable clearable placeholder="请选择城市">
+                                        <el-select v-model="HDData.b" filterable clearable placeholder="请选择城市" style="width: 100%">
                                             <el-option
                                                 v-for="item in docType2Options"
                                                 :key="item.value"
@@ -916,6 +922,21 @@ export default {
                 //         this.searchform.stname = '';
                 //         this.searchform.plantid = '';
                 //         break;
+                case 'settlemethodid':
+                    this.$refs.settlemethodid.searchform.settlemethodid = '';
+                    this.$refs.settlemethodid.searchform.settlemethodname = '';
+                    this.HDData.settlemethodname = '';
+                    break;
+                case 'QMCode':
+                    this.$refs.QMCode.searchform.levelcode = '';
+                    this.$refs.QMCode.searchform.levelname = '';
+                    this.HDData.QMName = '';
+                    break;
+                case 'FollowCode':
+                    this.$refs.FollowCode.searchform.sdgroup = '';
+                    this.$refs.FollowCode.searchform.sdgroupname = '';
+                    this.HDData.FollowName = '';
+                    break;
                 case 'citt':
                     this.$refs.citt.searchform.citt = '';
                     this.$refs.citt.searchform.cittname = '';

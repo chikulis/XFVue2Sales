@@ -95,9 +95,7 @@ export default {
     },
 
     // 创建完成
-    created() {
-        this.fetchTableData();
-    },
+    created() {},
 
     // 执行方法
     methods: {

@@ -25,6 +25,7 @@ const base = {
     sysAdminUrl: 'https://localhost:5001/api',
     identityUrl: 'https://localhost:5001/api',
     iSalesUrl: 'https://localhost:5001/api',
+    iPriceUrl: 'https://localhost:5003/api',
     // itoolsurl: 'http://192.168.2.199:90/api'
 
 }

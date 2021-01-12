@@ -30,7 +30,6 @@
                             @cellDBLClickEvent="searchformInputEnterEvent"
                             @importClickEvent="searchformInputEnterEvent"
                             @inputChangeEvent="searchformInputChangeEvent"
-                            @input="fetchTableData"
                         ></Scltgeneral>
                     </el-form-item>
                 </el-col>
@@ -151,15 +150,22 @@ export default {
 
     // 执行方法
     methods: {
+        asdasda() {
+            console.log(this);
+            if (this.$refs.cltcode.str == '') {
+                this.$message.warning('请先输入客户信息');
+                return false;
+            } else {
+                return true;
+            }
+        },
+
         // 查询方法
         fetchTableData() {
-            // this.$refs.dialogs.open((s) => {
-            //     if (this.$refs.cltcode.str == '') {
-            //         // console.log(this.$refs.dialogs.);
-
-            //         this.$message.warning('请先输入客户信息');
-            //     }
-            // });
+            // a = this.asdasda();
+            if (!this.asdasda()) {
+                return;
+            }
 
             this.commEntity.options.loading = true;
             //this.str 查询参数
@@ -181,14 +187,14 @@ export default {
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
-                //一条数据直接赋值
-                if (this.tableData.length == 1) {
-                    this.show = false;
-                    this.$emit('importClickEvent', this.tableData[0]);
-                    this.tableData = [];
-                } else {
+                // //一条数据直接赋值
+                // if (this.tableData.length == 1) {
+                //     this.show = false;
+                //     this.$emit('importClickEvent', this.tableData[0]);
+                //     this.tableData = [];
+                // } else {
                     this.show = true;
-                }
+                // }
                 this.fetchTableData();
             }
         },
@@ -249,15 +255,15 @@ export default {
                     this.searchform.cltname = row.cltname;
                     break;
             }
-            // this.fetchTableData();
+            this.fetchTableData();
         },
+
         // 监听客户编号input事件
         searchformInputChangeEvent(fieldname) {
             this.$refs.cltcode.searchform.cltcode = '';
             this.$refs.cltcode.searchform.cltname = '';
             this.$refs.cltcode.searchform.parentcltcode = '';
             this.searchform.cltname = '';
-            this.fetchTableData();
         }
     },
     computed: {

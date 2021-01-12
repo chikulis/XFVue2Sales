@@ -105,38 +105,57 @@ export default {
         fetchTableData() {
             this.commEntity.options.loading = true;
             //this.str 查询参数
-            this.$api.osdgroup.getData(this.searchform).then((res) => {
-                this.tableData = res.rows;
-                this.commEntity.pagination.total = res.total;
-                this.commEntity.options.loading = false;
-            });
+            this.$api.osdgroup
+                .getDataByPage(
+                    this.commEntity.pagination.pageIndex,
+                    this.commEntity.pagination.pageSize,
+                    this.commEntity.sort,
+                    this.commEntity.order,
+                    this.searchform
+                )
+                .then((res) => {
+                    this.tableData = res.rows;
+                    this.commEntity.pagination.total = res.total;
+                    this.commEntity.options.loading = false;
+                });
         },
 
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
-                //一条数据直接赋值
-                if (this.tableData.length == 1) {
-                    this.show = false;
-                    this.$emit('importClickEvent', this.tableData[0]);
-                    this.tableData = [];
-                } else {
-                    this.show = true;
-                }
+                // //一条数据直接赋值
+                // if (this.tableData.length == 1) {
+                //     this.show = false;
+                //     this.$emit('importClickEvent', this.tableData[0]);
+                //     this.tableData = [];
+                // } else {
+                this.show = true;
+                // }
                 this.fetchTableData();
             }
         },
 
         // 回车事件
         inputEnterEvent() {
-            this.$api.osdgroup.getData(this.searchform).then((res) => {
-                if (res.total != 1) {
-                    this.fetchTableData();
-                    this.show = true;
-                    return;
-                }
-                this.$emit('inputEnterEvent', res.rows[0], this.fieldname);
-            });
+            this.searchform.sdgroup = this.str;
+            this.$api.osdgroup
+                .getDataByPage(
+                    this.commEntity.pagination.pageIndex,
+                    this.commEntity.pagination.pageSize,
+                    this.commEntity.sort,
+                    this.commEntity.order,
+                    this.searchform
+                )
+                .then((res) => {
+                    this.tableData = res.rows;
+                    this.commEntity.pagination.total = res.total;
+                    this.commEntity.options.loading = false;
+                    if (res.total != 1) {
+                        this.show = true;
+                        return;
+                    }
+                    this.$emit('inputEnterEvent', res.rows[0], this.fieldname);
+                });
         },
 
         // 单击事件

@@ -2,6 +2,7 @@
  * api接口的统一出口
  */
 import currencyrate from '../api/cmmApi/currencyrate';
+import fcashdoc from '../api/priceApi/fcashdoc';
 import gopcodesystem from '../api/cmmApi/gopcodesystem';
 import gsettlemethod from '../api/cmmApi/gsettlemethod';
 import identity from '../api/sysAdmin/identity';
@@ -23,6 +24,7 @@ import vcltcompany from '../api/cmmApi/vcltcompany';
 
 export default {
     currencyrate,
+    fcashdoc,
     gopcodesystem,
     gsettlemethod,
     identity,
