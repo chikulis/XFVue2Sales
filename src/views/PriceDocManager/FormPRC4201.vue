@@ -58,11 +58,11 @@
 
                     <el-row :gutter="10">
                         <el-col :span="6">
-                            <el-form-item label="客户编号" prop="cltcode">
+                            <el-form-item label="客户编号" prop="oppocompanyid">
                                 <!-- <el-input v-model="searchform.cccode" @keyup.enter.native="fetchTableData"></el-input> -->
                                 <Scltgeneral
                                     ref="scltgeneral"
-                                    :modelname="searchform.cltcode"
+                                    :modelname="searchform.oppocompanyid"
                                     @inputEnterEvent="inputEnterEvent"
                                     @cellDBLClickEvent="inputEnterEvent"
                                     @importClickEvent="inputEnterEvent"
@@ -71,8 +71,8 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item label="客户名称" prop="cltname">
-                                <el-input v-model="searchform.cltname" disabled @keyup.enter.native="fetchTableData"></el-input>
+                            <el-form-item label="客户名称" prop="oppocompanyname">
+                                <el-input v-model="searchform.oppocompanyname" disabled @keyup.enter.native="fetchTableData"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
@@ -86,20 +86,28 @@
                         <el-col :span="24">
                             <el-form-item label="筛选" prop="status">
                                 <div style="padding-left: 20px; padding-top: 3px">
-                                    <el-radio-group v-model="searchform.docstatus" @change="fetchTableData">
+                                    <el-radio-group v-model="searchform.statusindex" @change="fetchTableData">
                                         <el-radio :label="0">本阶段</el-radio>
-                                        <el-radio :label="0">未确定</el-radio>
-                                        <el-radio :label="50">已确定</el-radio>
-                                        <el-radio :label="100">未送达</el-radio>
-                                        <el-radio :label="100">已处理</el-radio>
+                                        <el-radio :label="1">未确定</el-radio>
+                                        <el-radio :label="2">已确定</el-radio>
+                                        <el-radio :label="3">未送达</el-radio>
+                                        <el-radio :label="4">已处理</el-radio>
                                         <el-radio label>所有</el-radio>
                                     </el-radio-group>
                                     <el-divider direction="vertical"></el-divider>
                                     <span style="padding-left: 20px">
-                                        <el-checkbox v-model="searchform.self" @change="fetchTableData" label="仅含自制单"></el-checkbox>
-                                        <el-checkbox v-model="searchform.self" @change="fetchTableData" label="含未确认单据"></el-checkbox>
                                         <el-checkbox
-                                            v-model="searchform.ifblscrap"
+                                            v-model="searchform.isselfmade"
+                                            @change="fetchTableData"
+                                            label="仅含自制单"
+                                        ></el-checkbox>
+                                        <el-checkbox
+                                            v-model="searchform.isunconfirmed"
+                                            @change="fetchTableData"
+                                            label="含未确认单据"
+                                        ></el-checkbox>
+                                        <el-checkbox
+                                            v-model="searchform.isblscrap"
                                             @change="fetchTableData"
                                             label="隐藏作废单"
                                         ></el-checkbox>
@@ -121,12 +129,12 @@
                 @cellDBLClickEvent="cellDBLClickEvent"
             ></CommTable>
         </div>
-        <!-- <Dialog2201 :dialog="commEntity.dialog" v-if="commEntity.dialog.show" @Refresh="fetchTableData"></Dialog2201> -->
+        <Dialog4201 :dialog="commEntity.dialog" v-if="commEntity.dialog.show" @Refresh="fetchTableData"></Dialog4201>
     </div>
 </template>
 
 <script>
-// import Dialog2201 from '@views/SalesDocManager/components/Dialog2201'; //引用 Dialog
+import Dialog4201 from '@views/PriceDocManager/components/Dialog4201'; //引用 Dialog
 export default {
     // 数据
     data() {
@@ -139,13 +147,13 @@ export default {
                 enddate: this.$moment().subtract('days', 0).format('YYYY-MM-DD'),
                 companyid: '',
                 companyname: '',
-                cltcode: '',
-                cltname: '',
-                doccode:'',
-                docstatus: '',
-                // blscrap: '',
-                // self: false,
-                // ifblscrap: true
+                oppocompanyid: '',
+                oppocompanyname: '',
+                doccode: '',
+                statusindex: '',
+                isselfmade: false,
+                isunconfirmed: false,
+                isblscrap: true
             },
             columns: [
                 {
@@ -253,7 +261,7 @@ export default {
                 },
                 {
                     field: 'hdcurrency',
-                    title: '币种代码',
+                    title: '币种编号',
                     width: 100
                 },
                 {
@@ -292,7 +300,7 @@ export default {
 
     components: {
         //创建Dilog
-        // Dialog2201
+        Dialog4201
     },
 
     // 操作方法
@@ -304,7 +312,7 @@ export default {
             // this.searchform.blscrap = this.searchform.ifblscrap ? 'true' : 'false';
 
             this.$api.fcashdoc
-                .getDataLeftJoinSPricelistByPage(
+                .getDataByPage(
                     this.commEntity.pagination.pageIndex,
                     this.commEntity.pagination.pageSize,
                     this.commEntity.sort,
@@ -317,12 +325,13 @@ export default {
                     this.commEntity.options.loading = false;
                 });
         },
+
         // 表格双击事件
         cellDBLClickEvent(row) {
             this.$router.push({
-                name: '211010',
+                name: '565020',
                 params: {
-                    formid: 211010,
+                    formid: 565020,
                     multipleSelection: row.row,
                     type: 'fetch'
                 }
@@ -331,13 +340,6 @@ export default {
 
         // 新增按钮事件
         addTableData() {
-            // this.$router.push({
-            //   name: "211010",
-            //   params: {
-            //     formid: 211010,
-            //     multipleSelection:null
-            //   }
-            // });
             this.commEntity.dialog.show = false;
             this.$nextTick(() => {
                 this.commEntity.dialog.options = 'add';
@@ -345,27 +347,31 @@ export default {
                 this.commEntity.dialog.show = true;
             });
         },
+
         // 公司事件
         inputEnterEvent1(row) {
             this.$refs.ocompany.str = row.companyid;
             this.searchform.companyid = row.companyid;
             this.searchform.companyname = row.companyname;
         },
+
         // 监听input事件
         inputChangeEvent1() {
             this.searchform.companyid = '';
             this.searchform.companyname = '';
         },
+
         // 客户事件
         inputEnterEvent(row) {
             this.$refs.scltgeneral.str = row.cltcode;
-            this.searchform.cltcode = row.cltcode;
-            this.searchform.cltname = row.cltname;
+            this.searchform.oppocompanyid = row.cltcode;
+            this.searchform.oppocompanyname = row.cltname;
         },
+
         // 监听input事件
         inputChangeEvent() {
-            this.searchform.cltcode = '';
-            this.searchform.cltname = '';
+            this.searchform.oppocompanyid = '';
+            this.searchform.oppocompanyname = '';
         }
     },
 

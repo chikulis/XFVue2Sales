@@ -11,6 +11,7 @@ import Gsettlemethod from "@components/Diolog/Gsettlemethod"; // 重量结算方
 import Ocompany from "@components/Diolog/Ocompany"; // 公司列表组件
 import Osdgroup from "@components/Diolog/Osdgroup"; // 业务员列表组件
 import Ostorage from "@components/Diolog/Ostorage"; // 仓库列表组件
+import PrcCustomer from "@components/Diolog/PrcCustomer"; // 结算客户列表组件
 import QMSlevel from "@components/Diolog/QMSlevel"; // 质量码清单列表组件
 import Scltgeneral from "@components/Diolog/Scltgeneral"; // 客户列表组件
 import Slscontracthd from "@components/Diolog/Slscontracthd"; // 合同组件
@@ -59,6 +60,7 @@ export default (Vue) => {
         Vue.component("Ocompany", Ocompany);
         Vue.component("Osdgroup", Osdgroup);
         Vue.component("Ostorage", Ostorage);
+        Vue.component("PrcCustomer", PrcCustomer);
         Vue.component("QMSlevel", QMSlevel);
         Vue.component("Scltgeneral", Scltgeneral);
         Vue.component("Slscontracthd", Slscontracthd);

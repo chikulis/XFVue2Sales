@@ -21,7 +21,7 @@ const base = {
     //https://localhost:44333/api/mid_menu/getall?dbid=a.weberp
 
     // 本地测试接口
-    iCMMUrl: 'https://localhost:5003/api',
+    iCMMUrl: 'https://localhost:5005/api',
     sysAdminUrl: 'https://localhost:5001/api',
     identityUrl: 'https://localhost:5001/api',
     iSalesUrl: 'https://localhost:5001/api',
