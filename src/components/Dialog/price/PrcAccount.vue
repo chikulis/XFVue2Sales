@@ -1,4 +1,4 @@
-<!-- 币种汇率列表 组件 -->
+<!-- 公司会计科目列表 组件 -->
 <template>
     <div class="dialog">
         <!-- input框 -->
@@ -17,17 +17,18 @@
             ></i>
         </el-input>
         <!-- dialog组件 -->
-        <el-dialog ref="dialogs" title="币种汇率列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="800px">
+        <el-dialog ref="dialogs" title="公司会计科目列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="60%">
             <el-row :gutter="10">
                 <el-col :span="9">
-                    <el-form-item label="时间" prop="settlemethodid">
-                        <el-date-picker
-                            v-model="searchform.settlemethodid"
-                            style="width: 100%"
-                            type="date"
-                            value-format="yyyy-MM-dd"
-                            @change="fetchTableData"
-                        ></el-date-picker>
+                    <el-form-item label="公司编号" prop="companyid">
+                        <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
+                        <PrcOCompany
+                            ref="companyid"
+                            :modelname="searchform.companyid"
+                            fieldname="companyid"
+                            @selectData="inputEnterEvent"
+                            @inputChangeEvent="inputChangeEvent"
+                        ></PrcOCompany>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -53,8 +54,7 @@
     </div>
 </template>
   
-  
-  <script>
+<script>
 export default {
     data() {
         return {
@@ -72,30 +72,48 @@ export default {
 
             //搜索
             searchform: {
-                settlemethodid: this.$moment().format('YYYY-MM-DD')
+                usercode: JSON.parse(localStorage.eleUser || '[]').username,
+                companyid: this.companyid,
+                accountid: ''
             },
 
             // 表格字段
             tableColumn: [
                 {
+                    field: 'coacode',
+                    title: '帐套号'
+                },
+                {
+                    field: 'accttype',
+                    title: '科目类型'
+                },
+                {
+                    field: 'acctcode',
+                    title: '编号'
+                },
+                {
+                    field: 'acctname',
+                    title: '名称'
+                },
+                {
+                    field: 'acctsubtype',
+                    title: '科目类别'
+                },
+                {
+                    field: 'dcflag',
+                    title: '借贷方向'
+                },
+                {
+                    field: 'acctfullname',
+                    title: '科目全称'
+                },
+                {
+                    field: 'companyid',
+                    title: '公司'
+                },
+                {
                     field: 'currency',
-                    title: '币种编号'
-                },
-                {
-                    field: 'currencyname',
-                    title: '币种名称'
-                },
-                {
-                    field: 'beginday',
-                    title: '开始日期',
-                },
-                {
-                    field: 'endday',
-                    title: '结束日期'
-                },
-                {
-                    field: 'exchange_rate',
-                    title: '汇率'
+                    title: '币种'
                 }
             ],
 
@@ -106,10 +124,11 @@ export default {
 
     // 传递参数
     props: {
-        modelname: '',
-        fieldname: '',
-        entertrue: { default: true },
-        disable: { default: false }
+        modelname: String,
+        fieldname: String,
+        companyid: String,
+        entertrue: { type: Boolean, default: true },
+        disable: { type: Boolean, default: false }
     },
 
     // 创建完成
@@ -119,9 +138,11 @@ export default {
     methods: {
         // 查询方法
         fetchTableData() {
+            //普通查询清空searchform的curcurency条件
+            this.searchform.currency = '';
             this.commEntity.options.loading = true;
             //this.str 查询参数
-            this.$api.currencyrate.getGLCurrencyRate(this.searchform).then((res) => {
+            this.$api.fcashdocitem.saveData1111(this.searchform).then((res) => {
                 this.tableData = res.rows;
                 this.commEntity.pagination.total = res.total;
                 this.commEntity.options.loading = false;
@@ -131,27 +152,32 @@ export default {
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
-                //一条数据直接赋值
-                if (this.tableData.length == 1) {
-                    this.show = false;
-                    this.$emit('importClickEvent', this.tableData[0]);
-                    this.tableData = [];
-                } else {
-                    this.show = true;
-                }
+                this.show = true;
                 this.fetchTableData();
             }
         },
 
         // 回车事件
         inputEnterEvent() {
-            this.$api.currencyrate.getGLCurrencyRate(this.searchform).then((res) => {
+            if (this.str == '') {
+                this.$message.warning('当前币种编号输入不正确，请检查！');
+                return;
+            }
+            //str回车事件，searchform的curcurency要等于str
+            this.searchform.currency = this.str;
+            this.$api.fcashdocitem.saveData1111(this.searchform).then((res) => {
                 if (res.total != 1) {
-                    this.fetchTableData();
+                    if (res.total == 0) {
+                        this.$message.warning('当前币种编号输入不正确，请检查！');
+                        return;
+                    }
+                    this.tableData = res.rows;
+                    this.commEntity.pagination.total = res.total;
+                    this.commEntity.options.loading = false;
                     this.show = true;
                     return;
                 }
-                this.$emit('inputEnterEvent', res.rows[0], this.fieldname);
+                this.$emit('selectData', { row: res.rows[0], fieldname: this.fieldname });
             });
         },
 
@@ -163,7 +189,7 @@ export default {
         // 双击事件
         cellDBLClickEvent(row) {
             this.show = false;
-            this.$emit('cellDBLClickEvent', row.row, this.fieldname);
+            this.$emit('selectData', { row: row.row, fieldname: this.fieldname });
         },
 
         // 选定操作
@@ -173,7 +199,7 @@ export default {
                 return;
             }
             this.show = false;
-            this.$emit('importClickEvent', this.clickrow, this.fieldname);
+            this.$emit('selectData', { row: this.clickrow, fieldname: this.fieldname });
         },
         // input值监听
         inputChangeEvent() {

@@ -35,26 +35,19 @@
                                 <el-input disabled v-model="HDData.formid"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="单据状态" prop="docstatus">
-                                <el-input disabled v-model="HDData.docstatus"></el-input>
-                            </el-form-item>
-                        </el-col>
                     </el-row>
 
                     <el-row :gutter="20">
                         <el-col :span="6">
-                            <el-form-item label="公司代码" prop="companyid">
+                            <el-form-item label="公司编号" prop="companyid">
                                 <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                <Ocompany
+                                <PrcOCompany
                                     ref="companyid"
                                     :modelname="HDData.companyid"
                                     fieldname="companyid"
-                                    @inputEnterEvent="inputEnterEvent"
-                                    @cellDBLClickEvent="inputEnterEvent"
-                                    @importClickEvent="inputEnterEvent"
+                                    @selectData="inputEnterEvent"
                                     @inputChangeEvent="inputChangeEvent"
-                                ></Ocompany>
+                                ></PrcOCompany>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
@@ -64,7 +57,7 @@
                         </el-col>
                         <el-col :span="6">
                             <el-form-item label="引用单号" prop="refcode">
-                                <el-input v-model="HDData.refcode" @input="asss" @keyup.enter.native="aaa"></el-input>
+                                <el-input v-model="HDData.refcode" @input="asss" @keyup.enter.native="refCodeEnter"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
@@ -72,7 +65,96 @@
                                 <el-input disabled v-model="HDData.refformid"></el-input>
                             </el-form-item>
                         </el-col>
+                    </el-row>
 
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <el-form-item label="客户编号" prop="oppocompanyid">
+                                <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
+                                <PrcCustomer
+                                    ref="oppocompanyid"
+                                    :modelname="HDData.oppocompanyid"
+                                    fieldname="oppocompanyid"
+                                    :companyid="HDData.companyid"
+                                    @selectData="inputEnterEvent"
+                                    @inputChangeEvent="inputChangeEvent"
+                                ></PrcCustomer>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="客户名称" prop="oppocompanyname">
+                                <el-input disabled v-model="HDData.oppocompanyname"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="往来类型" prop="objtype">
+                                <el-select v-model="HDData.objtype" clearable placeholder="请选择往来类型" style="width: 100%">
+                                    <el-option
+                                        v-for="item in objTypeOptions"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                    ></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="结算类型" prop="paymethod">
+                                <el-select v-model="HDData.paymethod" clearable placeholder="请选择结算类型" style="width: 100%">
+                                    <el-option
+                                        v-for="item in payMethodOptions"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                    ></el-option>
+                                </el-select>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <el-form-item label="组织编号" prop="orgid">
+                                <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
+                                <PrcOsdorg
+                                    ref="orgid"
+                                    :modelname="HDData.orgid"
+                                    fieldname="orgid"
+                                    :entertrue="false"
+                                    @inputEnterEvent="inputEnterEvent"
+                                    @cellDBLClickEvent="inputEnterEvent"
+                                    @importClickEvent="inputEnterEvent"
+                                    @inputChangeEvent="inputChangeEvent"
+                                ></PrcOsdorg>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="组织名称" prop="orgname">
+                                <el-input disabled v-model="HDData.orgname"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="资金账户编号" prop="cashcode">
+                                <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
+                                <PrcOsdorg
+                                    ref="cashcode"
+                                    :modelname="HDData.cashcode"
+                                    fieldname="cashcode"
+                                    @inputEnterEvent="inputEnterEvent"
+                                    @cellDBLClickEvent="inputEnterEvent"
+                                    @importClickEvent="inputEnterEvent"
+                                    @inputChangeEvent="inputChangeEvent"
+                                ></PrcOsdorg>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="资金账户名称" prop="cashname">
+                                <el-input disabled v-model="HDData.cashname"></el-input>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row :gutter="20">
                         <el-col :span="6">
                             <el-form-item label="业务员" prop="sdgroup">
                                 <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
@@ -92,121 +174,6 @@
                                 <el-input disabled v-model="HDData.sdgroupname"></el-input>
                             </el-form-item>
                         </el-col>
-                    </el-row>
-
-                    <el-row :gutter="20">
-                        <el-col :span="6">
-                            <el-form-item label="客户编号" prop="oppocompanyid">
-                                <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                <PrcCustomer
-                                    ref="oppocompanyid"
-                                    :modelname="HDData.oppocompanyid"
-                                    fieldname="oppocompanyid"
-                                    @inputEnterEvent="inputEnterEvent"
-                                    @cellDBLClickEvent="inputEnterEvent"
-                                    @importClickEvent="inputEnterEvent"
-                                    @inputChangeEvent="inputChangeEvent"
-                                ></PrcCustomer>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="客户名称" prop="oppocompanyname">
-                                <el-input disabled v-model="HDData.oppocompanyname"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="经销商代码" prop="Cltcode2">
-                                <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                <Vcltcompany
-                                    ref="Cltcode2"
-                                    :modelname="HDData.Cltcode2"
-                                    fieldname="Cltcode2"
-                                    @inputEnterEvent="inputEnterEvent"
-                                    @cellDBLClickEvent="inputEnterEvent"
-                                    @importClickEvent="inputEnterEvent"
-                                    @inputChangeEvent="inputChangeEvent"
-                                ></Vcltcompany>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="经销商名称" prop="CltName2">
-                                <el-input disabled v-model="HDData.CltName2"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-
-                    <el-row :gutter="20">
-                        <el-col :span="6">
-                            <el-form-item label="开票代码" prop="prncltcode">
-                                <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                <Scltgeneral
-                                    ref="prncltcode"
-                                    :modelname="HDData.prncltcode"
-                                    fieldname="prncltcode"
-                                    @inputEnterEvent="inputEnterEvent"
-                                    @cellDBLClickEvent="inputEnterEvent"
-                                    @importClickEvent="inputEnterEvent"
-                                    @inputChangeEvent="inputChangeEvent"
-                                ></Scltgeneral>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="开票名称" prop="prncltName">
-                                <el-input class="entertrue" v-model="HDData.prncltName"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="销售组织代码" prop="sdorgid">
-                                <el-input disabled v-model="HDData.sdorgid"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="销售组织名称" prop="sdorgname">
-                                <el-input disabled v-model="HDData.sdorgname"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-
-                    <el-row :gutter="20">
-                        <el-col :span="6">
-                            <el-form-item label="提货仓库代码" prop="stcode">
-                                <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                <Ostorage
-                                    ref="stcode"
-                                    :modelname="HDData.stcode"
-                                    fieldname="stcode"
-                                    @inputEnterEvent="inputEnterEvent"
-                                    @cellDBLClickEvent="inputEnterEvent"
-                                    @importClickEvent="inputEnterEvent"
-                                    @inputChangeEvent="inputChangeEvent"
-                                ></Ostorage>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="提货仓库名称" prop="stname">
-                                <el-input disabled v-model="HDData.stname"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="供货公司代码" prop="SupplyCompanyid">
-                                <el-input disabled v-model="HDData.SupplyCompanyid"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="供货名称" prop="SupplyCompanyname">
-                                <el-input disabled v-model="HDData.SupplyCompanyname"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-
-                    <el-row :gutter="20">
-                        <el-col :span="6">
-                            <el-form-item label="工厂代码" prop="SupplyAbbrName">
-                                <el-input disabled v-model="HDData.SupplyAbbrName"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row :gutter="20">
                         <el-col :span="6">
                             <el-form-item label="价目表代码" prop="Plistid">
                                 <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
@@ -224,25 +191,6 @@
                         <el-col :span="6">
                             <el-form-item label="价目表名称" prop="PlistName">
                                 <el-input disabled v-model="HDData.PlistName"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="结算方式代码" prop="settlemethodid">
-                                <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                <Gsettlemethod
-                                    ref="settlemethodid"
-                                    :modelname="HDData.settlemethodid"
-                                    fieldname="settlemethodid"
-                                    @inputEnterEvent="inputEnterEvent"
-                                    @cellDBLClickEvent="inputEnterEvent"
-                                    @importClickEvent="inputEnterEvent"
-                                    @inputChangeEvent="inputChangeEvent"
-                                ></Gsettlemethod>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="结算方式名称" prop="settlemethodname">
-                                <el-input disabled v-model="HDData.settlemethodname"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -272,7 +220,21 @@
                                 <el-input disabled v-model="HDData.hdcurrencyrate"></el-input>
                             </el-form-item>
                         </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="单据状态" prop="docstatus">
+                                <el-input disabled v-model="HDData.docstatus"></el-input>
+                            </el-form-item>
+                        </el-col>
                     </el-row>
+
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <el-form-item label="制单日期" prop="docdate">
+                                <el-date-picker v-model="HDData.docdate" class="entertrue" style="width: 100%" type="date"></el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
                     <el-row :gutter="20">
                         <el-col>
                             <el-form-item label="文本" prop="QMName">
@@ -295,10 +257,8 @@
 <script>
 import base from '@utils/base'; // 导入接口域名列表
 import axios from '@utils/request';
-import PrcCustomer from '../../../components/Diolog/PrcCustomer.vue';
 
 export default {
-  components: { PrcCustomer },
     // 数据
     data() {
         return {
@@ -321,8 +281,45 @@ export default {
                 refcode: '',
                 refformid: '',
                 oppocompanyid: '',
-                oppocompanyname: ''
-            }
+                oppocompanyname: '',
+                objtype: '客户',
+                paymethod: '',
+                orgid: '',
+                orgname: '',
+                cashcode: '',
+                cashname: '',
+                sdgroup: '',
+                sdgroupname: '',
+                contractno: '',
+                projectno: '',
+                hdcurrency: '',
+                hdcurrencyname: '',
+                hdexchange_rate: '',
+                docstatus: '',
+                pricedate: this.$moment().format('YYYY-MM-DD'),
+                hdtext: '',
+                entername:''
+            },
+            objTypeOptions: [
+                { label: '客户', value: '客户' },
+                { label: '供应商', value: '供应商' },
+                { label: '部门', value: '部门' }
+            ],
+            payMethodOptions: [
+                { label: '现金', value: '现金' },
+                { label: '支票', value: '支票' },
+                { label: '汇款', value: '汇款' },
+                { label: '银行汇票', value: '银行汇票' },
+                { label: '转账', value: '转账' },
+                { label: '同城结算', value: '同城结算' },
+                { label: '进账', value: '进账' },
+                { label: '划账', value: '划账' },
+                { label: '承兑', value: '承兑' },
+                { label: '刷卡', value: '刷卡' },
+                { label: '直通卡', value: '直通卡' },
+                { label: '银行承兑', value: '银行承兑' },
+                { label: '商业承兑', value: '商业承兑' }
+            ]
         };
     },
     // 父页面传递过来的参数
@@ -336,24 +333,33 @@ export default {
         if (this.hdData != '' && this.hdData != null) {
             this.HDData = this.hdData;
         }
-        this.getOptionsData();
-        console.log(this.hdData);
     },
     // 操作方法
     methods: {
         // 选择公司事件
-        inputEnterEvent(row, fieldname) {
-            console.log(row);
-            switch (fieldname) {
+        inputEnterEvent(data) {
+            console.log(data);
+            switch (data.fieldname) {
                 case 'companyid':
-                    this.$refs.companyid.str = row.companyid;
-                    this.HDData.companyid = row.companyid;
-                    this.HDData.companyname = row.companyname;
+                    this.$refs.companyid.str = data.row.companyid;
+                    this.HDData.companyid = data.row.companyid;
+                    this.HDData.companyname = data.row.companyname;
                     break;
                 case 'oppocompanyid':
-                    this.$refs.oppocompanyid.str = row.cltcode;
-                    this.HDData.oppocompanyid = row.cltcode;
-                    this.HDData.oppocompanyname = row.cltname;
+                    this.$refs.oppocompanyid.str = data.row.cltcode;
+                    this.HDData.oppocompanyid = data.row.cltcode;
+                    this.HDData.oppocompanyname = data.row.cltname;
+                    this.$refs.orgid.str = data.row.orgid;
+                    this.HDData.orgid = data.row.orgid;
+                    this.HDData.orgname = data.row.orgname;
+                    this.$refs.sdgroup.str = data.row.sdgroup;
+                    this.HDData.sdgroup = data.row.sdgroup;
+                    this.HDData.sdgroupname = data.row.sdgroupname;
+                    break;
+                case 'orgid':
+                    this.$refs.orgid.str = row.sdorgid;
+                    this.HDData.orgid = row.sdorgid;
+                    this.HDData.orgname = row.sdorgname;
                     break;
             }
         },
@@ -368,70 +374,37 @@ export default {
                     this.HDData.oppocompanyid = '';
                     this.HDData.oppocompanyname = '';
                     break;
+                case 'orgid':
+                    this.HDData.orgid = '';
+                    this.HDData.orgname = '';
+                    break;
+                case 'cashcode':
+                    this.HDData.cashcode = '';
+                    this.HDData.cashname = '';
+                    break;
             }
         },
         save() {
-            //   if (this.dialog.options == "add") {
-            //     // this.$api.mj_imatdochd.add(this.HDData).then(res => {
-            //     //   if (res.data.doccode != "" && res.data.doccode != null) {
-            //     //     this.$message.success("新增成功");
-            //     //     this.dialog.show = false;
-            //     //     this.$router.push({
-            //     //       name: "4032",
-            //     //       params: {
-            //     //         formid: 4032,
-            //     //         multipleSelection: res.data,
-            //     //         type: "fetch"
-            //     //       }
-            //     //     });
-            //     //   } else {
-            //     //     this.$message.warning(res.data.message);
-            //     //   }
-            //     // });
-
-            //   } else if (this.dialog.options == "updata") {
-            //     this.$api.mj_imatdochd.update(this.HDData).then(res => {
-            //       if ((res.code = 200)) {
-            //         this.$message.success("修改成功");
-            //         this.dialog.show = false;
-            //         this.$router.push({
-            //           name: "4032",
-            //           params: {
-            //             formid: 4032,
-            //             multipleSelection: res.data,
-            //             type: "fetch"
-            //           }
-            //         });
-            //       } else {
-            //         this.$message.warning("修改失败:" + res.message);
-            //       }
-            //     });
-            //   }
-            // }
-            this.$api.slssalesorderhd
-                .save(this.HDData)
+            this.$api.fcashdoc
+                .saveData(this.HDData)
                 .then((res) => {
-                    // if (res.status == 201) {
-                    //   // this.$message.success("保存成功");
-                    //  this.addFormData=res.data;
-                    if (res != undefined) {
-                        this.HDData = res;
-                        alert('保存成功');
-                        this.dialog.show = false;
-                        this.$router.push({
-                            name: '11010',
-                            params: {
-                                formid: 11010,
-                                multipleSelection: res.data,
-                                type: 'fetch'
-                            }
-                        });
-                    } else {
-                        this.$alert(res.data.message);
-                    }
+                    // if (res != undefined) {
+                    //     this.HDData = res;
+                    //     alert('保存成功');
+                    //     this.dialog.show = false;
+                    //     this.$router.push({
+                    //         name: '11010',
+                    //         params: {
+                    //             formid: 11010,
+                    //             multipleSelection: res.data,
+                    //             type: 'fetch'
+                    //         }
+                    //     });
+                    // } else {
+                    //     this.$alert(res.data.message);
+                    // }
                 })
                 .catch(function (error) {
-                    // this.$message.success('修改出错：'+error);
                     alert('保存出错：' + error);
                     console.log(error);
                 });
@@ -440,7 +413,7 @@ export default {
         asss() {
             console.log('1');
         },
-        aaa() {
+        refCodeEnter() {
             if (this.HDData.refcode == '') {
                 this.$message.warning('请输入正确的单据号，请检查！');
                 return;
@@ -476,7 +449,7 @@ export default {
 
 
 <style type="text/css">
-el-row {
+.el-row {
     margin-top: 10px;
 }
 

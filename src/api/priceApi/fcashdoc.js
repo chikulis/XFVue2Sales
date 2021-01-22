@@ -8,5 +8,9 @@ const fcashdoc = {
     getDataByDocCode(doccode) {
         return service.get(`${base.iPriceUrl}/fcashdoc/GetDataByDocCode?doccode=` + doccode);
     },
+    saveData(aaaa)
+    {
+        return service.post(`${base.iPriceUrl}/fcashdoc/SaveData`, aaaa);
+    }
 }
 export default fcashdoc;

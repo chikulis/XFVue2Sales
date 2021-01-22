@@ -5,5 +5,9 @@ const scltgeneral = {
     getDataLeftJoinOSDOrgByPage(index, size, sort, order, searchform) {
         return service.post(`${base.iCMMUrl}/scltgeneral/GetDataLeftJoinOSDOrgByPage?page=` + index + '&rows=' + size + '&sort=' + sort + '&order=' + order, searchform);
     },
+    getDataInPriceVCopmanyByPage(index, size, sort, order, searchform)
+    {
+        return service.post(`${base.iCMMUrl}/scltgeneral/GetDataInPriceVCopmanyByPage?page=` + index + '&rows=' + size + '&sort=' + sort + '&order=' + order, searchform);
+    }
 }
 export default scltgeneral;

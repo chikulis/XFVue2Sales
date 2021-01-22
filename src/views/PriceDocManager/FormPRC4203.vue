@@ -9,112 +9,165 @@
                 <ActionTool
                     :disTools="disTools"
                     :ifdistools="ifdistools"
-                    @BackTo="BackTo"
-                    @okTableData="okTableData"
                     @addTableData="addTableData"
-                    @cancelTableData="cancelTableData"
-                    @delTableData="delTableData"
-                    @exportFrom="exportFrom"
-                    @savTableData="savTableData"
+                    @aleTableData="aleTableData"
+                    @fetchTableData="fetchTableData(addFormData.doccode)"
                 ></ActionTool>
             </el-row>
 
             <!-- 表头信息 -->
             <template>
                 <el-form ref="addFormData" :model="addFormData" label-width="100px" size="mini" class="formDatastyle" style="width: 85%">
-                    <el-row :gutter="20">
-                        <el-col :span="6">
-                            <el-form-item label="单据号" prop="doccode">
-                                <el-input disabled v-model="addFormData.doccode"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="单据日期" prop="docdate">
-                                <el-date-picker
-                                    v-model="addFormData.docdate"
-                                    class="entertrue"
-                                    style="width: 100%"
-                                    type="date"
-                                ></el-date-picker>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="单据类型" prop="doctype">
-                                <el-input disabled v-model="addFormData.doctype"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="结算类型" prop="paymethod">
-                                <el-input disabled v-model="addFormData.paymethod"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row :gutter="20">
-                        <el-col :span="6">
-                            <el-form-item label="公司编号" prop="companyid">
-                                <el-input disabled v-model="addFormData.companyid"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="公司名称" prop="companyname">
-                                <el-input disabled v-model="addFormData.companyname"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="销区编号" prop="orgid">
-                                <el-input disabled v-model="addFormData.orgid"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="销区名称" prop="orgname">
-                                <el-input disabled v-model="addFormData.orgname"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row :gutter="20">
-                        <el-col :span="6">
-                            <el-form-item label="客户编号" prop="oppocompanyid">
-                                <el-input disabled v-model="addFormData.oppocompanyid"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="客户名称" prop="oppocompanyname">
-                                <el-input disabled v-model="addFormData.oppocompanyname"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="客户类型" prop="objtype">
-                                <el-input disabled v-model="addFormData.objtype"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="单据状态" prop="docstatus">
-                                <el-input disabled v-model="addFormData.docstatus"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-                    <el-row :gutter="20">
-                        <el-col :span="6">
-                            <el-form-item label="资金账户编号" prop="cashcode">
-                                <el-input disabled v-model="addFormData.cashcode"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="资金账户名称" prop="cashname">
-                                <el-input disabled v-model="addFormData.cashname"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="币种名称" prop="hdcurrencyname">
-                                <el-input disabled v-model="addFormData.hdcurrencyname"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="汇率" prop="hdexchange_rate">
-                                <el-input disabled v-model="addFormData.hdexchange_rate"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
+                    <el-tabs tab-position="bottom" type="border-card">
+                        <el-tab-pane label="基本">
+                            <el-row :gutter="20">
+                                <el-col :span="6">
+                                    <el-form-item label="单号" prop="doccode">
+                                        <el-input disabled v-model="addFormData.doccode"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="日期" prop="docdate">
+                                        <el-date-picker
+                                            v-model="addFormData.docdate"
+                                            class="entertrue"
+                                            style="width: 100%"
+                                            type="date"
+                                        ></el-date-picker>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="单据类型" prop="doctype">
+                                        <el-input disabled v-model="addFormData.doctype"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="结算类型" prop="paymethod">
+                                        <el-input disabled v-model="addFormData.paymethod"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="20">
+                                <el-col :span="6">
+                                    <el-form-item label="公司编号" prop="companyid">
+                                        <el-input disabled v-model="addFormData.companyid"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="公司名称" prop="companyname">
+                                        <el-input disabled v-model="addFormData.companyname"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="销售组织编号" prop="orgid">
+                                        <el-input disabled v-model="addFormData.orgid"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="销售组织名称" prop="orgname">
+                                        <el-input disabled v-model="addFormData.orgname"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="20">
+                                <el-col :span="6">
+                                    <el-form-item label="往来方编号" prop="oppocompanyid">
+                                        <el-input disabled v-model="addFormData.oppocompanyid"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="往来方名称" prop="oppocompanyname">
+                                        <el-input disabled v-model="addFormData.oppocompanyname"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="往来类型" prop="objtype">
+                                        <el-input disabled v-model="addFormData.objtype"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="单据状态" prop="docstatus">
+                                        <el-input disabled v-model="addFormData.docstatus"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="20">
+                                <el-col :span="6">
+                                    <el-form-item label="资金账户编号" prop="cashcode">
+                                        <el-input disabled v-model="addFormData.cashcode"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="资金账户名称" prop="cashname">
+                                        <el-input disabled v-model="addFormData.cashname"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="币种编号" prop="hdcurrency">
+                                        <el-input disabled v-model="addFormData.hdcurrency"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="汇率" prop="hdexchange_rate">
+                                        <el-input disabled v-model="addFormData.hdexchange_rate"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-tab-pane>
+                        <el-tab-pane label="结算条款">
+                            <el-row :gutter="20">
+                                <el-col :span="6">
+                                    <el-form-item label="业务组编号" prop="sdgroup">
+                                        <el-input disabled v-model="addFormData.sdgroup"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="业务组名称" prop="sdgroupname">
+                                        <el-input disabled v-model="addFormData.sdgroupname"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="合同" prop="contractno">
+                                        <el-input disabled v-model="addFormData.contractno"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="工程" prop="projectno">
+                                        <el-input disabled v-model="addFormData.projectno"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="20">
+                                <el-col :span="6">
+                                    <el-form-item label="总金额" prop="summoney">
+                                        <el-input disabled v-model="addFormData.summoney"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="本币金额" prop="natsummoney">
+                                        <el-input disabled v-model="addFormData.natsummoney"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="引用单据" prop="refcode">
+                                        <el-input disabled v-model="addFormData.refcode"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="6">
+                                    <el-form-item label="实际收款日期" prop="pricedate">
+                                        <el-date-picker v-model="addFormData.pricedate" style="width: 100%" type="date"></el-date-picker>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row :gutter="20">
+                                <el-col :span="24">
+                                    <el-form-item label="备注" prop="hdtext">
+                                        <el-input disabled v-model="addFormData.hdtext"></el-input>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-tab-pane>
+                    </el-tabs>
                 </el-form>
             </template>
 
@@ -133,27 +186,25 @@
                 :fetch="fetchTableData"
                 :showfooter="true"
                 @cellClickEvent="cellClickEvent"
-                @saveRowEvent="saveRowEvent"
                 :operationstate="operationstate"
-                @cv1_edit="cv1_edit"
                 :showindex="true"
-                :entercolumn="entercolumn"
                 :footerMethod="footerMethod"
             ></EditTable>
         </div>
 
-        <Dialog2003
+        <Dialog4203
             :dialog="commEntity.dialog"
-            :list="list"
+            :headerData="headerData"
+            :hdData="rowdata"
             @Refresh="fetchTableData(addFormData.doccode)"
             v-if="commEntity.dialog.show"
-        ></Dialog2003>
+        ></Dialog4203>
     </div>
 </template>
 
 <script>
 import base from '@utils/base'; // 导入接口域名列表
-import Dialog2003 from '@views/SalesDocManager/components/Dialog2003';
+import Dialog4203 from '@views/PriceDocManager/components/Dialog4203';
 export default {
     // 数据
     data() {
@@ -169,18 +220,15 @@ export default {
             //修改实体
             FormData: this.$api.slssalesorderitem.FormData(),
 
-            list: {
-                doccode: '' //传入dialog的条件
-            },
+            //传入dialog数据
+            headerData: {},
 
-            operationstate: false, //操作栏状态
+            operationstate: true, //操作栏状态
 
             tableData2: [], //获取第一次输入框的数据
-            
+
             // 表格数据
             tableData: [],
-
-            entercolumn: ['digit', 'cv1', 'cv1name'],
 
             // 验证规则
             validrules: {
@@ -239,70 +287,47 @@ export default {
             // 表格字段
             tableColumn: [
                 {
-                    field: 'matcode',
-                    title: '物料型号',
-                    width: 100,
+                    field: 'docitem',
+                    title: '项次'
+                },
+                {
+                    field: 'accountid',
+                    title: '贷方科目编号',
                     edit: { name: 'input' }
                 },
                 {
-                    field: 'matname',
-                    title: '物料名称',
-                    width: 100,
+                    field: 'accountname',
+                    title: '贷方科目名称',
                     align: 'left',
                     edit: { name: 'input' }
                 },
                 {
-                    field: 'matgroup',
-                    title: '物料组',
-                    width: 80,
+                    field: 'resume',
+                    title: '摘要',
                     edit: { name: 'input' }
                 },
                 {
-                    field: 'uom',
-                    title: '单位',
-                    width: 85,
+                    field: 'money',
+                    title: '金额',
                     edit: { name: 'input' }
                 },
                 {
-                    field: 'digit',
-                    title: '订单支数',
-                    width: 100,
+                    field: 'natmoney',
+                    title: '本币金额',
                     edit: { name: 'input' }
                 },
                 {
-                    field: 'cv1',
-                    title: '颜色代码',
-                    width: 100,
-                    edit: { name: 'input', attrs: { type: 'input', disabled: 'true' } },
-                    editrender: true
+                    field: 'acctfullname',
+                    title: '科目全称'
                 },
                 {
-                    field: 'cv1name',
-                    title: '颜色名称',
-                    width: 100
+                    field: 'dtcurrency',
+                    title: '币种',
+                    edit: { name: 'input' }
                 },
                 {
-                    field: 'cv2',
-                    title: '材质代码',
-                    width: 100,
-                    edit: { name: 'input', attrs: { type: 'input', disabled: 'true' } },
-                    editrender: true
-                },
-                {
-                    field: 'cv2name',
-                    title: '材质名称',
-                    width: 100
-                },
-
-                {
-                    field: 'cv3',
-                    title: '膜厚代码',
-                    width: 120
-                },
-                {
-                    field: 'cv3name',
-                    title: '膜厚名称',
-                    width: 100
+                    field: 'dtexchange_rate',
+                    title: '汇率'
                 }
             ],
 
@@ -352,7 +377,6 @@ export default {
             // 如果状态大于等于50，隐藏 新增，修改，确认
             if (this.addFormData.docstatus >= 50) {
                 this.ifdistools = 'true';
-                this.operationstate = true;
             }
             this.fetchTableData(this.addFormData.doccode);
         } else {
@@ -382,7 +406,7 @@ export default {
     },
     // 引用组件
     components: {
-        Dialog2003
+        Dialog4203
     },
     // 操作方法
     methods: {
@@ -396,35 +420,23 @@ export default {
             });
         },
 
-        // 选择公司事件
-        inputEnterEvent(row) {
-            this.$refs.ocompany.str = row.companyid;
-            this.addFormData.companyid = row.companyid;
-            this.addFormData.companyname = row.companyname;
-        },
-
-        // 选择部门事件
-        ocostcenterEvent(row) {
-            this.$refs.ocostcenter.str = row.cccode;
-            this.addFormData.cccode = row.cccode;
-            this.addFormData.ccname = row.ccname;
-        },
-
-        // 选择仓库事件
-        stcodeEvent(row) {
-            this.$refs.stcode.str = row.stcode;
-            this.addFormData.stcode = row.stcode;
-            this.addFormData.stname = row.stname;
-        },
-
         // 查询按钮
         fetchTableData(doccode) {
             this.rowdata = null;
-            this.$api.slssalesorderitem.getbydoc(doccode).then((res) => {
-                this.tableData = res.rows;
-                this.commEntity.pagination.total = res.total;
-            });
+            this.$api.fcashdocitem
+                .getDataByDocCode(
+                    this.commEntity.pagination.pageIndex,
+                    this.commEntity.pagination.pageSize,
+                    this.commEntity.sort,
+                    this.commEntity.order,
+                    doccode
+                )
+                .then((res) => {
+                    this.tableData = res.rows;
+                    this.commEntity.pagination.total = res.total;
+                });
         },
+
         // 表尾合计
         footerMethod({ columns, data }) {
             return [
@@ -439,78 +451,61 @@ export default {
                 })
             ];
         },
-        // 新增按钮
-        exportFrom() {
-            this.commEntity.dialog.show = false;
-            this.$nextTick(() => {
-                this.list.doccode = this.addFormData.doccode;
-                this.commEntity.dialog.options = 'Assign';
-                this.commEntity.dialog.title = '物料';
-                this.commEntity.dialog.show = true;
-            });
-        },
-        splitNum(num, n, symbol) {
-            if (!num) throw new Error('splitNum需要传入一个待转换的数据');
-            if (typeof num !== 'number') throw new TypeError('num参数应该是一个number类型');
-            if (n < 0) throw new Error('参数n不应该小于0');
-            var hasDot = parseInt(num) != num; //这里检测num是否为小数，true表示小数
-            var m = n != undefined && n != null ? n : 1;
-            num = m == 0 ? num.toFixed(m) + '.' : hasDot ? (n ? num.toFixed(n) : num) : num.toFixed(m);
-            symbol = symbol || ',';
-            num = num.toString().replace(/(\d)(?=(\d{3})+\.)/g, function (match, p1, p2) {
-                return p1 + symbol;
-            });
-            if (n == 0 || (!hasDot && !n)) {
-                //如果n为0或者传入的num是整数并且没有指定整数的保留位数，则去掉前面操作中的小数位
-                num = num.substring(0, num.indexOf('.'));
-            }
-            return num;
-        },
+
+        // splitNum(num, n, symbol) {
+        //     if (!num) throw new Error('splitNum需要传入一个待转换的数据');
+        //     if (typeof num !== 'number') throw new TypeError('num参数应该是一个number类型');
+        //     if (n < 0) throw new Error('参数n不应该小于0');
+        //     var hasDot = parseInt(num) != num; //这里检测num是否为小数，true表示小数
+        //     var m = n != undefined && n != null ? n : 1;
+        //     num = m == 0 ? num.toFixed(m) + '.' : hasDot ? (n ? num.toFixed(n) : num) : num.toFixed(m);
+        //     symbol = symbol || ',';
+        //     num = num.toString().replace(/(\d)(?=(\d{3})+\.)/g, function (match, p1, p2) {
+        //         return p1 + symbol;
+        //     });
+        //     if (n == 0 || (!hasDot && !n)) {
+        //         //如果n为0或者传入的num是整数并且没有指定整数的保留位数，则去掉前面操作中的小数位
+        //         num = num.substring(0, num.indexOf('.'));
+        //     }
+        //     return num;
+        // },
+
         // 点击行事件
         cellClickEvent(row) {
             this.rowdata = row.row;
         },
+
         addTableData() {
-            console.log(this.addFormData.doccode);
             if (this.addFormData.doccode == null || this.addFormData.doccode == '') {
                 this.$message.warning('请生成单据 才能添加');
             } else {
-                this.$refs.table.insertEvent();
+                // this.$refs.table.insertEvent();
+                this.headerData = this.addFormData;
+                this.commEntity.dialog.show = true;
             }
         },
+
+        aleTableData() {
+            this.commEntity.dialog.show = true;
+        },
+
         // 修改明细按钮
         saveRowEvent(row) {
-            this.FormData.doccode = row.row.doccode;
-            this.FormData.rowid = row.row.rowid;
-            this.FormData.matcode = row.row.matcode;
-            this.FormData.matgroup = row.row.matgroup;
-            this.FormData.matname = row.row.matname;
-            this.FormData.cv1 = row.row.cv1;
-            this.FormData.cv1name = row.row.cv1name;
-            this.FormData.cv2 = row.row.cv2;
-            this.FormData.cv2name = row.row.cv2name;
-            this.FormData.cv3 = row.row.cv3;
-            this.FormData.cv3name = row.row.cv3name;
-            this.FormData.cv4 = row.row.cv4;
-            this.FormData.cv5 = row.row.cv5;
-            this.FormData.digit = row.row.digit;
-
-            const array = [];
-            array.push(this.FormData);
+            console.log('111111111111');
             if (row.type == 'update') {
-                this.$api.slssalesorderitem
-                    .update(row.row)
+                this.$api.fcashdocitem
+                    .saveData(row.row)
                     .then((res) => {
-                        if (res.data.code == 200) {
-                            this.$message.success('修改成功');
-                            this.fetchTableData(row.row.doccode);
-                            return;
-                        } else {
-                            this.$message.warning('修改失败：' + res.data.message);
-                            this.fetchTableData(row.row.doccode);
-                            return;
-                            this.form.console.warn('hes');
-                        }
+                        // if (res.data.code == 200) {
+                        //     this.$message.success('修改成功');
+                        //     this.fetchTableData(row.row.doccode);
+                        //     return;
+                        // } else {
+                        //     this.$message.warning('修改失败：' + res.data.message);
+                        //     this.fetchTableData(row.row.doccode);
+                        //     return;
+                        //     this.form.console.warn('hes');
+                        // }
                     })
                     .catch(function (error) {
                         this.$message.success('修改出错：' + error);
@@ -534,6 +529,7 @@ export default {
                 }
             }
         },
+
         // 删除明细按钮
         delTableData() {
             if (this.rowdata == null) {
@@ -581,6 +577,7 @@ export default {
                 }
             });
         },
+
         // 取消按钮
         cancelTableData() {
             if (this.addFormData.docstatus == 50) {
@@ -607,6 +604,7 @@ export default {
                 });
             }
         },
+
         //保存表头
         savTableData() {
             this.$api.slssalesorderhd
@@ -627,20 +625,6 @@ export default {
                     alert('修改出错：' + error);
                     console.log(error);
                 });
-        },
-        //机型弹窗 获取数据
-        cv1_edit(row, nul) {
-            if (nul.isTrusted == true) {
-                this.tableData2 = row;
-                this.$nextTick(() => {
-                    this.$refs.Log.showdiolog();
-                });
-            } else {
-                row.row.cv1 = nul;
-            }
-        },
-        cv1name_edit(row, nul) {
-            row.row.cv1name = nul;
         }
     }
 };

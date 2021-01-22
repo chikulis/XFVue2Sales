@@ -1,8 +1,9 @@
 /** 
  * api接口的统一出口
  */
-import currencyrate from '../api/cmmApi/currencyrate';
+import currency from '../api/cmmApi/currency';
 import fcashdoc from '../api/priceApi/fcashdoc';
+import fcashdocitem from '../api/priceApi/fcashdocitem';
 import gopcodesystem from '../api/cmmApi/gopcodesystem';
 import gsettlemethod from '../api/cmmApi/gsettlemethod';
 import identity from '../api/sysAdmin/identity';
@@ -13,7 +14,7 @@ import mid_module from '../api/sysAdmin/mid_module';
 import ocompany from '../api/cmmApi/ocompany';
 import osdgroup from '../api/cmmApi/osdgroup';
 import ostorage from '../api/cmmApi/ostorage';
-import prccustomer from '../api/priceApi/prccustomer';
+import prcosdorg from '../api/priceApi/prcosdorg';
 import qmslevel from '../api/cmmApi/qmslevel';
 import scltgeneral from '../api/cmmApi/scltgeneral';
 import slscltproject from '../api/SalesApi/slscltproject';
@@ -24,8 +25,9 @@ import spricelist from '../api/cmmApi/spricelist';
 import vcltcompany from '../api/cmmApi/vcltcompany';
 
 export default {
-    currencyrate,
+    currency,
     fcashdoc,
+    fcashdocitem,
     gopcodesystem,
     gsettlemethod,
     identity,
@@ -36,7 +38,7 @@ export default {
     ocompany,
     osdgroup,
     ostorage,
-    prccustomer,
+    prcosdorg,
     qmslevel,
     scltgeneral,
     slscontracthd,

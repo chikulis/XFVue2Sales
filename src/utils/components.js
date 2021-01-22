@@ -2,48 +2,51 @@
 import ActionTool from "@components/ActionTool";
 import Breadcrumb from "@components/Breadcrumb";
 import CommTable from "@components/CommTable";
-import Currencyrate from "@components/Diolog/Currencyrate"; // 币种列表组件
-import Departmental from "@components/Diolog/Departmental"; // 部门组件
+import Currencyrate from "@components/Dialog/Currencyrate"; // 币种列表组件
+import Departmental from "@components/Dialog/Departmental"; // 部门组件
 import DocStatusImg from "@components/DocStatusImg";
 import EditTable from "@components/EditTable";
-import Gopcodesystem from "@components/Diolog/Gopcodesystem"; // 客户对照系统列表组件
-import Gsettlemethod from "@components/Diolog/Gsettlemethod"; // 重量结算方式列表组件
-import Ocompany from "@components/Diolog/Ocompany"; // 公司列表组件
-import Osdgroup from "@components/Diolog/Osdgroup"; // 业务员列表组件
-import Ostorage from "@components/Diolog/Ostorage"; // 仓库列表组件
-import PrcCustomer from "@components/Diolog/PrcCustomer"; // 结算客户列表组件
-import QMSlevel from "@components/Diolog/QMSlevel"; // 质量码清单列表组件
-import Scltgeneral from "@components/Diolog/Scltgeneral"; // 客户列表组件
-import Slscontracthd from "@components/Diolog/Slscontracthd"; // 合同组件
-import Slscltproject from "@components/Diolog/Slscltproject"; // 客户项目组件
-import Spricelist from "@components/Diolog/Spricelist"; // 物料价目表  
-import Vcltcompany from "@components/Diolog/Vcltcompany"; // 经销商列表组件
-// import Typedata from "@components/Diolog/Typedata";//机型
-// import Pvndgeneral from "@components/Diolog/Pvndgeneral"; // 供应商列表组件
-// import Gpaytype from "@components/Diolog/Gpaytype"; // 付款方式列表组件
-// import Gvattype from "@components/Diolog/Gvattype"; // 税票列表组件
-// import Picktype from "@components/Diolog/Picktype"; // 收货方式
-// import Reference from "@components/Diolog/Reference";//可收货的采购订单
-// import ReadBaoFeiMatcode from "@components/Diolog/ReadBaoFeiMatcode";//可报废模具信息
-// import MdReason from "@components/Diolog/MdReason";//可报废模具信息
-// import Ostoragebin from "@components/Diolog/Ostoragebin";//查询库位
-// import Workcenter from "@components/Diolog/Workcenter";//查询车间
-// import Machine from "@components/Diolog/Machine";//查询车间机台
-// import GetMjMatStOragelots from "@components/Diolog/GetMjMatStOragelots";//查询可用模具
-// import Frequency from "@components/Diolog/Frequency";//查询班次组件
-// import Factoryinformation from "@components/Diolog/Factoryinformation";//查询班次组件
-// import Accountcanbemodified from "@components/Diolog/Accountcanbemodified";//查询可修改的台账
-// import XdXatCaseBox from "@components/Diolog/XdXatCaseBox";//查询模框组件
-// import UsreNvironment from "@components/Diolog/UsreNvironment";//查询模框组件
-// import GetDtData from "@components/Diolog/GetDtData";//查询模框组件
+import Gopcodesystem from "@components/Dialog/Gopcodesystem"; // 客户对照系统列表组件
+import Gsettlemethod from "@components/Dialog/Gsettlemethod"; // 重量结算方式列表组件
+import Ocompany from "@components/Dialog/Ocompany"; // 公司列表组件
+import Osdgroup from "@components/Dialog/Osdgroup"; // 业务员列表组件
+import Ostorage from "@components/Dialog/Ostorage"; // 仓库列表组件
+import PrcAccount from "@components/Dialog/price/PrcAccount"; // 结算--公司会计科目列表组件
+import PrcCustomer from "@components/Dialog/price/PrcCustomer"; // 结算--客户列表组件
+import PrcOCompany from "@components/Dialog/price/PrcOCompany"; // 结算--公司列表组件
+import PrcOsdorg from "@components/Dialog/price/PrcOsdorg"; // 结算--组织列表组件
+import QMSlevel from "@components/Dialog/QMSlevel"; // 质量码清单列表组件
+import Scltgeneral from "@components/Dialog/Scltgeneral"; // 客户列表组件
+import Slscontracthd from "@components/Dialog/Slscontracthd"; // 合同组件
+import Slscltproject from "@components/Dialog/Slscltproject"; // 客户项目组件
+import Spricelist from "@components/Dialog/Spricelist"; // 物料价目表  
+import Vcltcompany from "@components/Dialog/Vcltcompany"; // 经销商列表组件
+// import Typedata from "@components/Dialog/Typedata";//机型
+// import Pvndgeneral from "@components/Dialog/Pvndgeneral"; // 供应商列表组件
+// import Gpaytype from "@components/Dialog/Gpaytype"; // 付款方式列表组件
+// import Gvattype from "@components/Dialog/Gvattype"; // 税票列表组件
+// import Picktype from "@components/Dialog/Picktype"; // 收货方式
+// import Reference from "@components/Dialog/Reference";//可收货的采购订单
+// import ReadBaoFeiMatcode from "@components/Dialog/ReadBaoFeiMatcode";//可报废模具信息
+// import MdReason from "@components/Dialog/MdReason";//可报废模具信息
+// import Ostoragebin from "@components/Dialog/Ostoragebin";//查询库位
+// import Workcenter from "@components/Dialog/Workcenter";//查询车间
+// import Machine from "@components/Dialog/Machine";//查询车间机台
+// import GetMjMatStOragelots from "@components/Dialog/GetMjMatStOragelots";//查询可用模具
+// import Frequency from "@components/Dialog/Frequency";//查询班次组件
+// import Factoryinformation from "@components/Dialog/Factoryinformation";//查询班次组件
+// import Accountcanbemodified from "@components/Dialog/Accountcanbemodified";//查询可修改的台账
+// import XdXatCaseBox from "@components/Dialog/XdXatCaseBox";//查询模框组件
+// import UsreNvironment from "@components/Dialog/UsreNvironment";//查询模框组件
+// import GetDtData from "@components/Dialog/GetDtData";//查询模框组件
 
 
 
 
 //首页组件
-// import ChartCard from "@components/Diolog/homepage/ChartCard";//卡片组件
-// import Trend from "@components/Diolog/homepage/Trend";//头部图片组件
-// import RankList from "@components/Diolog/homepage/RankList";//中部表格组件
+// import ChartCard from "@components/Dialog/homepage/ChartCard";//卡片组件
+// import Trend from "@components/Dialog/homepage/Trend";//头部图片组件
+// import RankList from "@components/Dialog/homepage/RankList";//中部表格组件
 
 
 
@@ -60,7 +63,10 @@ export default (Vue) => {
         Vue.component("Ocompany", Ocompany);
         Vue.component("Osdgroup", Osdgroup);
         Vue.component("Ostorage", Ostorage);
+        Vue.component("PrcAccount", PrcAccount);
         Vue.component("PrcCustomer", PrcCustomer);
+        Vue.component("PrcOCompany", PrcOCompany);
+        Vue.component("PrcOsdorg", PrcOsdorg);
         Vue.component("QMSlevel", QMSlevel);
         Vue.component("Scltgeneral", Scltgeneral);
         Vue.component("Slscontracthd", Slscontracthd);
