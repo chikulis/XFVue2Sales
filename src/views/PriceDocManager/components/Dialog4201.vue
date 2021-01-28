@@ -41,13 +41,13 @@
                         <el-col :span="6">
                             <el-form-item label="公司编号" prop="companyid">
                                 <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                <PrcOCompany
+                                <PrcCompany
                                     ref="companyid"
                                     :modelname="HDData.companyid"
                                     fieldname="companyid"
                                     @selectData="inputEnterEvent"
                                     @inputChangeEvent="inputChangeEvent"
-                                ></PrcOCompany>
+                                ></PrcCompany>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
@@ -57,7 +57,7 @@
                         </el-col>
                         <el-col :span="6">
                             <el-form-item label="引用单号" prop="refcode">
-                                <el-input v-model="HDData.refcode" @input="asss" @keyup.enter.native="refCodeEnter"></el-input>
+                                <el-input v-model="HDData.refcode" @input="refCodeChange" @keyup.enter.native="refCodeEnter"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
@@ -71,14 +71,14 @@
                         <el-col :span="6">
                             <el-form-item label="客户编号" prop="oppocompanyid">
                                 <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                <PrcCustomer
+                                <PrcCltCompany
                                     ref="oppocompanyid"
                                     :modelname="HDData.oppocompanyid"
                                     fieldname="oppocompanyid"
-                                    :companyid="HDData.companyid"
+                                    @companyidIsNull="companyidIsNull"
                                     @selectData="inputEnterEvent"
                                     @inputChangeEvent="inputChangeEvent"
-                                ></PrcCustomer>
+                                ></PrcCltCompany>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
@@ -116,16 +116,14 @@
                         <el-col :span="6">
                             <el-form-item label="组织编号" prop="orgid">
                                 <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                <PrcOsdorg
+                                <PrcSDOrg
                                     ref="orgid"
                                     :modelname="HDData.orgid"
                                     fieldname="orgid"
                                     :entertrue="false"
-                                    @inputEnterEvent="inputEnterEvent"
-                                    @cellDBLClickEvent="inputEnterEvent"
-                                    @importClickEvent="inputEnterEvent"
+                                    @selectData="inputEnterEvent"
                                     @inputChangeEvent="inputChangeEvent"
-                                ></PrcOsdorg>
+                                ></PrcSDOrg>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
@@ -136,15 +134,14 @@
                         <el-col :span="6">
                             <el-form-item label="资金账户编号" prop="cashcode">
                                 <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                <PrcOsdorg
+                                <PrcCashAccount
                                     ref="cashcode"
                                     :modelname="HDData.cashcode"
                                     fieldname="cashcode"
-                                    @inputEnterEvent="inputEnterEvent"
-                                    @cellDBLClickEvent="inputEnterEvent"
-                                    @importClickEvent="inputEnterEvent"
+                                    @companyidIsNull="companyidIsNull"
+                                    @selectData="inputEnterEvent"
                                     @inputChangeEvent="inputChangeEvent"
-                                ></PrcOsdorg>
+                                ></PrcCashAccount>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
@@ -158,87 +155,80 @@
                         <el-col :span="6">
                             <el-form-item label="业务员" prop="sdgroup">
                                 <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                <Osdgroup
+                                <PrcSDGroup
                                     ref="sdgroup"
                                     :modelname="HDData.sdgroup"
                                     fieldname="sdgroup"
-                                    @inputEnterEvent="inputEnterEvent"
-                                    @cellDBLClickEvent="inputEnterEvent"
-                                    @importClickEvent="inputEnterEvent"
+                                    :entertrue="false"
+                                    @selectData="inputEnterEvent"
                                     @inputChangeEvent="inputChangeEvent"
-                                ></Osdgroup>
+                                ></PrcSDGroup>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
                             <el-form-item label="业务员姓名" prop="sdgroupname">
-                                <el-input disabled v-model="HDData.sdgroupname"></el-input>
+                                <el-input disabled v-model="HDData.sdgroupname" placeholder="业务员姓名"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item label="价目表代码" prop="Plistid">
-                                <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                <Spricelist
-                                    ref="Plistid"
-                                    :modelname="HDData.Plistid"
-                                    fieldname="Plistid"
-                                    @inputEnterEvent="inputEnterEvent"
-                                    @cellDBLClickEvent="inputEnterEvent"
-                                    @importClickEvent="inputEnterEvent"
-                                    @inputChangeEvent="inputChangeEvent"
-                                ></Spricelist>
+                            <el-form-item label="合同编号" prop="contractno">
+                                <el-input v-model="HDData.contractno" placeholder="合同编号"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item label="价目表名称" prop="PlistName">
-                                <el-input disabled v-model="HDData.PlistName"></el-input>
+                            <el-form-item label="项目编号" prop="projectno">
+                                <el-input v-model="HDData.projectno" placeholder="项目编号"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
 
                     <el-row :gutter="20">
                         <el-col :span="6">
-                            <el-form-item label="币种代码" prop="hdcurrency">
+                            <el-form-item label="币种编号" prop="hdcurrency">
                                 <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                <Currencyrate
+                                <PrcCurrency
                                     ref="hdcurrency"
                                     :modelname="HDData.hdcurrency"
                                     fieldname="hdcurrency"
-                                    @inputEnterEvent="inputEnterEvent"
-                                    @cellDBLClickEvent="inputEnterEvent"
-                                    @importClickEvent="inputEnterEvent"
+                                    @selectData="inputEnterEvent"
                                     @inputChangeEvent="inputChangeEvent"
-                                ></Currencyrate>
+                                ></PrcCurrency>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item label="币种名称" prop="hdCurrencyName">
-                                <el-input disabled v-model="HDData.hdCurrencyName"></el-input>
+                            <el-form-item label="币种名称" prop="hdcurrencyname">
+                                <el-input disabled v-model="HDData.hdcurrencyname" placeholder="币种名称"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item label="汇率" prop="hdcurrencyrate">
-                                <el-input disabled v-model="HDData.hdcurrencyrate"></el-input>
+                            <el-form-item label="汇率" prop="hdexchange_rate">
+                                <el-input disabled v-model="HDData.hdexchange_rate" placeholder="汇率"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
                             <el-form-item label="单据状态" prop="docstatus">
-                                <el-input disabled v-model="HDData.docstatus"></el-input>
+                                <el-input disabled v-model="HDData.docstatus" placeholder="单据状态"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
 
                     <el-row :gutter="20">
                         <el-col :span="6">
-                            <el-form-item label="制单日期" prop="docdate">
-                                <el-date-picker v-model="HDData.docdate" class="entertrue" style="width: 100%" type="date"></el-date-picker>
+                            <el-form-item label="实际收款日期" prop="pricedate">
+                                <el-date-picker
+                                    v-model="HDData.pricedate"
+                                    style="width: 100%"
+                                    type="date"
+                                    placeholder="请选择实际收款日期"
+                                ></el-date-picker>
                             </el-form-item>
                         </el-col>
                     </el-row>
 
                     <el-row :gutter="20">
                         <el-col>
-                            <el-form-item label="文本" prop="QMName">
-                                <el-input type="textarea" :rows="5" v-model="HDData.QMName"></el-input>
+                            <el-form-item label="文本" prop="hdtext">
+                                <el-input type="textarea" :rows="5" v-model="HDData.hdtext" placeholder="其他文本信息"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -255,21 +245,13 @@
 
 
 <script>
-import base from '@utils/base'; // 导入接口域名列表
-import axios from '@utils/request';
-
 export default {
     // 数据
     data() {
         return {
-            //选项卡默认项
-            activeName: 'first',
             // 通用数据
             commEntity: this.$api.identity.getCommEntity(),
-            //组件disabled默认值
-            AlPriceDateDiabled: false,
-            AlPriceDiabled: false,
-            btnCalcAlPriceDisabled: false,
+
             // 数据
             HDData: {
                 doccode: '',
@@ -298,13 +280,16 @@ export default {
                 docstatus: '',
                 pricedate: this.$moment().format('YYYY-MM-DD'),
                 hdtext: '',
-                entername:''
+                entername: JSON.parse(localStorage.eleUser || '[]').username,
+                modifyname: JSON.parse(localStorage.eleUser || '[]').username
             },
+
             objTypeOptions: [
                 { label: '客户', value: '客户' },
                 { label: '供应商', value: '供应商' },
                 { label: '部门', value: '部门' }
             ],
+
             payMethodOptions: [
                 { label: '现金', value: '现金' },
                 { label: '支票', value: '支票' },
@@ -325,15 +310,19 @@ export default {
     // 父页面传递过来的参数
     props: {
         dialog: Object,
-        list: Object,
         hdData: Object
     },
+
     // 加载完成
     created() {
-        if (this.hdData != '' && this.hdData != null) {
-            this.HDData = this.hdData;
+        console.log(this.hdData);
+        if (this.hdData != '' && this.hdData != null && this.dialog.options == 'update') {
+            //复制源数据出来，再赋值，否则会修改列表源数据
+            const copyArray = JSON.parse(JSON.stringify(this.hdData));
+            this.HDData = copyArray;
         }
     },
+
     // 操作方法
     methods: {
         // 选择公司事件
@@ -349,20 +338,37 @@ export default {
                     this.$refs.oppocompanyid.str = data.row.cltcode;
                     this.HDData.oppocompanyid = data.row.cltcode;
                     this.HDData.oppocompanyname = data.row.cltname;
-                    this.$refs.orgid.str = data.row.orgid;
-                    this.HDData.orgid = data.row.orgid;
-                    this.HDData.orgname = data.row.orgname;
+                    this.$refs.orgid.str = data.row.sdorgid;
+                    this.HDData.orgid = data.row.sdorgid;
+                    this.HDData.orgname = data.row.sdorgname;
                     this.$refs.sdgroup.str = data.row.sdgroup;
                     this.HDData.sdgroup = data.row.sdgroup;
                     this.HDData.sdgroupname = data.row.sdgroupname;
                     break;
                 case 'orgid':
-                    this.$refs.orgid.str = row.sdorgid;
-                    this.HDData.orgid = row.sdorgid;
-                    this.HDData.orgname = row.sdorgname;
+                    this.$refs.orgid.str = data.row.sdorgid;
+                    this.HDData.orgid = data.row.sdorgid;
+                    this.HDData.orgname = data.row.sdorgname;
+                    break;
+                case 'cashcode':
+                    this.$refs.cashcode.str = data.row.cashacctcode;
+                    this.HDData.cashcode = data.row.cashacctcode;
+                    this.HDData.cashname = data.row.cashacctname;
+                    break;
+                case 'sdgroup':
+                    this.$refs.sdgroup.str = data.row.sdgroup;
+                    this.HDData.sdgroup = data.row.sdgroup;
+                    this.HDData.sdgroupname = data.row.sdgroupname;
+                    break;
+                case 'hdcurrency':
+                    this.$refs.hdcurrency.str = data.row.currency;
+                    this.HDData.hdcurrency = data.row.currency;
+                    this.HDData.hdcurrencyname = data.row.currencyname;
+                    this.HDData.hdexchange_rate = data.row.exchange_rate;
                     break;
             }
         },
+
         // 监听input事件
         inputChangeEvent(fieldname) {
             switch (fieldname) {
@@ -382,27 +388,30 @@ export default {
                     this.HDData.cashcode = '';
                     this.HDData.cashname = '';
                     break;
+                case 'sdgroup':
+                    this.HDData.sdgroup = '';
+                    this.HDData.sdgroupname = '';
+                    break;
+                case 'hdcurrency':
+                    this.HDData.hdcurrency = '';
+                    this.HDData.hdcurrencyname = '';
+                    this.HDData.hdexchange_rate = '';
+                    break;
             }
         },
+
         save() {
             this.$api.fcashdoc
                 .saveData(this.HDData)
                 .then((res) => {
-                    // if (res != undefined) {
-                    //     this.HDData = res;
-                    //     alert('保存成功');
-                    //     this.dialog.show = false;
-                    //     this.$router.push({
-                    //         name: '11010',
-                    //         params: {
-                    //             formid: 11010,
-                    //             multipleSelection: res.data,
-                    //             type: 'fetch'
-                    //         }
-                    //     });
-                    // } else {
-                    //     this.$alert(res.data.message);
-                    // }
+                    console.log(res);
+                    if (res.code == 200) {
+                        this.$message.success('保存成功');
+                        this.dialog.show = false;
+                    } else {
+                        this.$alert(res.message);
+                    }
+                    this.$emit('Refresh');
                 })
                 .catch(function (error) {
                     alert('保存出错：' + error);
@@ -410,9 +419,25 @@ export default {
                 });
         },
 
-        asss() {
-            console.log('1');
+        refCodeChange() {
+            this.$refs.companyid.str = '';
+            this.HDData.companyid = '';
+            this.HDData.companyname = '';
+            this.$refs.orgid.str = '';
+            this.HDData.orgid = '';
+            this.HDData.orgname = '';
+            this.$refs.oppocompanyid.str = '';
+            this.HDData.oppocompanyid = '';
+            this.HDData.oppocompanyname = '';
+            this.$refs.sdgroup.str = '';
+            this.HDData.sdgroup = '';
+            this.HDData.sdgroupname = '';
+            this.$refs.hdcurrency.str = '';
+            this.HDData.hdcurrency = '';
+            this.HDData.hdcurrencyname = '';
+            this.HDData.hdexchange_rate = '';
         },
+
         refCodeEnter() {
             if (this.HDData.refcode == '') {
                 this.$message.warning('请输入正确的单据号，请检查！');
@@ -442,6 +467,23 @@ export default {
                 this.HDData.hdcurrencyname = res.rows[0].hdcurrencyname;
                 this.HDData.hdexchange_rate = res.rows[0].hdexchange_rate;
             });
+        },
+
+        companyidIsNull(fieldname) {
+            if (this.HDData.companyid == '') {
+                this.$message.warning('公司编号没有输入，请检查！');
+            }
+            switch (fieldname) {
+                case 'oppocompanyid':
+                    this.$refs.oppocompanyid.searchform.companyid = this.HDData.companyid;
+                    break;
+                case 'cashcode':
+                    this.$refs.cashcode.searchform.companyid = this.HDData.companyid;
+                    if (this.HDData.formid == '') {
+                        this.$refs.cashcode.searchform.formid = this.HDData.formid = 3105;
+                    }
+                    break;
+            }
         }
     }
 };

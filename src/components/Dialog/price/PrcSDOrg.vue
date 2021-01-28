@@ -1,4 +1,4 @@
-<!-- 公司列表 组件 -->
+<!-- 销售组织列表 组件 -->
 <template>
     <div class="dialog">
         <!-- input框 -->
@@ -17,7 +17,7 @@
             ></i>
         </el-input>
         <!-- dialog组件 -->
-        <el-dialog ref="dialogs" title="公司列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="800px">
+        <el-dialog ref="dialogs" title="销售组织列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="50%">
             <!-- 表格区域 -->
             <CommTable
                 ref="table"
@@ -38,9 +38,9 @@
         </el-dialog>
     </div>
 </template>
-  
-  
-  <script>
+    
+    
+    <script>
 export default {
     data() {
         return {
@@ -56,16 +56,16 @@ export default {
             // 表格数据
             tableData: [],
 
-            //搜索
             searchform: {
-                companyid: ''
+                sdorgid: ''
             },
 
             // 表格字段
             tableColumn: [
-                { field: 'companyid', title: '公司编号' },
-                { field: 'companyname', title: '公司名称' },
-                { field: 'encompanyname', title: '公司英文名称' }
+                { field: 'sdorgid', title: '销售组织编号' },
+                { field: 'sdorgname', title: '销售组织名称' },
+                { field: 'deputy', title: '负责人名称' },
+                { field: 'memo40', title: '备注' }
             ],
 
             // 选中的数据
@@ -75,30 +75,21 @@ export default {
 
     // 传递参数
     props: {
-        modelname: '',
-        fieldname: '',
-        //是否必填
-        entertrue: { default: true },
-        //是否禁用
-        disable: { default: false }
+        modelname: String,
+        fieldname: String,
+        entertrue: { type: Boolean, default: true },
+        disable: { type: Boolean, default: false }
     },
 
     // 创建完成
     created() {},
 
-    watch: {
-        modelname: function (newVal, oldVal) {
-            this.str = newVal;
-        }
-    },
-
     // 执行方法
     methods: {
         // 查询方法
         fetchTableData() {
-            this.searchform.companyid = '';
             this.commEntity.options.loading = true;
-            this.$api.ocompany
+            this.$api.prcsdorg
                 .getDataByPage(
                     this.commEntity.pagination.pageIndex,
                     this.commEntity.pagination.pageSize,
@@ -116,6 +107,7 @@ export default {
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
+                this.searchform.sdorgid = '';
                 this.show = true;
                 this.fetchTableData();
             }
@@ -123,8 +115,8 @@ export default {
 
         // 回车事件
         inputEnterEvent() {
-            this.searchform.companyid = this.str;
-            this.$api.ocompany
+            this.searchform.sdorgid = this.str;
+            this.$api.prcsdorg
                 .getDataByPage(
                     this.commEntity.pagination.pageIndex,
                     this.commEntity.pagination.pageSize,

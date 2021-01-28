@@ -1,4 +1,4 @@
-<!-- 客户列表 组件 -->
+<!-- 资金账户列表 组件 -->
 <template>
     <div class="dialog">
         <!-- input框 -->
@@ -17,28 +17,22 @@
             ></i>
         </el-input>
         <!-- dialog组件 -->
-        <el-dialog ref="dialogs" title="客户列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="50%">
+        <el-dialog ref="dialogs" title="资金账户列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="60%">
             <el-row :gutter="10">
-                <el-col :span="8">
+                <el-col :span="9">
                     <el-form-item label="公司编号" prop="companyid">
                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                        <PrcOCompany
+                        <PrcCompany
                             ref="companyid"
                             :modelname="searchform.companyid"
                             fieldname="companyid"
                             @selectData="searchInputEnterEvent"
-                            @inputChangeEvent="searchInputChangeEvent"
-                        ></PrcOCompany>
+                        ></PrcCompany>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                    <el-form-item label="客户编号" prop="cltcode">
-                        <el-input class="entertrue" v-model="searchform.cltcode" @input="fetchTableData"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="客户名称" prop="cltname">
-                        <el-input class="entertrue" v-model="searchform.cltname" @input="fetchTableData"></el-input>
+                <el-col :span="9">
+                    <el-form-item label="功能编号" prop="formid">
+                        <el-input class="entertrue" v-model="searchform.formid" @input="fetchTableData"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -63,9 +57,8 @@
         </el-dialog>
     </div>
 </template>
-    
-    
-    <script>
+  
+<script>
 export default {
     data() {
         return {
@@ -81,22 +74,44 @@ export default {
             // 表格数据
             tableData: [],
 
+            //搜索
             searchform: {
-                companyid: this.companyid,
-                cltcode: this.modelname,
-                cltname: ''
+                companyid: '',
+                formid: 3105,
+                docword: '',
+                cashacctcode: ''
             },
+
             // 表格字段
             tableColumn: [
-                { field: 'cltcode', title: '客户编号' },
-                { field: 'cltname', title: '客户名称', align: 'left' },
-                { field: 'areaid', title: '客户地区' },
-                { field: 'plistid', title: '价目表编号' },
-                { field: 'plistname', title: '价目表名称' },
-                { field: 'sdorgid', title: '销区编号' },
-                { field: 'sdorgname', title: '销区名称' },
-                { field: 'parentcltcode', title: '经销商编号' },
-                { field: 'parentcltname', title: '经销商名称' }
+                {
+                    field: 'cashacctcode',
+                    title: '资金账户编号'
+                },
+                {
+                    field: 'cashacctname',
+                    title: '资金账户名称'
+                },
+                {
+                    field: 'balance',
+                    title: '当前余额'
+                },
+                {
+                    field: 'bankcode',
+                    title: '参考账号'
+                },
+                {
+                    field: 'companyid',
+                    title: '公司编号'
+                },
+                {
+                    field: 'currency',
+                    title: '币种编号'
+                },
+                {
+                    field: 'exchange_rate',
+                    title: '币种汇率'
+                }
             ],
 
             // 选中的数据
@@ -106,32 +121,23 @@ export default {
 
     // 传递参数
     props: {
-        modelname: '',
-        fieldname: '',
-        companyid: '',
-        entertrue: { default: true },
-        disable: { default: false }
+        modelname: String,
+        fieldname: String,
+        entertrue: { type: Boolean, default: true },
+        disable: { type: Boolean, default: false }
     },
 
     // 创建完成
     created() {},
 
-    watch: {
-        companyid: function (newVal, oldVal) {
-            this.searchform.companyid = newVal;
-        }
-    },
-
     // 执行方法
     methods: {
         // 查询方法
         fetchTableData() {
-            if (this.isNullCltCode()) {
-                return;
-            }
             this.commEntity.options.loading = true;
-            this.$api.scltgeneral
-                .getDataInPriceVCopmanyByPage(
+            //this.str 查询参数
+            this.$api.fcashdoc
+                .getDataOfCashAcctount(
                     this.commEntity.pagination.pageIndex,
                     this.commEntity.pagination.pageSize,
                     this.commEntity.sort,
@@ -148,9 +154,12 @@ export default {
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
-                if (this.isNullCltCode()) {
+                this.$emit('companyidIsNull', this.fieldname);
+                if (this.searchform.companyid == '') {
                     return;
                 }
+                //普通查询清空searchform的cashacctcode条件
+                this.searchform.cashacctcode = '';
                 this.show = true;
                 this.fetchTableData();
             }
@@ -158,12 +167,18 @@ export default {
 
         // 回车事件
         inputEnterEvent() {
-            if (this.isNullCltCode()) {
+            this.$emit('companyidIsNull', this.fieldname);
+            if (this.searchform.companyid == '') {
                 return;
             }
-            this.searchform.cltcode = this.str;
-            this.$api.scltgeneral
-                .getDataInPriceVCopmanyByPage(
+            if (this.str == '') {
+                this.$message.warning('资金账户编号没有输入正确，请检查！');
+                return;
+            }
+            //str回车事件，searchform的cashacctcode要等于str
+            this.searchform.cashacctcode = this.str;
+            this.$api.fcashdoc
+                .getDataOfCashAcctount(
                     this.commEntity.pagination.pageIndex,
                     this.commEntity.pagination.pageSize,
                     this.commEntity.sort,
@@ -171,14 +186,18 @@ export default {
                     this.searchform
                 )
                 .then((res) => {
+                    this.tableData = res.rows;
+                    this.commEntity.pagination.total = res.total;
+                    this.commEntity.options.loading = false;
                     if (res.total != 1) {
-                        this.tableData = res.rows;
-                        this.commEntity.pagination.total = res.total;
-                        this.commEntity.options.loading = false;
+                        if (res.total == 0) {
+                            this.$message.warning('资金账户编号没有输入正确，请检查！');
+                            return;
+                        }
                         this.show = true;
                         return;
                     }
-                    this.$emit('selectData', res.rows[0], this.fieldname);
+                    this.$emit('selectData', { row: res.rows[0], fieldname: this.fieldname });
                 });
         },
 
@@ -207,24 +226,10 @@ export default {
             this.$emit('inputChangeEvent', this.fieldname);
         },
 
-        isNullCltCode() {
-            console.log('modelname:' + this.modelname);
-            console.log('str:' + this.str);
-            console.log('companyid:' + this.companyid);
-            console.log('searchform.companyid:' + this.searchform.companyid);
-            // if (this.searchform.companyid == '') {
-            //     this.$alert('公司编号没有输入，请检查！');
-            //     return true;
-            // }
-            return false;
-        },
-
         searchInputEnterEvent(data) {
             this.$refs.companyid.str = data.row.companyid;
             this.searchform.companyid = data.row.companyid;
-        },
-        searchInputChangeEvent() {
-            // this.$refs.companyid.str = this.searchform.companyid;
+            this.fetchTableData();
         }
     }
 };

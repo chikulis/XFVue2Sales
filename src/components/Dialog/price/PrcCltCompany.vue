@@ -1,10 +1,10 @@
-<!-- 销售组织列表 组件 -->
+<!-- 客户列表 组件 -->
 <template>
     <div class="dialog">
         <!-- input框 -->
         <el-input
-            :class="{ entertrue: isEntertrue }"
-            :disabled="isDisable"
+            :class="{ entertrue: entertrue }"
+            :disabled="disable"
             v-model="str"
             @keyup.enter.native="inputEnterEvent"
             @input="inputChangeEvent"
@@ -17,7 +17,31 @@
             ></i>
         </el-input>
         <!-- dialog组件 -->
-        <el-dialog ref="dialogs" title="销售组织列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="50%">
+        <el-dialog ref="dialogs" title="客户列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="50%">
+            <el-row :gutter="10">
+                <el-col :span="8">
+                    <el-form-item label="公司编号" prop="companyid">
+                        <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
+                        <PrcCompany
+                            ref="companyid"
+                            :modelname="searchform.companyid"
+                            fieldname="companyid"
+                            @selectData="searchInputEnterEvent"
+                        ></PrcCompany>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="客户编号" prop="cltcode">
+                        <el-input class="entertrue" v-model="searchform.cltcode" @input="fetchTableData"></el-input>
+                    </el-form-item>
+                </el-col>
+                <el-col :span="8">
+                    <el-form-item label="客户名称" prop="cltname">
+                        <el-input class="entertrue" v-model="searchform.cltname" @input="fetchTableData"></el-input>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+
             <!-- 表格区域 -->
             <CommTable
                 ref="table"
@@ -40,7 +64,7 @@
 </template>
     
     
-    <script>
+<script>
 export default {
     data() {
         return {
@@ -57,15 +81,21 @@ export default {
             tableData: [],
 
             searchform: {
-                sdorgid: ''
+                companyid: '',
+                cltcode: this.modelname,
+                cltname: ''
             },
-
             // 表格字段
             tableColumn: [
-                { field: 'sdorgid', title: '销售组织编号' },
-                { field: 'sdorgname', title: '销售组织名称' },
-                { field: 'deputy', title: '负责人名称' },
-                { field: 'memo40', title: '备注' }
+                { field: 'cltcode', title: '客户编号' },
+                { field: 'cltname', title: '客户名称', align: 'left' },
+                { field: 'areaid', title: '客户地区' },
+                { field: 'plistid', title: '价目表编号' },
+                { field: 'plistname', title: '价目表名称' },
+                { field: 'sdorgid', title: '销区编号' },
+                { field: 'sdorgname', title: '销区名称' },
+                { field: 'parentcltcode', title: '经销商编号' },
+                { field: 'parentcltname', title: '经销商名称' }
             ],
 
             // 选中的数据
@@ -75,10 +105,10 @@ export default {
 
     // 传递参数
     props: {
-        modelname: '',
-        fieldname: '',
-        entertrue: { default: true },
-        disable: { default: false }
+        modelname: String,
+        fieldname: String,
+        entertrue: { type: Boolean, default: true },
+        disable: { type: Boolean, default: false }
     },
 
     // 创建完成
@@ -89,7 +119,7 @@ export default {
         // 查询方法
         fetchTableData() {
             this.commEntity.options.loading = true;
-            this.$api.prcosdorg
+            this.$api.prccltcompany
                 .getDataByPage(
                     this.commEntity.pagination.pageIndex,
                     this.commEntity.pagination.pageSize,
@@ -107,23 +137,24 @@ export default {
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
-                this.searchform.sdorgid = '';
-                // //一条数据直接赋值
-                // if (this.tableData.length == 1) {
-                //     this.show = false;
-                //     this.$emit('importClickEvent', this.tableData[0]);
-                //     this.tableData = [];
-                // } else {
+                this.$emit('companyidIsNull', this.fieldname);
+                if (this.searchform.companyid == '') {
+                    return;
+                }
+                this.searchform.cltcode = this.str;
                 this.show = true;
-                // }
                 this.fetchTableData();
             }
         },
 
         // 回车事件
         inputEnterEvent() {
-            this.searchform.sdorgid = this.str;
-            this.$api.prcosdorg
+            this.$emit('companyidIsNull', this.fieldname);
+            if (this.searchform.companyid == '') {
+                return;
+            }
+            this.searchform.cltcode = this.str;
+            this.$api.prccltcompany
                 .getDataByPage(
                     this.commEntity.pagination.pageIndex,
                     this.commEntity.pagination.pageSize,
@@ -139,7 +170,7 @@ export default {
                         this.show = true;
                         return;
                     }
-                    this.$emit('inputEnterEvent', res.rows[0], this.fieldname);
+                    this.$emit('selectData', { row: res.rows[0], fieldname: this.fieldname });
                 });
         },
 
@@ -151,7 +182,7 @@ export default {
         // 双击事件
         cellDBLClickEvent(row) {
             this.show = false;
-            this.$emit('cellDBLClickEvent', row.row, this.fieldname);
+            this.$emit('selectData', { row: row.row, fieldname: this.fieldname });
         },
 
         // 选定操作
@@ -161,19 +192,17 @@ export default {
                 return;
             }
             this.show = false;
-            this.$emit('importClickEvent', this.clickrow, this.fieldname);
+            this.$emit('selectData', { row: this.clickrow, fieldname: this.fieldname });
         },
         // input值监听
         inputChangeEvent() {
             this.$emit('inputChangeEvent', this.fieldname);
-        }
-    },
-    computed: {
-        isEntertrue() {
-            return this.entertrue;
         },
-        isDisable() {
-            return this.disable;
+
+        searchInputEnterEvent(data) {
+            this.$refs.companyid.str = data.row.companyid;
+            this.searchform.companyid = data.row.companyid;
+            this.fetchTableData();
         }
     }
 };

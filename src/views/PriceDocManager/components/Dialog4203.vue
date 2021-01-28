@@ -11,7 +11,7 @@
             :validate-on-rule-change="false"
         >
             <template>
-                <el-form label-width="100px" size="mini" class="formDatastyle" style="padding-left: 10px">
+                <el-form :rules="validrules" label-width="100px" size="mini" class="formDatastyle" style="padding-left: 10px">
                     <el-row :gutter="20">
                         <el-col :span="6">
                             <el-form-item label="单号" prop="doccode">
@@ -33,14 +33,14 @@
                         <el-col :span="6">
                             <el-form-item label="贷方科目编号" prop="accountid">
                                 <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                <PrcAccount
+                                <PrcAccctCodeAccessList
                                     ref="accountid"
                                     :modelname="HDData.accountid"
                                     fieldname="accountid"
-                                    :companyid="headerData.companyid"
+                                    :companyid="headerFormData.companyid"
                                     @selectData="inputEnterEvent"
                                     @inputChangeEvent="inputChangeEvent"
-                                ></PrcAccount>
+                                ></PrcAccctCodeAccessList>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
@@ -68,13 +68,13 @@
                         <el-col :span="6">
                             <el-form-item label="币种" prop="dtcurrency">
                                 <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                <Currencyrate
+                                <PrcCurrency
                                     ref="dtcurrency"
                                     :modelname="HDData.dtcurrency"
                                     fieldname="dtcurrency"
                                     @selectData="inputEnterEvent"
                                     @inputChangeEvent="inputChangeEvent"
-                                ></Currencyrate>
+                                ></PrcCurrency>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
@@ -103,24 +103,16 @@
 
 
 <script>
-import base from '@utils/base'; // 导入接口域名列表
-import axios from '@utils/request';
-
 export default {
     // 数据
     data() {
         return {
-            //选项卡默认项
-            activeName: 'first',
             // 通用数据
             commEntity: this.$api.identity.getCommEntity(),
-            //组件disabled默认值
-            AlPriceDateDiabled: false,
-            AlPriceDiabled: false,
-            btnCalcAlPriceDisabled: false,
+            
             // 数据
             HDData: {
-                doccode: this.headerData.doccode,
+                doccode: this.headerFormData.doccode,
                 docitem: '',
                 rowid: '',
                 accountid: '113101',
@@ -128,25 +120,34 @@ export default {
                 acctfullname: '应收帐款_应收帐款－销售往来',
                 money: '',
                 natmoney: '',
-                dtcurrency: this.headerData.hdcurrency,
-                dtexchange_rate: this.headerData.hdexchange_rate,
-                resume: ''
-            }
+                dtcurrency: this.headerFormData.hdcurrency,
+                dtexchange_rate: this.headerFormData.hdexchange_rate,
+                resume: '',
+                usercode: JSON.parse(localStorage.eleUser || '[]').username
+            },
+
+            validrules: {}
         };
     },
+
     // 父页面传递过来的参数
     props: {
         dialog: Object,
-        headerData: Object,
+        headerFormData: Object,
         hdData: Object
     },
+
     // 加载完成
     created() {
-        if (this.hdData != '' && this.hdData != null) {
-            this.HDData = this.hdData;
+        console.log(this.headerFormData);
+        console.log(this.hdData);
+        if (this.hdData != '' && this.hdData != null && this.dialog.options == 'update') {
+            //复制源数据出来，再赋值，否则会修改列表源数据
+            const copyArray = JSON.parse(JSON.stringify(this.hdData));
+            this.HDData = copyArray;
         }
-        console.log(this.headerData);
     },
+
     // 操作方法
     methods: {
         // 选择公司事件
@@ -158,6 +159,9 @@ export default {
                     this.HDData.accountid = data.row.acctcode;
                     this.HDData.accountname = data.row.acctname;
                     this.HDData.acctfullname = data.row.acctfullname;
+                    this.$refs.dtcurrency.str = data.row.currency;
+                    this.HDData.currency = data.row.currency;
+                    this.HDData.dtexchange_rate = data.row.exchange_rate;
                     break;
                 case 'dtcurrency':
                     this.$refs.dtcurrency.str = data.row.currency;
@@ -167,6 +171,7 @@ export default {
             }
             this.getNatMoney();
         },
+
         // 监听input事件
         inputChangeEvent(fieldname) {
             switch (fieldname) {
@@ -181,6 +186,7 @@ export default {
                     break;
             }
         },
+
         save() {
             this.HDData.docitem = Number(this.HDData.docitem);
             this.HDData.money = Number(this.HDData.money);
@@ -189,27 +195,22 @@ export default {
             this.$api.fcashdocitem
                 .saveData(this.HDData)
                 .then((res) => {
-                    // if (res != undefined) {
-                    //     this.HDData = res;
-                    //     alert('保存成功');
-                    //     this.dialog.show = false;
-                    //     this.$router.push({
-                    //         name: '11010',
-                    //         params: {
-                    //             formid: 11010,
-                    //             multipleSelection: res.data,
-                    //             type: 'fetch'
-                    //         }
-                    //     });
-                    // } else {
-                    //     this.$alert(res.data.message);
-                    // }
+                    console.log(res);
+                    if (res.code == 200) {
+                        this.$message.success('保存成功');
+                        this.dialog.show = false;
+                    } else {
+                        this.$alert(res.message);
+                    }
+                    this.$emit('Refresh');
                 })
                 .catch(function (error) {
-                    alert('保存出错：' + error);
+                    this.$message.error('保存出错：' + error);
+                    // alert('保存出错：' + error);
                     console.log(error);
                 });
         },
+
         getNatMoney() {
             this.HDData.natmoney = 0;
             var mytotalmoney = this.HDData.money * this.HDData.dtexchange_rate;

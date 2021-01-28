@@ -11,26 +11,38 @@
                     :ifdistools="ifdistools"
                     @addTableData="addTableData"
                     @aleTableData="aleTableData"
-                    @fetchTableData="fetchTableData(addFormData.doccode)"
+                    @delTableData="delTableData"
+                    @fetchTableData="fetchTableData(headerFormData.doccode)"
+                    @okTableData="okTableData"
+                    @freeTableData="freeTableData"
+                    @cancelTableData="cancelTableData"
+                    @Headerchange="Headerchange"
                 ></ActionTool>
             </el-row>
 
             <!-- 表头信息 -->
             <template>
-                <el-form ref="addFormData" :model="addFormData" label-width="100px" size="mini" class="formDatastyle" style="width: 85%">
+                <el-form
+                    ref="headerFormData"
+                    :model="headerFormData"
+                    label-width="100px"
+                    size="mini"
+                    class="formDatastyle"
+                    style="width: 85%"
+                >
                     <el-tabs tab-position="bottom" type="border-card">
                         <el-tab-pane label="基本">
                             <el-row :gutter="20">
                                 <el-col :span="6">
                                     <el-form-item label="单号" prop="doccode">
-                                        <el-input disabled v-model="addFormData.doccode"></el-input>
+                                        <el-input disabled v-model="headerFormData.doccode"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="日期" prop="docdate">
                                         <el-date-picker
-                                            v-model="addFormData.docdate"
-                                            class="entertrue"
+                                            v-model="headerFormData.docdate"
+                                            value-format="yyyy-MM-dd"
                                             style="width: 100%"
                                             type="date"
                                         ></el-date-picker>
@@ -38,78 +50,78 @@
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="单据类型" prop="doctype">
-                                        <el-input disabled v-model="addFormData.doctype"></el-input>
+                                        <el-input disabled v-model="headerFormData.doctype"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="结算类型" prop="paymethod">
-                                        <el-input disabled v-model="addFormData.paymethod"></el-input>
+                                        <el-input disabled v-model="headerFormData.paymethod"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row :gutter="20">
                                 <el-col :span="6">
                                     <el-form-item label="公司编号" prop="companyid">
-                                        <el-input disabled v-model="addFormData.companyid"></el-input>
+                                        <el-input disabled v-model="headerFormData.companyid"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="公司名称" prop="companyname">
-                                        <el-input disabled v-model="addFormData.companyname"></el-input>
+                                        <el-input disabled v-model="headerFormData.companyname"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="销售组织编号" prop="orgid">
-                                        <el-input disabled v-model="addFormData.orgid"></el-input>
+                                        <el-input disabled v-model="headerFormData.orgid"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="销售组织名称" prop="orgname">
-                                        <el-input disabled v-model="addFormData.orgname"></el-input>
+                                        <el-input disabled v-model="headerFormData.orgname"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row :gutter="20">
                                 <el-col :span="6">
                                     <el-form-item label="往来方编号" prop="oppocompanyid">
-                                        <el-input disabled v-model="addFormData.oppocompanyid"></el-input>
+                                        <el-input disabled v-model="headerFormData.oppocompanyid"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="往来方名称" prop="oppocompanyname">
-                                        <el-input disabled v-model="addFormData.oppocompanyname"></el-input>
+                                        <el-input disabled v-model="headerFormData.oppocompanyname"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="往来类型" prop="objtype">
-                                        <el-input disabled v-model="addFormData.objtype"></el-input>
+                                        <el-input disabled v-model="headerFormData.objtype"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="单据状态" prop="docstatus">
-                                        <el-input disabled v-model="addFormData.docstatus"></el-input>
+                                        <el-input disabled v-model="headerFormData.docstatus"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row :gutter="20">
                                 <el-col :span="6">
                                     <el-form-item label="资金账户编号" prop="cashcode">
-                                        <el-input disabled v-model="addFormData.cashcode"></el-input>
+                                        <el-input disabled v-model="headerFormData.cashcode"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="资金账户名称" prop="cashname">
-                                        <el-input disabled v-model="addFormData.cashname"></el-input>
+                                        <el-input disabled v-model="headerFormData.cashname"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="币种编号" prop="hdcurrency">
-                                        <el-input disabled v-model="addFormData.hdcurrency"></el-input>
+                                        <el-input disabled v-model="headerFormData.hdcurrency"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="汇率" prop="hdexchange_rate">
-                                        <el-input disabled v-model="addFormData.hdexchange_rate"></el-input>
+                                        <el-input disabled v-model="headerFormData.hdexchange_rate"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -118,51 +130,51 @@
                             <el-row :gutter="20">
                                 <el-col :span="6">
                                     <el-form-item label="业务组编号" prop="sdgroup">
-                                        <el-input disabled v-model="addFormData.sdgroup"></el-input>
+                                        <el-input disabled v-model="headerFormData.sdgroup"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="业务组名称" prop="sdgroupname">
-                                        <el-input disabled v-model="addFormData.sdgroupname"></el-input>
+                                        <el-input disabled v-model="headerFormData.sdgroupname"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="合同" prop="contractno">
-                                        <el-input disabled v-model="addFormData.contractno"></el-input>
+                                        <el-input disabled v-model="headerFormData.contractno"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="工程" prop="projectno">
-                                        <el-input disabled v-model="addFormData.projectno"></el-input>
+                                        <el-input disabled v-model="headerFormData.projectno"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row :gutter="20">
                                 <el-col :span="6">
                                     <el-form-item label="总金额" prop="summoney">
-                                        <el-input disabled v-model="addFormData.summoney"></el-input>
+                                        <el-input disabled v-model="headerFormData.summoney"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="本币金额" prop="natsummoney">
-                                        <el-input disabled v-model="addFormData.natsummoney"></el-input>
+                                        <el-input disabled v-model="headerFormData.natsummoney"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="引用单据" prop="refcode">
-                                        <el-input disabled v-model="addFormData.refcode"></el-input>
+                                        <el-input disabled v-model="headerFormData.refcode"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="实际收款日期" prop="pricedate">
-                                        <el-date-picker v-model="addFormData.pricedate" style="width: 100%" type="date"></el-date-picker>
+                                        <el-date-picker v-model="headerFormData.pricedate" style="width: 100%" type="date"></el-date-picker>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
                             <el-row :gutter="20">
                                 <el-col :span="24">
                                     <el-form-item label="备注" prop="hdtext">
-                                        <el-input disabled v-model="addFormData.hdtext"></el-input>
+                                        <el-input disabled v-model="headerFormData.hdtext"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -172,7 +184,7 @@
             </template>
 
             <!-- 状态图片 -->
-            <DocStatusImg :docstatus="addFormData.docstatus"></DocStatusImg>
+            <DocStatusImg :docstatus="headerFormData.docstatus"></DocStatusImg>
 
             <br />
 
@@ -192,19 +204,28 @@
             ></EditTable>
         </div>
 
+        <Dialog4201
+            :dialog="docDialog.dialog"
+            :hdData="headerFormData"
+            @Refresh="refreshHeader(headerFormData.doccode)"
+            v-if="docDialog.dialog.show"
+        ></Dialog4201>
+
         <Dialog4203
-            :dialog="commEntity.dialog"
-            :headerData="headerData"
+            :dialog="docItemDialog.dialog"
+            :headerFormData="headerFormData"
             :hdData="rowdata"
-            @Refresh="fetchTableData(addFormData.doccode)"
-            v-if="commEntity.dialog.show"
+            @Refresh="fetchTableData(headerFormData.doccode)"
+            v-if="docItemDialog.dialog.show"
         ></Dialog4203>
     </div>
 </template>
 
 <script>
-import base from '@utils/base'; // 导入接口域名列表
+import Dialog4201 from '@views/PriceDocManager/components/Dialog4201';
 import Dialog4203 from '@views/PriceDocManager/components/Dialog4203';
+import XEUtils from 'xe-utils';
+
 export default {
     // 数据
     data() {
@@ -215,20 +236,91 @@ export default {
             rowdata: null,
 
             // 主表实体
-            addFormData: this.$api.slssalesorderhd.addFormData(),
+            headerFormData: {
+                doccode: '',
+                docdate: this.$moment().format('YYYY-MM-DD'),
+                doctype: '收款单',
+                paymethod: '',
+                companyid: '',
+                companyname: '',
+                orgid: '',
+                orgname: '',
+                oppocompanyid: '',
+                oppocompanyname: '',
+                objtype: '客户',
+                docstatus: 0,
+                cashcode: '',
+                cashname: '',
+                hdcurrency: '',
+                hdexchange_rate: 0,
+                sdgroup: '',
+                sdgroupname: '',
+                contractno: '',
+                projectno: '',
+                summoney: 0,
+                natsummoney: 0,
+                refcode: '',
+                pricedate: this.$moment().format('YYYY-MM-DD'),
+                hdtext: '',
+                entername: JSON.parse(localStorage.eleUser || '[]').username,
+                modifyname: JSON.parse(localStorage.eleUser || '[]').username
+            },
 
-            //修改实体
-            FormData: this.$api.slssalesorderitem.FormData(),
+            // 修改实体
+            // FormData: this.$api.slssalesorderitem.FormData(),
 
-            //传入dialog数据
-            headerData: {},
-
-            operationstate: true, //操作栏状态
-
-            tableData2: [], //获取第一次输入框的数据
+            // 表格字段
+            tableColumn: [
+                {
+                    field: 'docitem',
+                    title: '项次'
+                },
+                {
+                    field: 'accountid',
+                    title: '贷方科目编号',
+                    edit: { name: 'input' }
+                },
+                {
+                    field: 'accountname',
+                    title: '贷方科目名称',
+                    align: 'left',
+                    edit: { name: 'input' }
+                },
+                {
+                    field: 'resume',
+                    title: '摘要',
+                    edit: { name: 'input' }
+                },
+                {
+                    field: 'money',
+                    title: '金额',
+                    edit: { name: 'input' }
+                },
+                {
+                    field: 'natmoney',
+                    title: '本币金额',
+                    edit: { name: 'input' }
+                },
+                {
+                    field: 'acctfullname',
+                    title: '科目全称'
+                },
+                {
+                    field: 'dtcurrency',
+                    title: '币种',
+                    edit: { name: 'input' }
+                },
+                {
+                    field: 'dtexchange_rate',
+                    title: '汇率'
+                }
+            ],
 
             // 表格数据
             tableData: [],
+
+            // 表格操作栏状态
+            operationstate: true,
 
             // 验证规则
             validrules: {
@@ -284,53 +376,6 @@ export default {
                 ]
             },
 
-            // 表格字段
-            tableColumn: [
-                {
-                    field: 'docitem',
-                    title: '项次'
-                },
-                {
-                    field: 'accountid',
-                    title: '贷方科目编号',
-                    edit: { name: 'input' }
-                },
-                {
-                    field: 'accountname',
-                    title: '贷方科目名称',
-                    align: 'left',
-                    edit: { name: 'input' }
-                },
-                {
-                    field: 'resume',
-                    title: '摘要',
-                    edit: { name: 'input' }
-                },
-                {
-                    field: 'money',
-                    title: '金额',
-                    edit: { name: 'input' }
-                },
-                {
-                    field: 'natmoney',
-                    title: '本币金额',
-                    edit: { name: 'input' }
-                },
-                {
-                    field: 'acctfullname',
-                    title: '科目全称'
-                },
-                {
-                    field: 'dtcurrency',
-                    title: '币种',
-                    edit: { name: 'input' }
-                },
-                {
-                    field: 'dtexchange_rate',
-                    title: '汇率'
-                }
-            ],
-
             // 工具栏动态操作
             disTools: [
                 {
@@ -364,7 +409,10 @@ export default {
             ],
 
             // 是否启用按钮验证
-            ifdistools: ''
+            ifdistools: '',
+
+            docDialog: this.$api.identity.getCommEntity(),
+            docItemDialog: this.$api.identity.getCommEntity()
         };
     },
 
@@ -373,55 +421,35 @@ export default {
         console.log(this.$route.params.multipleSelection);
         // 渲染表头数据
         if (this.$route.params.multipleSelection) {
-            this.addFormData = this.$route.params.multipleSelection;
+            this.headerFormData = this.$route.params.multipleSelection;
             // 如果状态大于等于50，隐藏 新增，修改，确认
-            if (this.addFormData.docstatus >= 50) {
+            if (this.headerFormData.docstatus >= 50) {
                 this.ifdistools = 'true';
             }
-            this.fetchTableData(this.addFormData.doccode);
-        } else {
-            // var dateNow=,
-            (this.addFormData.DocDate = this.$moment().subtract('days', 0).format('YYYY-MM-DD')),
-                (this.addFormData.DelDate = this.$moment().subtract('days', 0).format('YYYY-MM-DD')),
-                (this.addFormData.AlPriceDate = this.$moment().subtract('days', 0).format('YYYY-MM-DD')),
-                (this.addFormData.AlPrice = 0),
-                (this.addFormData.FormID = 21101),
-                (this.addFormData.DocStatus = 0),
-                (this.addFormData.SLSType = 'P'),
-                (this.addFormData.EnterName = JSON.parse(localStorage.eleUser || '[]').usercode),
-                (this.addFormData.EnterDate = this.$moment().subtract('days', 0).format('YYYY-MM-DD')),
-                (this.addFormData.Companyid = JSON.parse(localStorage.eleUser || '[]').companyid),
-                (this.addFormData.CompanyName = JSON.parse(localStorage.eleUser || '[]').companyname),
-                (this.addFormData.Usertxthd3 = JSON.parse(localStorage.eleUser || '[]').companyid),
-                (this.addFormData.Hdcurrency = 'RMB'),
-                (this.addFormData.HdCurrencyName = '人民币'),
-                (this.addFormData.Hdcurrencyrate = 1),
-                (this.addFormData.ProcMethodId = 'H003'),
-                (this.addFormData.ProcMethodName = ''),
-                (this.addFormData.AlpriceMethod = 1),
-                (this.addFormData.QMCode = '001'),
-                (this.addFormData.QMName = ''),
-                (this.addFormData.TPPackageType = 0);
+            this.fetchTableData(this.headerFormData.doccode);
         }
     },
     // 引用组件
     components: {
+        Dialog4201,
         Dialog4203
     },
+
     // 操作方法
     methods: {
-        // 返回按钮
-        BackTo() {
-            this.$router.push({
-                name: '2002',
-                params: {
-                    formid: 2002
-                }
-            });
-        },
+        // // 返回按钮
+        // BackTo() {
+        //     this.$router.push({
+        //         name: '2002',
+        //         params: {
+        //             formid: 2002
+        //         }
+        //     });
+        // },
 
         // 查询按钮
         fetchTableData(doccode) {
+            console.log(this.commEntity);
             this.rowdata = null;
             this.$api.fcashdocitem
                 .getDataByDocCode(
@@ -444,10 +472,10 @@ export default {
                     if (columnIndex === 0) {
                         return '和值';
                     }
-                    // if (["digit", "totalmoney"].includes(column.property)) {
-                    //   return XEUtils.sum(data, column.property);
-                    // }
-                    return '';
+                    if (['money', 'natmoney'].includes(column.property)) {
+                        return XEUtils.sum(data, column.property);
+                    }
+                    return null;
                 })
             ];
         },
@@ -476,59 +504,70 @@ export default {
         },
 
         addTableData() {
-            if (this.addFormData.doccode == null || this.addFormData.doccode == '') {
+            if (this.headerFormData.doccode == null || this.headerFormData.doccode == '') {
                 this.$message.warning('请生成单据 才能添加');
             } else {
                 // this.$refs.table.insertEvent();
-                this.headerData = this.addFormData;
-                this.commEntity.dialog.show = true;
+                this.$nextTick(() => {
+                    this.docItemDialog.dialog.options = 'add';
+                    this.docItemDialog.dialog.title = '新增';
+                    this.docItemDialog.dialog.show = true;
+                });
             }
         },
 
         aleTableData() {
-            this.commEntity.dialog.show = true;
+            if (this.rowdata == null) {
+                this.$message.warning('请选中数据');
+                return;
+            }
+            this.$nextTick(() => {
+                this.docItemDialog.dialog.options = 'update';
+                this.docItemDialog.dialog.title = '修改';
+                this.docItemDialog.dialog.show = true;
+            });
         },
 
-        // 修改明细按钮
-        saveRowEvent(row) {
-            console.log('111111111111');
-            if (row.type == 'update') {
-                this.$api.fcashdocitem
-                    .saveData(row.row)
-                    .then((res) => {
-                        // if (res.data.code == 200) {
-                        //     this.$message.success('修改成功');
-                        //     this.fetchTableData(row.row.doccode);
-                        //     return;
-                        // } else {
-                        //     this.$message.warning('修改失败：' + res.data.message);
-                        //     this.fetchTableData(row.row.doccode);
-                        //     return;
-                        //     this.form.console.warn('hes');
-                        // }
-                    })
-                    .catch(function (error) {
-                        this.$message.success('修改出错：' + error);
-                        console.log(error);
-                    });
-                return;
-            } else if (row.type == 'add') {
-                if (this.addFormData.doccode != '' && this.addFormData.doccode != null) {
-                    this.$api.slssalesorderitem
-                        .add(this.addFormData.doccode, row.row)
-                        .then((res) => {
-                            this.$message.success('新增成功');
-                            this.fetchTableData(this.addFormData.doccode);
-                        })
-                        .catch(function (error) {
-                            this.$message.success('新增出错：' + error);
-                            console.log(error);
-                        });
-                } else {
-                    this.$message.warning('请生成单据');
-                }
-            }
-        },
+        // // 修改明细按钮
+        // saveRowEvent(row) {
+        //     console.log('111111111111');
+        //     if (row.type == 'update') {
+        //         this.$api.fcashdocitem
+        //             .saveData(row.row)
+        //             .then((res) => {
+        //                 // if (res.data.code == 200) {
+        //                 //     this.$message.success('修改成功');
+        //                 //     this.fetchTableData(row.row.doccode);
+        //                 //     return;
+        //                 // } else {
+        //                 //     this.$message.warning('修改失败：' + res.data.message);
+        //                 //     this.fetchTableData(row.row.doccode);
+        //                 //     return;
+        //                 //     this.form.console.warn('hes');
+        //                 // }
+        //             })
+        //             .catch(function (error) {
+        //                 this.$message.success('修改出错：' + error);
+        //                 console.log(error);
+        //             });
+        //         return;
+        //     } else if (row.type == 'add') {
+        //         if (this.headerFormData.doccode != '' && this.headerFormData.doccode != null) {
+        //             this.$api.slssalesorderitem
+        //                 .add(this.headerFormData.doccode, row.row)
+        //                 .then((res) => {
+        //                     this.$message.success('新增成功');
+        //                     this.fetchTableData(this.headerFormData.doccode);
+        //                 })
+        //                 .catch(function (error) {
+        //                     this.$message.success('新增出错：' + error);
+        //                     console.log(error);
+        //                 });
+        //         } else {
+        //             this.$message.warning('请生成单据');
+        //         }
+        //     }
+        // },
 
         // 删除明细按钮
         delTableData() {
@@ -536,96 +575,178 @@ export default {
                 this.$message.warning('请选中数据');
                 return;
             } else {
-                this.$api.slssalesorderitem.delete(this.rowdata.doccode, this.rowdata.rowid).then((res) => {
-                    if (res.data.code == 200) {
-                        this.$message.success('删除成功');
-                        this.fetchTableData(this.rowdata.doccode);
-                        return;
-                    } else {
-                        this.$message.warning('删除失败：' + res.data.message);
-                        return;
-                        this.form.console.warn('hes');
-                    }
+                this.$confirm('是否删除当前记录？一旦删除，单据记录将无法进行恢复！', '单据记录删除').then(() => {
+                    this.$api.fcashdocitem.deleteData(this.rowdata.doccode, this.rowdata.rowid).then((res) => {
+                        if (res.code == 200) {
+                            this.$message.success('记录删除成功');
+                            this.fetchTableData(this.headerFormData.doccode);
+                            return;
+                        } else {
+                            this.$message.warning('删除失败：' + res.message);
+                            return;
+                        }
+                    });
                 });
             }
         },
 
         // 确认按钮
         okTableData() {
-            this.$api.slssalesorderhd.conifrmdoc(this.addFormData.doccode, 1, this.addFormData.hrcode, '').then((res) => {
-                if (res.data.code == 200) {
-                    this.$message.success('确认成功');
-                    this.ifdistools = 'true';
-                    this.operationstate = true;
-                    this.addFormData.docstatus = 50;
-                    return;
-                } else {
-                    this.$alert(
-                        '确认失败:' + JSON.parse(res.data.message)[0].Memo == null
-                            ? res.data.message
-                            : JSON.parse(res.data.message)[0].Memo,
-                        '错误提示',
-                        {
-                            confirmButtonText: '确定',
-                            callback: (action) => {
-                                //方法
+            if (this.headerFormData.doccode == '') {
+                this.$message.warning('单号为空，请检查是否为新单！');
+                return;
+            }
+            if (this.headerFormData.docstatus >= 50) {
+                this.$message.warning('单据状态已经确认，不能再进行确认，请检查！');
+                return;
+            }
+            if (this.tableData.length == 0) {
+                this.$message.warning('当前单据不存在明细数据，请检查！');
+                return;
+            }
+            if (this.headerFormData.blscrap == 1) {
+                this.$message.warning('当前单据已经作废，请检查！');
+                return;
+            }
+
+            // 由于不能同时连续用两个confirm，第二个会覆盖掉第一个，只能把第二个提取出来封装重用，然后日期相同跟不修改日期，就调用封装方法就可以了
+            if (!this.$moment().isSame(this.headerFormData.docdate, 'month')) {
+                this.$confirm('当前单据日期不在本月中，是否不返回修改？', '单据日期检查')
+                    .then(() => {
+                        this.confirmOk();
+                    })
+                    .catch(() => {
+                        return;
+                    });
+            } else {
+                this.confirmOk();
+            }
+        },
+
+        confirmOk() {
+            this.$confirm('是否确认本单据？一旦确认，单据将无法进行修改！', '单据确认')
+                .then(() => {
+                    this.$api.fcashdoc
+                        .confirmDoc(this.headerFormData.doccode, JSON.parse(localStorage.eleUser || '[]').username)
+                        .then((res) => {
+                            if (res.code == 200) {
+                                this.headerFormData.docstatus = 50;
+                                this.ifdistools = 'true';
+                                this.$message.success('单据确认成功！');
+                                return;
+                            } else {
+                                this.$message.warning('单据确认失败：' + res.message);
+                                return;
                             }
-                        }
-                    );
+                        });
+                })
+                .catch(() => {
                     return;
-                    this.form.console.warn('hes');
-                }
-            });
+                });
+        },
+
+        freeTableData() {
+            if (this.headerFormData.docstatus >= 50) {
+                this.$message.warning('当前单据已经确认，无法保存，请先检查！');
+                return;
+            }
+            if (this.headerFormData.blscrap == 1) {
+                this.$message.warning('当前单据已经作废，请检查！');
+                return;
+            }
+            this.$confirm('是否作废本单据？一旦作废，单据将不可以进行修改！', '单据取消作废')
+                .then(() => {
+                    this.$api.fcashdoc
+                        .blscrapDoc(this.headerFormData.doccode)
+                        .then((res) => {
+                            if (res.code == 200) {
+                                this.headerFormData.blscrap = 1;
+                                this.ifdistools = '';
+                                this.$message.success('单据作废成功！');
+                                return;
+                            } else {
+                                this.$message.warning('单据作废失败：' + res.message);
+                                return;
+                            }
+                        });
+                })
+                .catch(() => {
+                    return;
+                });
         },
 
         // 取消按钮
         cancelTableData() {
-            if (this.addFormData.docstatus == 50) {
-                this.$api.slssalesorderhd.conifrmdoc(this.addFormData.doccode, -1, this.addFormData.hrcode, '').then((res) => {
-                    if (res.data.code == 200) {
-                        this.$message.success('取消确认成功');
-                        this.ifdistools = 'false';
-                        this.operationstate = false;
-                        this.addFormData.docstatus = 0;
-                        return;
-                    } else {
-                        this.$alert('取消确认失败:' + res.data.message, '错误提示', {
-                            confirmButtonText: '确定',
-                            callback: (action) => {}
-                        });
-                        return;
-                        this.form.console.warn('hes');
-                    }
-                });
-            } else {
-                this.$message({
-                    message: '单据已审核,不能做取消操作',
-                    type: 'warning'
-                });
+            if (this.headerFormData.doccode == '') {
+                this.$message.warning('单号为空，请检查是否为新单！');
+                return;
             }
+            if (this.headerFormData.docstatus < 50) {
+                this.$message.warning('单据状态未确认，不能再进行取消确认，请检查！');
+                return;
+            }
+            if (this.headerFormData.docstatus > 50) {
+                this.$message.warning('单据状态已经进行后续确认，不能再进行取消确认，请检查！');
+                return;
+            }
+            this.$confirm('是否取消确认本单据？', '单据确认')
+                .then(() => {
+                    this.$api.fcashdoc
+                        .cancelConfirmDoc(this.headerFormData.doccode, JSON.parse(localStorage.eleUser || '[]').username)
+                        .then((res) => {
+                            if (res.code == 200) {
+                                this.headerFormData.docstatus = 0;
+                                this.ifdistools = 'false';
+                                this.$message.success('单据取消确认成功！');
+                                return;
+                            } else {
+                                this.$message.warning('单据取消确认失败：' + res.message);
+                                return;
+                            }
+                        });
+                })
+                .catch(() => {
+                    return;
+                });
         },
 
-        //保存表头
-        savTableData() {
-            this.$api.slssalesorderhd
-                .save(this.addFormData)
-                .then((res) => {
-                    // if (res.status == 201) {
-                    //   // this.$message.success("保存成功");
-                    //  this.addFormData=res.data;
-                    if (res != undefined) {
-                        this.addFormData = res;
-                        alert('保存成功');
-                    } else {
-                        this.$alert(res.data.message);
-                    }
-                })
-                .catch(function (error) {
-                    // this.$message.success('修改出错：'+error);
-                    alert('修改出错：' + error);
-                    console.log(error);
-                });
+        Headerchange() {
+            this.$nextTick(() => {
+                this.docDialog.dialog.options = 'update';
+                this.docDialog.dialog.title = '修改';
+                this.docDialog.dialog.show = true;
+            });
+        },
+
+        refreshHeader(doccode) {
+            this.$api.fcashdoc.getDataByDocCode(doccode).then((res) => {
+                if (res.total > 0) {
+                    this.headerFormData = res.rows[0];
+                }
+            });
         }
+
+        // //保存表头
+        // savTableData() {
+        //     this.$api.slssalesorderhd
+        //         .save(this.addFormData)
+        //         .then((res) => {
+        //             // if (res.status == 201) {
+        //             //   // this.$message.success("保存成功");
+        //             //  this.addFormData=res.data;
+        //             if (res != undefined) {
+        //                 this.addFormData = res;
+        //                 alert('保存成功');
+        //             } else {
+        //                 this.$alert(res.data.message);
+        //             }
+        //         })
+        //         .catch(function (error) {
+        //             // this.$message.success('修改出错：'+error);
+        //             alert('修改出错：' + error);
+        //             console.log(error);
+        //         });
+        // }
     }
 };
 </script>

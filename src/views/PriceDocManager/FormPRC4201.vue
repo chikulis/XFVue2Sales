@@ -7,7 +7,7 @@
         <div class="container2">
             <!-- 工具栏 -->
             <el-row class="self-margin-down" :gutter="20">
-                <ActionTool @fetchTableData="fetchTableData" @addTableData="addTableData"></ActionTool>
+                <ActionTool @addTableData="addTableData" @aleTableData="aleTableData" @fetchTableData="fetchTableData"></ActionTool>
             </el-row>
 
             <template>
@@ -126,10 +126,12 @@
                 :options="commEntity.options"
                 :fetch="fetchTableData"
                 :pagination="commEntity.pagination"
+                @cellClickEvent="cellClickEvent"
                 @cellDBLClickEvent="cellDBLClickEvent"
             ></CommTable>
         </div>
-        <Dialog4201 :dialog="commEntity.dialog" v-if="commEntity.dialog.show" @Refresh="fetchTableData"></Dialog4201>
+
+        <Dialog4201 :dialog="commEntity.dialog" :hdData="rowdata" @Refresh="fetchTableData" v-if="commEntity.dialog.show"></Dialog4201>
     </div>
 </template>
 
@@ -140,7 +142,11 @@ export default {
     data() {
         return {
             commEntity: this.$api.identity.getCommEntity(),
+
+            rowdata: null,
+
             tableData: [],
+
             // 查询参数
             searchform: {
                 startdate: this.$moment().subtract('days', 1).format('YYYY-MM-DD'),
@@ -155,6 +161,7 @@ export default {
                 isunconfirmed: false,
                 isblscrap: true
             },
+
             columns: [
                 {
                     field: 'doccode',
@@ -326,6 +333,11 @@ export default {
                 });
         },
 
+        // 点击行事件
+        cellClickEvent(row) {
+            this.rowdata = row.row;
+        },
+
         // 表格双击事件
         cellDBLClickEvent(row) {
             this.$router.push({
@@ -344,6 +356,19 @@ export default {
             this.$nextTick(() => {
                 this.commEntity.dialog.options = 'add';
                 this.commEntity.dialog.title = '新增';
+                this.commEntity.dialog.show = true;
+            });
+        },
+
+        // 修改按钮事件
+        aleTableData() {
+            if (this.rowdata == null) {
+                this.$message.warning('请选中数据');
+                return;
+            }
+            this.$nextTick(() => {
+                this.commEntity.dialog.options = 'update';
+                this.commEntity.dialog.title = '修改';
                 this.commEntity.dialog.show = true;
             });
         },

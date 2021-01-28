@@ -13,8 +13,12 @@ import mid_menu from '../api/sysAdmin/mid_menu';
 import mid_module from '../api/sysAdmin/mid_module';
 import ocompany from '../api/cmmApi/ocompany';
 import osdgroup from '../api/cmmApi/osdgroup';
+import osdorg from '../api/cmmApi/osdorg';
 import ostorage from '../api/cmmApi/ostorage';
-import prcosdorg from '../api/priceApi/prcosdorg';
+import prccltcompany from '../api/priceApi/prccltcompany';
+import prccompany from '../api/priceApi/prccompany';
+import prcsdgroup from '../api/priceApi/prcsdgroup';
+import prcsdorg from '../api/priceApi/prcsdorg';
 import qmslevel from '../api/cmmApi/qmslevel';
 import scltgeneral from '../api/cmmApi/scltgeneral';
 import slscltproject from '../api/SalesApi/slscltproject';
@@ -37,8 +41,12 @@ export default {
     mid_module,
     ocompany,
     osdgroup,
+    osdorg,
     ostorage,
-    prcosdorg,
+    prccltcompany,
+    prccompany,
+    prcsdgroup,
+    prcsdorg,
     qmslevel,
     scltgeneral,
     slscontracthd,

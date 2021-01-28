@@ -11,10 +11,13 @@ import Gsettlemethod from "@components/Dialog/Gsettlemethod"; // 重量结算方
 import Ocompany from "@components/Dialog/Ocompany"; // 公司列表组件
 import Osdgroup from "@components/Dialog/Osdgroup"; // 业务员列表组件
 import Ostorage from "@components/Dialog/Ostorage"; // 仓库列表组件
-import PrcAccount from "@components/Dialog/price/PrcAccount"; // 结算--公司会计科目列表组件
-import PrcCustomer from "@components/Dialog/price/PrcCustomer"; // 结算--客户列表组件
-import PrcOCompany from "@components/Dialog/price/PrcOCompany"; // 结算--公司列表组件
-import PrcOsdorg from "@components/Dialog/price/PrcOsdorg"; // 结算--组织列表组件
+import PrcAccctCodeAccessList from "@components/Dialog/price/PrcAccctCodeAccessList"; // 结算--公司会计科目列表组件
+import PrcCashAccount from "@components/Dialog/price/PrcCashAccount"; // 结算--资金账户列表组件
+import PrcCompany from "@components/Dialog/price/PrcCompany"; // 结算--公司列表组件
+import PrcCurrency from "@components/Dialog/price/PrcCurrency"; // 结算--币种汇率列表组件
+import PrcSDGroup from "@components/Dialog/price/PrcSDGroup"; // 结算--业务员列表组件
+import PrcSDOrg from "@components/Dialog/price/PrcSDOrg"; // 结算--组织列表组件
+import PrcCltCompany from "@components/Dialog/price/PrcCltCompany"; // 结算--客户列表组件
 import QMSlevel from "@components/Dialog/QMSlevel"; // 质量码清单列表组件
 import Scltgeneral from "@components/Dialog/Scltgeneral"; // 客户列表组件
 import Slscontracthd from "@components/Dialog/Slscontracthd"; // 合同组件
@@ -63,10 +66,13 @@ export default (Vue) => {
         Vue.component("Ocompany", Ocompany);
         Vue.component("Osdgroup", Osdgroup);
         Vue.component("Ostorage", Ostorage);
-        Vue.component("PrcAccount", PrcAccount);
-        Vue.component("PrcCustomer", PrcCustomer);
-        Vue.component("PrcOCompany", PrcOCompany);
-        Vue.component("PrcOsdorg", PrcOsdorg);
+        Vue.component("PrcAccctCodeAccessList", PrcAccctCodeAccessList);
+        Vue.component("PrcCashAccount", PrcCashAccount);
+        Vue.component("PrcCompany", PrcCompany);
+        Vue.component("PrcCurrency", PrcCurrency);
+        Vue.component("PrcSDGroup", PrcSDGroup);
+        Vue.component("PrcSDOrg", PrcSDOrg);
+        Vue.component("PrcCltCompany", PrcCltCompany);
         Vue.component("QMSlevel", QMSlevel);
         Vue.component("Scltgeneral", Scltgeneral);
         Vue.component("Slscontracthd", Slscontracthd);
