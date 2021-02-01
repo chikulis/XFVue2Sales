@@ -117,27 +117,12 @@ export default {
         // 回车事件
         inputEnterEvent() {
             this.searchform.sdgroup = this.str;
-            this.$api.prcsdgroup
-                .getDataByPage(
-                    this.commEntity.pagination.pageIndex,
-                    this.commEntity.pagination.pageSize,
-                    this.commEntity.sort,
-                    this.commEntity.order,
-                    this.searchform
-                )
-                .then((res) => {
-                    this.tableData = res.rows;
-                    this.commEntity.pagination.total = res.total;
-                    this.commEntity.options.loading = false;
-                    if (res.total != 1) {
-                        if (res.total == 0) {
-                            return;
-                        }
-                        this.show = true;
-                        return;
-                    }
-                    this.$emit('selectData', { row: res.rows[0], fieldname: this.fieldname });
-                });
+            this.$api.prcsdgroup.getDataBySdgroup(this.searchform).then((res) => {
+                if (res.total == 0) {
+                    return;
+                }
+                this.$emit('selectData', { row: res.rows[0], fieldname: this.fieldname });
+            });
         },
 
         // 单击事件

@@ -1,4 +1,4 @@
-<!-- 4201 -- 收款凭证 -->
+<!-- 4001 -- 在途款 -->
 <template>
     <div class="container">
         <!-- 面包屑 -->
@@ -36,7 +36,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item label="公司代码" prop="companyid">
+                            <el-form-item label="公司编号" prop="companyid">
                                 <PrcCompany
                                     ref="companyid"
                                     :modelname="searchform.companyid"
@@ -58,6 +58,16 @@
                         <el-col :span="6">
                             <el-form-item label="单据号" prop="doccode">
                                 <el-input v-model="searchform.doccode" @keyup.enter.native="fetchTableData"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="单据状态" prop="docstatus">
+                                <el-input v-model="searchform.docstatus" @keyup.enter.native="fetchTableData"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="销售金额" prop="amount">
+                                <el-input v-model="searchform.amount" @keyup.enter.native="fetchTableData"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -91,6 +101,11 @@
                                             @change="fetchTableData"
                                             label="隐藏作废单"
                                         ></el-checkbox>
+                                        <el-checkbox
+                                            v-model="searchform.ispayflag"
+                                            @change="fetchTableData"
+                                            label="隐藏取消在途"
+                                        ></el-checkbox>
                                     </span>
                                 </div>
                             </el-form-item>
@@ -113,12 +128,12 @@
             ></CommTable>
         </div>
 
-        <Dialog4201 :dialog="commEntity.dialog" :hdData="rowdata" @Refresh="fetchTableData" v-if="commEntity.dialog.show"></Dialog4201>
+        <Dialog4001 :dialog="commEntity.dialog" :hdData="rowdata" @Refresh="fetchTableData" v-if="commEntity.dialog.show"></Dialog4001>
     </div>
 </template>
 
 <script>
-import Dialog4201 from '@views/PriceDocManager/components/Dialog4201'; // 引用 Dialog
+import Dialog4001 from '@views/PriceDocManager/components/Dialog4001'; // 引用 Dialog
 import XEUtils from 'xe-utils';
 
 export default {
@@ -133,15 +148,18 @@ export default {
 
             // 查询参数
             searchform: {
-                startdate: this.$moment().subtract('days', 1).format('YYYY-MM-DD'),
+                startdate: this.$moment('2020-05-01').subtract('days', 0).format('YYYY-MM-DD'),
                 enddate: this.$moment().subtract('days', 0).format('YYYY-MM-DD'),
                 companyid: '',
                 oppocompanyid: '',
                 doccode: '',
+                docstatus: '',
+                amount: '',
                 statusindex: '',
                 isselfmade: false,
                 isunconfirmed: false,
                 isblscrap: true,
+                ispayflag: true,
                 usercode: JSON.parse(localStorage.eleUser || '[]').usercode,
                 username: JSON.parse(localStorage.eleUser || '[]').username
             },
@@ -160,11 +178,6 @@ export default {
                 {
                     field: 'doctype',
                     title: '单据类型',
-                    width: 100
-                },
-                {
-                    field: 'pricedate',
-                    title: '实际收款日期',
                     width: 100
                 },
                 {
@@ -195,16 +208,15 @@ export default {
                     align: 'left'
                 },
                 {
-                    field: 'summoney',
-                    title: '款项原币',
+                    field: 'amount',
+                    title: '销售金额',
                     width: 100,
                     align: 'right'
                 },
                 {
-                    field: 'natsummoney',
-                    title: '款项本币',
-                    width: 100,
-                    align: 'right'
+                    field: 'payflag',
+                    title: '视为到款',
+                    width: 100
                 },
                 {
                     field: 'docstatus',
@@ -218,51 +230,6 @@ export default {
                             return <span>已审核</span>;
                         }
                     },
-                    width: 100
-                },
-                {
-                    field: 'paymethod',
-                    title: '结算类型',
-                    width: 100
-                },
-                {
-                    field: 'hdtext',
-                    title: '备注',
-                    width: 100
-                },
-                {
-                    field: 'orgid',
-                    title: '销区编号',
-                    width: 100
-                },
-                {
-                    field: 'orgname',
-                    title: '销区名称',
-                    width: 100
-                },
-                {
-                    field: 'sdgroup',
-                    title: '业务员编号',
-                    width: 100
-                },
-                {
-                    field: 'sdgroupname',
-                    title: '业务员名称',
-                    width: 100
-                },
-                {
-                    field: 'hdcurrency',
-                    title: '币种编号',
-                    width: 100
-                },
-                {
-                    field: 'hdcurrencyname',
-                    title: '币种名称',
-                    width: 100
-                },
-                {
-                    field: 'hdexchange_rate',
-                    title: '汇率',
                     width: 100
                 },
                 {
@@ -284,6 +251,82 @@ export default {
                     field: 'postdate',
                     title: '过账日期',
                     width: 100
+                },
+                {
+                    field: 'paymethod',
+                    title: '结算类型',
+                    width: 100
+                },
+                {
+                    field: 'orgid',
+                    title: '销区编号',
+                    width: 100
+                },
+                {
+                    field: 'orgname',
+                    title: '销区名称',
+                    width: 100
+                },
+                {
+                    field: 'sdgroup',
+                    title: '业务员编号',
+                    width: 100
+                },
+                {
+                    field: 'sdgroupname',
+                    title: '业务员姓名',
+                    width: 100
+                },
+                {
+                    field: 'hdcurrency',
+                    title: '币种编号',
+                    width: 100
+                },
+                {
+                    field: 'hdcurrencyname',
+                    title: '币种名称',
+                    width: 100
+                },
+                {
+                    field: 'hdexchange_rate',
+                    title: '币种汇率',
+                    width: 100,
+                    align: 'right'
+                },
+                {
+                    field: 'cccode',
+                    title: '收款部门编号',
+                    width: 100
+                },
+                {
+                    field: 'ccname',
+                    title: '收款部门名称',
+                    width: 100
+                },
+                {
+                    field: 'blscrap',
+                    title: '是否作废',
+                    width: 100
+                },
+                {
+                    field: 'blclosed',
+                    title: '是否冲销',
+                    width: 100
+                },
+                {
+                    field: 'hdtext',
+                    title: '备注',
+                    width: 150
+                },
+                {
+                    field: 'linkdoccode',
+                    title: '收款单号',
+                    width: 100
+                },
+                {
+                    field: 'canceldate',
+                    title: '取消在途时间',
+                    width: 100
                 }
             ]
         };
@@ -291,20 +334,7 @@ export default {
 
     components: {
         // 创建Dilog
-        Dialog4201
-    },
-
-    // 组件重用，如果不要重用，请将watch注释掉，查询方法跟表格双击方法按需注释，数据库里收款审核改回FormPRC4205
-    watch: {
-        // 路由名称监听
-        '$route.name': function () {
-            // 修改顶头导航
-            this.$children[0].getFomridMessage(this.$route.name);
-            // 修改顶部按钮
-            this.$children[1].$children[0].getToolAction();
-            // 重新执行查询
-            this.fetchTableData();
-        }
+        Dialog4001
     },
 
     // 操作方法
@@ -316,7 +346,7 @@ export default {
                     if (columnIndex === 0) {
                         return '和值';
                     }
-                    if (['summoney', 'natsummoney'].includes(column.property)) {
+                    if (['amount'].includes(column.property)) {
                         return XEUtils.sum(data, column.property);
                     }
                     return null;
@@ -328,38 +358,19 @@ export default {
         fetchTableData() {
             console.log(this.$route.name);
             this.commEntity.options.loading = true;
-
-            // this.searchform.blscrap = this.searchform.ifblscrap ? 'true' : 'false';
-
-            if (this.$route.name == '56502') {
-                this.$api.fcashdoc
-                    .getDataByPage(
-                        this.commEntity.pagination.pageIndex,
-                        this.commEntity.pagination.pageSize,
-                        this.commEntity.sort,
-                        this.commEntity.order,
-                        this.searchform
-                    )
-                    .then((res) => {
-                        this.tableData = res.rows;
-                        this.commEntity.pagination.total = res.total;
-                        this.commEntity.options.loading = false;
-                    });
-            } else {
-                this.$api.fcashdoc
-                    .getDataOfCheckByPage(
-                        this.commEntity.pagination.pageIndex,
-                        this.commEntity.pagination.pageSize,
-                        this.commEntity.sort,
-                        this.commEntity.order,
-                        this.searchform
-                    )
-                    .then((res) => {
-                        this.tableData = res.rows;
-                        this.commEntity.pagination.total = res.total;
-                        this.commEntity.options.loading = false;
-                    });
-            }
+            this.$api.fcashdoc
+                .getDataOfByPage(
+                    this.commEntity.pagination.pageIndex,
+                    this.commEntity.pagination.pageSize,
+                    this.commEntity.sort,
+                    this.commEntity.order,
+                    this.searchform
+                )
+                .then((res) => {
+                    this.tableData = res.rows;
+                    this.commEntity.pagination.total = res.total;
+                    this.commEntity.options.loading = false;
+                });
         },
 
         // 点击行事件
@@ -369,34 +380,15 @@ export default {
 
         // 表格双击事件
         cellDBLClickEvent(row) {
-            let routeName = this.$route.name;
-            let name = '565020';
-            let formid = 565020;
-            if (routeName == '56503') {
-                name = '565030';
-                formid = 565030;
-            }
-            this.$router.push({
-                name,
-                params: {
-                    formid,
-                    multipleSelection: row.row,
-                    type: 'fetch'
-                }
+            this.$nextTick(() => {
+                this.commEntity.dialog.options = 'update';
+                this.commEntity.dialog.title = '修改';
+                this.commEntity.dialog.show = true;
             });
-            // this.$router.push({
-            //     name: '565020',
-            //     params: {
-            //         formid:565020,
-            //         multipleSelection: row.row,
-            //         type: 'fetch'
-            //     }
-            // });
         },
 
         // 新增按钮事件
         addTableData() {
-            this.commEntity.dialog.show = false;
             this.$nextTick(() => {
                 this.commEntity.dialog.options = 'add';
                 this.commEntity.dialog.title = '新增';

@@ -21,18 +21,25 @@
                         <el-col :span="6">
                             <el-form-item label="单据类型" prop="doctype">
                                 <el-select v-model="HDData.doctype" clearable placeholder="请选择单据类型" style="width: 100%">
-                                    <el-option key="收款单" label="收款单" value="收款单"></el-option>
+                                    <el-option key="在途款" label="在途款" value="在途款"></el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
                             <el-form-item label="制单日期" prop="docdate">
-                                <el-date-picker v-model="HDData.docdate" class="entertrue" style="width: 100%" type="date" value-format='yyyy-MM-dd'></el-date-picker>
+                                <el-date-picker
+                                    v-model="HDData.docdate"
+                                    class="entertrue"
+                                    type="date"
+                                    value-format="yyyy-MM-dd"
+                                    placeholder="请选择"
+                                    style="width: 100%"
+                                ></el-date-picker>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
                             <el-form-item label="功能号" prop="formid">
-                                <el-input disabled v-model="HDData.formid"></el-input>
+                                <el-input disabled v-model="HDData.formid" placeholder="功能号"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -52,17 +59,25 @@
                         </el-col>
                         <el-col :span="6">
                             <el-form-item label="公司名称" prop="companyname">
-                                <el-input disabled v-model="HDData.companyname"></el-input>
+                                <el-input disabled v-model="HDData.companyname" placeholder="公司名称"></el-input>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item label="引用单号" prop="refcode">
-                                <el-input v-model="HDData.refcode" @input="refCodeChange" @keyup.enter.native="refCodeEnter"></el-input>
+                            <el-form-item label="组织编号" prop="orgid">
+                                <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
+                                <PrcSDOrg
+                                    ref="orgid"
+                                    :modelname="HDData.orgid"
+                                    fieldname="orgid"
+                                    :entertrue="false"
+                                    @selectData="inputEnterEvent"
+                                    @inputChangeEvent="inputChangeEvent"
+                                ></PrcSDOrg>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item label="引用功能" prop="refformid">
-                                <el-input disabled v-model="HDData.refformid"></el-input>
+                            <el-form-item label="组织名称" prop="orgname">
+                                <el-input disabled v-model="HDData.orgname" placeholder="组织名称"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -83,75 +98,9 @@
                         </el-col>
                         <el-col :span="6">
                             <el-form-item label="客户名称" prop="oppocompanyname">
-                                <el-input disabled v-model="HDData.oppocompanyname"></el-input>
+                                <el-input disabled v-model="HDData.oppocompanyname" placeholder="客户名称"></el-input>
                             </el-form-item>
                         </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="往来类型" prop="objtype">
-                                <el-select v-model="HDData.objtype" clearable placeholder="请选择往来类型" style="width: 100%">
-                                    <el-option
-                                        v-for="item in objTypeOptions"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value"
-                                    ></el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="结算类型" prop="paymethod">
-                                <el-select v-model="HDData.paymethod" clearable placeholder="请选择结算类型" style="width: 100%">
-                                    <el-option
-                                        v-for="item in payMethodOptions"
-                                        :key="item.value"
-                                        :label="item.label"
-                                        :value="item.value"
-                                    ></el-option>
-                                </el-select>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-
-                    <el-row :gutter="20">
-                        <el-col :span="6">
-                            <el-form-item label="组织编号" prop="orgid">
-                                <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                <PrcSDOrg
-                                    ref="orgid"
-                                    :modelname="HDData.orgid"
-                                    fieldname="orgid"
-                                    :entertrue="false"
-                                    @selectData="inputEnterEvent"
-                                    @inputChangeEvent="inputChangeEvent"
-                                ></PrcSDOrg>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="组织名称" prop="orgname">
-                                <el-input disabled v-model="HDData.orgname"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="资金账户编号" prop="cashcode">
-                                <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                <PrcCashAccount
-                                    ref="cashcode"
-                                    :modelname="HDData.cashcode"
-                                    fieldname="cashcode"
-                                    @companyidIsNull="companyidIsNull"
-                                    @selectData="inputEnterEvent"
-                                    @inputChangeEvent="inputChangeEvent"
-                                ></PrcCashAccount>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="资金账户名称" prop="cashname">
-                                <el-input disabled v-model="HDData.cashname"></el-input>
-                            </el-form-item>
-                        </el-col>
-                    </el-row>
-
-                    <el-row :gutter="20">
                         <el-col :span="6">
                             <el-form-item label="业务员" prop="sdgroup">
                                 <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
@@ -170,14 +119,66 @@
                                 <el-input disabled v-model="HDData.sdgroupname" placeholder="业务员姓名"></el-input>
                             </el-form-item>
                         </el-col>
+                    </el-row>
+
+                    <el-row :gutter="20">
                         <el-col :span="6">
-                            <el-form-item label="合同编号" prop="contractno">
-                                <el-input v-model="HDData.contractno" placeholder="合同编号"></el-input>
+                            <el-form-item label="结算类型" prop="paymethod">
+                                <el-select v-model="HDData.paymethod" clearable placeholder="请选择结算类型" style="width: 100%">
+                                    <el-option
+                                        v-for="item in payMethodOptions"
+                                        :key="item.value"
+                                        :label="item.label"
+                                        :value="item.value"
+                                    ></el-option>
+                                </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item label="项目编号" prop="projectno">
-                                <el-input v-model="HDData.projectno" placeholder="项目编号"></el-input>
+                            <el-form-item label="有效开始日期" prop="effbeginday">
+                                <el-date-picker
+                                    v-model="HDData.effbeginday"
+                                    type="date"
+                                    value-format="yyyy-MM-dd"
+                                    placeholder="请选择有效开始日期"
+                                    style="width: 100%"
+                                ></el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="有效结束日期" prop="effendday">
+                                <el-date-picker
+                                    v-model="HDData.effendday"
+                                    type="date"
+                                    value-format="yyyy-MM-dd"
+                                    placeholder="请选择有效结束日期"
+                                    style="width: 100%"
+                                ></el-date-picker>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="视为到款" prop="payflag">
+                                <el-checkbox v-model="HDData.payflag" border true-label="1" false-label="0">备选项</el-checkbox>
+                            </el-form-item>
+                        </el-col>
+                    </el-row>
+
+                    <el-row :gutter="20">
+                        <el-col :span="6">
+                            <el-form-item label="收款部门编号" prop="cccode">
+                                <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
+                                <PrcSDGroup
+                                    ref="cccode"
+                                    :modelname="HDData.cccode"
+                                    fieldname="cccode"
+                                    @selectData="inputEnterEvent"
+                                    @inputChangeEvent="inputChangeEvent"
+                                ></PrcSDGroup>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="收款部门名称" prop="ccname">
+                                <el-input disabled v-model="HDData.ccname" placeholder="收款部门名称"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -273,6 +274,7 @@ export default {
                 cashname: '',
                 sdgroup: '',
                 sdgroupname: '',
+                payflag: 1,
                 contractno: '',
                 projectno: '',
                 hdcurrency: '',
@@ -299,12 +301,9 @@ export default {
                 { label: '转账', value: '转账' },
                 { label: '同城结算', value: '同城结算' },
                 { label: '进账', value: '进账' },
-                { label: '划账', value: '划账' },
                 { label: '承兑', value: '承兑' },
                 { label: '刷卡', value: '刷卡' },
-                { label: '直通卡', value: '直通卡' },
-                { label: '银行承兑', value: '银行承兑' },
-                { label: '商业承兑', value: '商业承兑' }
+                { label: '直通车', value: '直通车' }
             ]
         };
     },
@@ -335,6 +334,11 @@ export default {
                     this.HDData.companyid = data.row.companyid;
                     this.HDData.companyname = data.row.companyname;
                     break;
+                case 'orgid':
+                    this.$refs.orgid.str = data.row.sdorgid;
+                    this.HDData.orgid = data.row.sdorgid;
+                    this.HDData.orgname = data.row.sdorgname;
+                    break;
                 case 'oppocompanyid':
                     this.$refs.oppocompanyid.str = data.row.cltcode;
                     this.HDData.oppocompanyid = data.row.cltcode;
@@ -345,21 +349,20 @@ export default {
                     this.$refs.sdgroup.str = data.row.sdgroup;
                     this.HDData.sdgroup = data.row.sdgroup;
                     this.HDData.sdgroupname = data.row.sdgroupname;
-                    break;
-                case 'orgid':
-                    this.$refs.orgid.str = data.row.sdorgid;
-                    this.HDData.orgid = data.row.sdorgid;
-                    this.HDData.orgname = data.row.sdorgname;
-                    break;
-                case 'cashcode':
-                    this.$refs.cashcode.str = data.row.cashacctcode;
-                    this.HDData.cashcode = data.row.cashacctcode;
-                    this.HDData.cashname = data.row.cashacctname;
+                    if (this.HDData.oppocompanyname == '') {
+                        this.$message.warning('当前公司不存在当前客户，请先检查！');
+                        break;
+                    }
                     break;
                 case 'sdgroup':
                     this.$refs.sdgroup.str = data.row.sdgroup;
                     this.HDData.sdgroup = data.row.sdgroup;
                     this.HDData.sdgroupname = data.row.sdgroupname;
+                    break;
+                case 'cashcode':
+                    this.$refs.cashcode.str = data.row.cashacctcode;
+                    this.HDData.cashcode = data.row.cashacctcode;
+                    this.HDData.cashname = data.row.cashacctname;
                     break;
                 case 'hdcurrency':
                     this.$refs.hdcurrency.str = data.row.currency;
@@ -377,21 +380,21 @@ export default {
                     this.HDData.companyid = '';
                     this.HDData.companyname = '';
                     break;
-                case 'oppocompanyid':
-                    this.HDData.oppocompanyid = '';
-                    this.HDData.oppocompanyname = '';
-                    break;
                 case 'orgid':
                     this.HDData.orgid = '';
                     this.HDData.orgname = '';
                     break;
-                case 'cashcode':
-                    this.HDData.cashcode = '';
-                    this.HDData.cashname = '';
+                case 'oppocompanyid':
+                    this.HDData.oppocompanyid = '';
+                    this.HDData.oppocompanyname = '';
                     break;
                 case 'sdgroup':
                     this.HDData.sdgroup = '';
                     this.HDData.sdgroupname = '';
+                    break;
+                case 'cashcode':
+                    this.HDData.cashcode = '';
+                    this.HDData.cashname = '';
                     break;
                 case 'hdcurrency':
                     this.HDData.hdcurrency = '';

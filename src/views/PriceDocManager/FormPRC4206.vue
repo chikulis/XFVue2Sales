@@ -1,4 +1,4 @@
-<!-- 4203 -- 收款凭证明细 -->
+<!-- 4206 -- 收款审核明细 -->
 <template>
     <div class="container">
         <!-- 面包屑 -->
@@ -9,12 +9,8 @@
                 <ActionTool
                     :disTools="disTools"
                     :ifdistools="ifdistools"
-                    @addTableData="addTableData"
-                    @aleTableData="aleTableData"
-                    @delTableData="delTableData"
                     @fetchTableData="fetchTableData(headerFormData.doccode)"
-                    @okTableData="okTableData"
-                    @freeTableData="freeTableData"
+                    @Confirm="Confirm"
                     @cancelTableData="cancelTableData"
                     @Headerchange="Headerchange"
                 ></ActionTool>
@@ -42,9 +38,9 @@
                                     <el-form-item label="日期" prop="docdate">
                                         <el-date-picker
                                             v-model="headerFormData.docdate"
-                                            value-format="yyyy-MM-dd"
                                             style="width: 100%"
                                             type="date"
+                                            value-format="yyyy-MM-dd"
                                         ></el-date-picker>
                                     </el-form-item>
                                 </el-col>
@@ -167,7 +163,12 @@
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="实际收款日期" prop="pricedate">
-                                        <el-date-picker v-model="headerFormData.pricedate" style="width: 100%" type="date"></el-date-picker>
+                                        <el-date-picker
+                                            v-model="headerFormData.pricedate"
+                                            style="width: 100%"
+                                            type="date"
+                                            value-format="yyyy-MM-dd"
+                                        ></el-date-picker>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -197,7 +198,6 @@
                 :options="commEntity.options"
                 :fetch="fetchTableData"
                 :showfooter="true"
-                @cellClickEvent="cellClickEvent"
                 :operationstate="operationstate"
                 :showindex="true"
                 :footerMethod="footerMethod"
@@ -322,89 +322,15 @@ export default {
             // 表格操作栏状态
             operationstate: true,
 
-            // 验证规则
-            validrules: {
-                matcode: [
-                    {
-                        required: true,
-                        message: '物料编码不能为空',
-                        trigger: 'blur'
-                    }
-                ],
-                matname: [
-                    {
-                        required: true,
-                        message: '物料名称不能为空',
-                        trigger: 'blur'
-                    }
-                ],
-                matgroup: [
-                    {
-                        required: true,
-                        message: '物料组不能为空',
-                        trigger: 'blur'
-                    }
-                ],
-                digit: [
-                    {
-                        required: true,
-                        message: '订单支数不能为空',
-                        trigger: 'blur'
-                    }
-                ],
-
-                cv1: [
-                    {
-                        required: true,
-                        message: '颜色不能为空',
-                        trigger: 'blur'
-                    }
-                ],
-                cv1name: [
-                    {
-                        required: true,
-                        message: '颜色名称不能为空',
-                        trigger: 'blur'
-                    }
-                ],
-                planddate: [
-                    {
-                        required: true,
-                        message: '计划交期不能为空',
-                        trigger: 'blur'
-                    }
-                ]
-            },
-
             // 工具栏动态操作
             disTools: [
                 {
-                    name: 'BackTo',
-                    value: true
-                },
-                {
-                    name: 'okTableData',
+                    name: 'Confirm',
                     value: false
                 },
                 {
                     name: 'cancelTableData',
                     value: true
-                },
-                {
-                    name: 'addTableData',
-                    value: false
-                },
-                {
-                    name: 'exportFrom',
-                    value: false
-                },
-                {
-                    name: 'delTableData',
-                    value: false
-                },
-                {
-                    name: 'saveRowEvent',
-                    value: false
                 }
             ],
 
@@ -418,31 +344,17 @@ export default {
 
     // 加载完成
     created() {
-        console.log(this.$route.params);
+        console.log(this.$route.params.multipleSelection);
         // 渲染表头数据
         if (this.$route.params.multipleSelection) {
             this.headerFormData = this.$route.params.multipleSelection;
             // 如果状态大于等于50，隐藏 新增，修改，确认
-            if (this.headerFormData.docstatus >= 50) {
+            if (this.headerFormData.docstatus >= 100) {
                 this.ifdistools = 'true';
             }
             this.fetchTableData(this.headerFormData.doccode);
         }
     },
-
-    // // 组件重用，如果不要重用，请将watch注释掉，查询方法跟表格双击方法按需注释，数据库里收款审核改回FormPRC4205
-    // watch: {
-    //     // 路由名称监听
-    //     '$route.name': function () {
-    //         // 修改顶头导航
-    //         this.$children[0].getFomridMessage(this.$route.name);
-    //         // 修改顶部按钮
-    //         this.$children[1].$children[0].getToolAction();
-    //         // 重新执行查询
-    //         // this.fetchTableData();
-    //     }
-    // },
-
     // 引用组件
     components: {
         Dialog4201,
@@ -451,18 +363,10 @@ export default {
 
     // 操作方法
     methods: {
-        // // 返回按钮
-        // BackTo() {
-        //     this.$router.push({
-        //         name: '2002',
-        //         params: {
-        //             formid: 2002
-        //         }
-        //     });
-        // },
-
         // 查询按钮
         fetchTableData(doccode) {
+            this.refreshHeader(doccode);
+            console.log(this.commEntity);
             this.rowdata = null;
             this.$api.fcashdocitem
                 .getDataByDocCode(
@@ -493,132 +397,24 @@ export default {
             ];
         },
 
-        // splitNum(num, n, symbol) {
-        //     if (!num) throw new Error('splitNum需要传入一个待转换的数据');
-        //     if (typeof num !== 'number') throw new TypeError('num参数应该是一个number类型');
-        //     if (n < 0) throw new Error('参数n不应该小于0');
-        //     var hasDot = parseInt(num) != num; //这里检测num是否为小数，true表示小数
-        //     var m = n != undefined && n != null ? n : 1;
-        //     num = m == 0 ? num.toFixed(m) + '.' : hasDot ? (n ? num.toFixed(n) : num) : num.toFixed(m);
-        //     symbol = symbol || ',';
-        //     num = num.toString().replace(/(\d)(?=(\d{3})+\.)/g, function (match, p1, p2) {
-        //         return p1 + symbol;
-        //     });
-        //     if (n == 0 || (!hasDot && !n)) {
-        //         //如果n为0或者传入的num是整数并且没有指定整数的保留位数，则去掉前面操作中的小数位
-        //         num = num.substring(0, num.indexOf('.'));
-        //     }
-        //     return num;
-        // },
-
-        // 点击行事件
-        cellClickEvent(row) {
-            this.rowdata = row.row;
-        },
-
-        addTableData() {
-            if (this.headerFormData.doccode == null || this.headerFormData.doccode == '') {
-                this.$message.warning('请生成单据 才能添加');
-            } else {
-                // this.$refs.table.insertEvent();
-                this.$nextTick(() => {
-                    this.docItemDialog.dialog.options = 'add';
-                    this.docItemDialog.dialog.title = '新增';
-                    this.docItemDialog.dialog.show = true;
-                });
-            }
-        },
-
-        aleTableData() {
-            if (this.rowdata == null) {
-                this.$message.warning('请选中数据');
-                return;
-            }
-            this.$nextTick(() => {
-                this.docItemDialog.dialog.options = 'update';
-                this.docItemDialog.dialog.title = '修改';
-                this.docItemDialog.dialog.show = true;
-            });
-        },
-
-        // // 修改明细按钮
-        // saveRowEvent(row) {
-        //     console.log('111111111111');
-        //     if (row.type == 'update') {
-        //         this.$api.fcashdocitem
-        //             .saveData(row.row)
-        //             .then((res) => {
-        //                 // if (res.data.code == 200) {
-        //                 //     this.$message.success('修改成功');
-        //                 //     this.fetchTableData(row.row.doccode);
-        //                 //     return;
-        //                 // } else {
-        //                 //     this.$message.warning('修改失败：' + res.data.message);
-        //                 //     this.fetchTableData(row.row.doccode);
-        //                 //     return;
-        //                 //     this.form.console.warn('hes');
-        //                 // }
-        //             })
-        //             .catch(function (error) {
-        //                 this.$message.success('修改出错：' + error);
-        //                 console.log(error);
-        //             });
-        //         return;
-        //     } else if (row.type == 'add') {
-        //         if (this.headerFormData.doccode != '' && this.headerFormData.doccode != null) {
-        //             this.$api.slssalesorderitem
-        //                 .add(this.headerFormData.doccode, row.row)
-        //                 .then((res) => {
-        //                     this.$message.success('新增成功');
-        //                     this.fetchTableData(this.headerFormData.doccode);
-        //                 })
-        //                 .catch(function (error) {
-        //                     this.$message.success('新增出错：' + error);
-        //                     console.log(error);
-        //                 });
-        //         } else {
-        //             this.$message.warning('请生成单据');
-        //         }
-        //     }
-        // },
-
-        // 删除明细按钮
-        delTableData() {
-            if (this.rowdata == null) {
-                this.$message.warning('请选中数据');
-                return;
-            } else {
-                this.$confirm('是否删除当前记录？一旦删除，单据记录将无法进行恢复！', '单据记录删除').then(() => {
-                    this.$api.fcashdocitem.deleteData(this.rowdata.doccode, this.rowdata.rowid).then((res) => {
-                        if (res.code == 200) {
-                            this.$message.success('记录删除成功');
-                            this.fetchTableData(this.headerFormData.doccode);
-                            return;
-                        } else {
-                            this.$message.warning('删除失败：' + res.message);
-                            return;
-                        }
-                    });
-                });
-            }
-        },
-
         // 确认按钮
-        okTableData() {
+        Confirm() {
             if (this.headerFormData.doccode == '') {
                 this.$message.warning('单号为空，请检查是否为新单！');
                 return;
             }
-            if (this.headerFormData.docstatus >= 50) {
+            if (this.headerFormData.blclosed != -1) {
+                if (this.headerFormData.docstatus < 50) {
+                    this.$message.warning('单据状态未确认，不能进行审核，请检查！');
+                    return;
+                }
+            }
+            if (this.headerFormData.docstatus >= 100) {
                 this.$message.warning('单据状态已经确认，不能再进行确认，请检查！');
                 return;
             }
             if (this.tableData.length == 0) {
                 this.$message.warning('当前单据不存在明细数据，请检查！');
-                return;
-            }
-            if (this.headerFormData.blscrap == 1) {
-                this.$message.warning('当前单据已经作废，请检查！');
                 return;
             }
 
@@ -640,7 +436,7 @@ export default {
             this.$confirm('是否确认本单据？一旦确认，单据将无法进行修改！', '单据确认')
                 .then(() => {
                     // 设定单据状态
-                    const docstatus = 50;
+                    const docstatus = 100;
                     this.$api.fcashdoc
                         .confirmDoc(this.headerFormData.doccode, JSON.parse(localStorage.eleUser || '[]').username, docstatus)
                         .then((res) => {
@@ -660,66 +456,35 @@ export default {
                 });
         },
 
-        freeTableData() {
-            if (this.headerFormData.docstatus >= 50) {
-                this.$message.warning('当前单据已经确认，无法保存，请先检查！');
-                return;
-            }
-            if (this.headerFormData.blscrap == 1) {
-                this.$message.warning('当前单据已经作废，请检查！');
-                return;
-            }
-            this.$confirm('是否作废本单据？一旦作废，单据将不可以进行修改！', '单据取消作废')
-                .then(() => {
-                    this.$api.fcashdoc.blscrapDoc(this.headerFormData.doccode).then((res) => {
-                        if (res.code == 200) {
-                            this.headerFormData.blscrap = 1;
-                            this.ifdistools = '';
-                            this.$message.success('单据作废成功！');
-                            return;
-                        } else {
-                            this.$message.warning('单据作废失败：' + res.message);
-                            return;
-                        }
-                    });
-                })
-                .catch(() => {
-                    return;
-                });
-        },
-
         // 取消按钮
         cancelTableData() {
             if (this.headerFormData.doccode == '') {
                 this.$message.warning('单号为空，请检查是否为新单！');
                 return;
             }
-            if (this.headerFormData.docstatus < 50) {
-                this.$message.warning('单据状态未确认，不能再进行取消确认，请检查！');
+            if (this.headerFormData.docstatus < 100) {
+                this.$message.warning('单据状态未确认，不能再进行冲销，请检查！');
                 return;
             }
-            if (this.headerFormData.docstatus > 50) {
-                this.$message.warning('单据状态已经进行后续确认，不能再进行取消确认，请检查！');
+            if (this.headerFormData.docstatus > 100) {
+                this.$message.warning('单据状态已经进行后续确认，不能再进行冲销，请检查！');
                 return;
             }
-            this.$confirm('是否取消确认本单据？', '单据确认')
-                .then(() => {
-                    this.$api.fcashdoc
-                        .cancelConfirmDoc(this.headerFormData.doccode, JSON.parse(localStorage.eleUser || '[]').username)
-                        .then((res) => {
-                            if (res.code == 200) {
-                                this.headerFormData.docstatus = 0;
-                                this.ifdistools = 'false';
-                                this.$message.success('单据取消确认成功！');
-                                return;
-                            } else {
-                                this.$message.warning('单据取消确认失败：' + res.message);
-                                return;
-                            }
-                        });
-                })
-                .catch(() => {
-                    return;
+
+            this.$api.fcashdoc
+                .cancelConfirmDoc(this.headerFormData.doccode, JSON.parse(localStorage.eleUser || '[]').username)
+                .then((res) => {
+                    if (res.code == 200) {
+                        if (res.total > 0) {
+                            
+                        } else {
+                            this.$message.warning('冲销失败，请检查！');
+                            return;
+                        }
+                    } else {
+                        this.$message.warning('单据取消确认失败：' + res.message);
+                        return;
+                    }
                 });
         },
 
@@ -738,28 +503,6 @@ export default {
                 }
             });
         }
-
-        // //保存表头
-        // savTableData() {
-        //     this.$api.slssalesorderhd
-        //         .save(this.addFormData)
-        //         .then((res) => {
-        //             // if (res.status == 201) {
-        //             //   // this.$message.success("保存成功");
-        //             //  this.addFormData=res.data;
-        //             if (res != undefined) {
-        //                 this.addFormData = res;
-        //                 alert('保存成功');
-        //             } else {
-        //                 this.$alert(res.data.message);
-        //             }
-        //         })
-        //         .catch(function (error) {
-        //             // this.$message.success('修改出错：'+error);
-        //             alert('修改出错：' + error);
-        //             console.log(error);
-        //         });
-        // }
     }
 };
 </script>

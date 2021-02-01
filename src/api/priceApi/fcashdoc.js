@@ -8,11 +8,17 @@ const fcashdoc = {
     getDataByDocCode(doccode) {
         return service.get(`${base.iPriceUrl}/fcashdoc/GetDataByDocCode?doccode=` + doccode);
     },
+    getDataOfCheckByPage(index, size, sort, order, searchform) {
+        return service.post(`${base.iPriceUrl}/fcashdoc/GetDataOfCheckByPage?page=` + index + '&rows=' + size + '&sort=' + sort + '&order=' + order, searchform);
+    },
+    getDataOfByPage(index, size, sort, order, searchform) {
+        return service.post(`${base.iPriceUrl}/fcashdoc/GetDataOfByPage?page=` + index + '&rows=' + size + '&sort=' + sort + '&order=' + order, searchform);
+    },
     saveData(data) {
         return service.post(`${base.iPriceUrl}/fcashdoc/SaveData`, data);
     },
-    confirmDoc(doccode, username) {
-        return service.post(`${base.iPriceUrl}/fcashdoc/ConfirmDoc`, { doccode, username });
+    confirmDoc(doccode, username, docstatus) {
+        return service.post(`${base.iPriceUrl}/fcashdoc/ConfirmDoc`, { doccode, username, docstatus });
     },
     blscrapDoc(doccode) {
         return service.post(`${base.iPriceUrl}/fcashdoc/BlscrapDoc`, { doccode });

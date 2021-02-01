@@ -8,6 +8,7 @@
             v-model="str"
             @keyup.enter.native="inputEnterEvent"
             @input="inputChangeEvent"
+            placeholder="客户编号"
         >
             <i
                 slot="suffix"
@@ -154,24 +155,14 @@ export default {
                 return;
             }
             this.searchform.cltcode = this.str;
-            this.$api.prccltcompany
-                .getDataByPage(
-                    this.commEntity.pagination.pageIndex,
-                    this.commEntity.pagination.pageSize,
-                    this.commEntity.sort,
-                    this.commEntity.order,
-                    this.searchform
-                )
-                .then((res) => {
-                    this.tableData = res.rows;
-                    this.commEntity.pagination.total = res.total;
-                    this.commEntity.options.loading = false;
-                    if (res.total != 1) {
-                        this.show = true;
-                        return;
-                    }
-                    this.$emit('selectData', { row: res.rows[0], fieldname: this.fieldname });
-                });
+            this.$api.prccltcompany.getDataByCltcode(this.searchform).then((res) => {
+                if (res.total == 0) {
+                    this.show = true;
+                    this.fetchTableData();
+                    return;
+                }
+                this.$emit('selectData', { row: res.rows[0], fieldname: this.fieldname });
+            });
         },
 
         // 单击事件

@@ -8,6 +8,7 @@
             v-model="str"
             @keyup.enter.native="inputEnterEvent"
             @input="inputChangeEvent"
+            placeholder="组织编号"
         >
             <i
                 slot="suffix"
@@ -116,24 +117,12 @@ export default {
         // 回车事件
         inputEnterEvent() {
             this.searchform.sdorgid = this.str;
-            this.$api.prcsdorg
-                .getDataByPage(
-                    this.commEntity.pagination.pageIndex,
-                    this.commEntity.pagination.pageSize,
-                    this.commEntity.sort,
-                    this.commEntity.order,
-                    this.searchform
-                )
-                .then((res) => {
-                    this.tableData = res.rows;
-                    this.commEntity.pagination.total = res.total;
-                    this.commEntity.options.loading = false;
-                    if (res.total != 1) {
-                        this.show = true;
-                        return;
-                    }
-                    this.$emit('selectData', { row: res.rows[0], fieldname: this.fieldname });
-                });
+            this.$api.prcsdorg.getDataBySdorgid(this.searchform).then((res) => {
+                if (res.total == 0) {
+                    return;
+                }
+                this.$emit('selectData', { row: res.rows[0], fieldname: this.fieldname });
+            });
         },
 
         // 单击事件

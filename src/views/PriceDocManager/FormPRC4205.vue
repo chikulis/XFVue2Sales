@@ -1,4 +1,4 @@
-<!-- 4201 -- 收款凭证 -->
+<!-- 4205 -- 收款审核 -->
 <template>
     <div class="container">
         <!-- 面包屑 -->
@@ -7,7 +7,7 @@
         <div class="container2">
             <!-- 工具栏 -->
             <el-row class="self-margin-down" :gutter="20">
-                <ActionTool @addTableData="addTableData" @aleTableData="aleTableData" @fetchTableData="fetchTableData"></ActionTool>
+                <ActionTool @aleTableData="aleTableData" @fetchTableData="fetchTableData"></ActionTool>
             </el-row>
 
             <template>
@@ -106,10 +106,8 @@
                 :options="commEntity.options"
                 :fetch="fetchTableData"
                 :pagination="commEntity.pagination"
-                :showfooter="true"
                 @cellClickEvent="cellClickEvent"
                 @cellDBLClickEvent="cellDBLClickEvent"
-                :footerMethod="footerMethod"
             ></CommTable>
         </div>
 
@@ -118,9 +116,7 @@
 </template>
 
 <script>
-import Dialog4201 from '@views/PriceDocManager/components/Dialog4201'; // 引用 Dialog
-import XEUtils from 'xe-utils';
-
+import Dialog4201 from '@views/PriceDocManager/components/Dialog4201'; //引用 Dialog
 export default {
     // 数据
     data() {
@@ -290,76 +286,31 @@ export default {
     },
 
     components: {
-        // 创建Dilog
+        //创建Dilog
         Dialog4201
-    },
-
-    // 组件重用，如果不要重用，请将watch注释掉，查询方法跟表格双击方法按需注释，数据库里收款审核改回FormPRC4205
-    watch: {
-        // 路由名称监听
-        '$route.name': function () {
-            // 修改顶头导航
-            this.$children[0].getFomridMessage(this.$route.name);
-            // 修改顶部按钮
-            this.$children[1].$children[0].getToolAction();
-            // 重新执行查询
-            this.fetchTableData();
-        }
     },
 
     // 操作方法
     methods: {
-        // 表尾合计
-        footerMethod({ columns, data }) {
-            return [
-                columns.map((column, columnIndex) => {
-                    if (columnIndex === 0) {
-                        return '和值';
-                    }
-                    if (['summoney', 'natsummoney'].includes(column.property)) {
-                        return XEUtils.sum(data, column.property);
-                    }
-                    return null;
-                })
-            ];
-        },
-
         // 查询按钮事件
         fetchTableData() {
-            console.log(this.$route.name);
             this.commEntity.options.loading = true;
 
             // this.searchform.blscrap = this.searchform.ifblscrap ? 'true' : 'false';
 
-            if (this.$route.name == '56502') {
-                this.$api.fcashdoc
-                    .getDataByPage(
-                        this.commEntity.pagination.pageIndex,
-                        this.commEntity.pagination.pageSize,
-                        this.commEntity.sort,
-                        this.commEntity.order,
-                        this.searchform
-                    )
-                    .then((res) => {
-                        this.tableData = res.rows;
-                        this.commEntity.pagination.total = res.total;
-                        this.commEntity.options.loading = false;
-                    });
-            } else {
-                this.$api.fcashdoc
-                    .getDataOfCheckByPage(
-                        this.commEntity.pagination.pageIndex,
-                        this.commEntity.pagination.pageSize,
-                        this.commEntity.sort,
-                        this.commEntity.order,
-                        this.searchform
-                    )
-                    .then((res) => {
-                        this.tableData = res.rows;
-                        this.commEntity.pagination.total = res.total;
-                        this.commEntity.options.loading = false;
-                    });
-            }
+            this.$api.fcashdoc
+                .getDataOfCheckByPage(
+                    this.commEntity.pagination.pageIndex,
+                    this.commEntity.pagination.pageSize,
+                    this.commEntity.sort,
+                    this.commEntity.order,
+                    this.searchform
+                )
+                .then((res) => {
+                    this.tableData = res.rows;
+                    this.commEntity.pagination.total = res.total;
+                    this.commEntity.options.loading = false;
+                });
         },
 
         // 点击行事件
@@ -369,38 +320,13 @@ export default {
 
         // 表格双击事件
         cellDBLClickEvent(row) {
-            let routeName = this.$route.name;
-            let name = '565020';
-            let formid = 565020;
-            if (routeName == '56503') {
-                name = '565030';
-                formid = 565030;
-            }
             this.$router.push({
-                name,
+                name: '565020',
                 params: {
-                    formid,
+                    formid: 565020,
                     multipleSelection: row.row,
                     type: 'fetch'
                 }
-            });
-            // this.$router.push({
-            //     name: '565020',
-            //     params: {
-            //         formid:565020,
-            //         multipleSelection: row.row,
-            //         type: 'fetch'
-            //     }
-            // });
-        },
-
-        // 新增按钮事件
-        addTableData() {
-            this.commEntity.dialog.show = false;
-            this.$nextTick(() => {
-                this.commEntity.dialog.options = 'add';
-                this.commEntity.dialog.title = '新增';
-                this.commEntity.dialog.show = true;
             });
         },
 
@@ -433,7 +359,7 @@ export default {
         }
     },
 
-    // 创建完成
+    //创建完成
     created: function () {
         this.fetchTableData();
     }
