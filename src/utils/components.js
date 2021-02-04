@@ -14,6 +14,7 @@ import Ostorage from "@components/Dialog/Ostorage"; // 仓库列表组件
 import PrcAccctCodeAccessList from "@components/Dialog/price/PrcAccctCodeAccessList"; // 结算--公司会计科目列表组件
 import PrcCashAccount from "@components/Dialog/price/PrcCashAccount"; // 结算--资金账户列表组件
 import PrcCompany from "@components/Dialog/price/PrcCompany"; // 结算--公司列表组件
+import PrcCostCenter from "@components/Dialog/price/PrcCostCenter"; // 结算--收款部门列表组件
 import PrcCurrency from "@components/Dialog/price/PrcCurrency"; // 结算--币种汇率列表组件
 import PrcSDGroup from "@components/Dialog/price/PrcSDGroup"; // 结算--业务员列表组件
 import PrcSDOrg from "@components/Dialog/price/PrcSDOrg"; // 结算--组织列表组件
@@ -69,6 +70,7 @@ export default (Vue) => {
         Vue.component("PrcAccctCodeAccessList", PrcAccctCodeAccessList);
         Vue.component("PrcCashAccount", PrcCashAccount);
         Vue.component("PrcCompany", PrcCompany);
+        Vue.component("PrcCostCenter", PrcCostCenter);
         Vue.component("PrcCurrency", PrcCurrency);
         Vue.component("PrcSDGroup", PrcSDGroup);
         Vue.component("PrcSDOrg", PrcSDOrg);

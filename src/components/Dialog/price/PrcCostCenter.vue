@@ -1,4 +1,4 @@
-<!-- 公司列表 组件 -->
+<!-- 收款部门列表 组件 -->
 <template>
     <div class="dialog">
         <!-- input框 -->
@@ -8,7 +8,7 @@
             v-model="str"
             @keyup.enter.native="inputEnterEvent"
             @input="inputChangeEvent"
-            placeholder="公司编号"
+            placeholder="收款部门编号"
         >
             <i
                 slot="suffix"
@@ -18,7 +18,21 @@
             ></i>
         </el-input>
         <!-- dialog组件 -->
-        <el-dialog ref="dialogs" title="公司列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="800px">
+        <el-dialog ref="dialogs" title="收款部门列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="50%">
+            <el-row :gutter="10">
+                <el-col :span="8">
+                    <el-form-item label="公司编号" prop="companyid">
+                        <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
+                        <PrcCompany
+                            ref="companyid"
+                            :modelname="searchform.companyid"
+                            fieldname="companyid"
+                            @selectData="searchInputEnterEvent"
+                        ></PrcCompany>
+                    </el-form-item>
+                </el-col>
+            </el-row>
+
             <!-- 表格区域 -->
             <CommTable
                 ref="table"
@@ -39,9 +53,9 @@
         </el-dialog>
     </div>
 </template>
-  
-  
-  <script>
+    
+    
+<script>
 export default {
     data() {
         return {
@@ -57,16 +71,16 @@ export default {
             // 表格数据
             tableData: [],
 
-            //搜索
             searchform: {
-                companyid: ''
+                companyid: '',
+                cccode: ''
             },
-
             // 表格字段
             tableColumn: [
-                { field: 'companyid', title: '公司编号' },
-                { field: 'companyname', title: '公司名称' },
-                { field: 'encompanyname', title: '公司英文名称' }
+                { field: 'cccode', title: '收款部门编号' },
+                { field: 'ccname', title: '收款部门名称' },
+                { field: 'hrcode', title: '负责人编号' },
+                { field: 'companyid', title: '所属公司编号' }
             ],
 
             // 选中的数据
@@ -78,28 +92,19 @@ export default {
     props: {
         modelname: String,
         fieldname: String,
-        //是否必填
         entertrue: { type: Boolean, default: true },
-        //是否禁用
         disable: { type: Boolean, default: false }
     },
 
     // 创建完成
     created() {},
 
-    watch: {
-        modelname(newVal, oldVal) {
-            console.log(newVal);
-            this.str = newVal;
-        }
-    },
-
     // 执行方法
     methods: {
         // 查询方法
         fetchTableData() {
             this.commEntity.options.loading = true;
-            this.$api.prccompany
+            this.$api.prccostcenter
                 .getDataByPage(
                     this.commEntity.pagination.pageIndex,
                     this.commEntity.pagination.pageSize,
@@ -117,7 +122,11 @@ export default {
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
-                this.searchform.companyid = '';
+                this.$emit('companyidIsNull', this.fieldname);
+                if (this.searchform.companyid == '') {
+                    return;
+                }
+                this.searchform.cccode = '';
                 this.show = true;
                 this.fetchTableData();
             }
@@ -125,9 +134,14 @@ export default {
 
         // 回车事件
         inputEnterEvent() {
-            this.searchform.companyid = this.str;
-            this.$api.prccompany.getDataByCompanyid(this.searchform).then((res) => {
+            this.$emit('companyidIsNull', this.fieldname);
+            if (this.searchform.companyid == '') {
+                return;
+            }
+            this.searchform.cccode = this.str;
+            this.$api.prccostcenter.getDataByCccode(this.searchform).then((res) => {
                 if (res.total == 0) {
+                    this.$message.warning('部门未输入，请检查！');
                     return;
                 }
                 this.$emit('selectData', { row: res.rows[0], fieldname: this.fieldname });
@@ -154,10 +168,15 @@ export default {
             this.show = false;
             this.$emit('selectData', { row: this.clickrow, fieldname: this.fieldname });
         },
-
         // input值监听
         inputChangeEvent() {
             this.$emit('inputChangeEvent', this.fieldname);
+        },
+
+        searchInputEnterEvent(data) {
+            this.$refs.companyid.str = data.row.companyid;
+            this.searchform.companyid = data.row.companyid;
+            this.fetchTableData();
         }
     }
 };

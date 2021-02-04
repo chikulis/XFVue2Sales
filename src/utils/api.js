@@ -17,6 +17,7 @@ import osdorg from '../api/cmmApi/osdorg';
 import ostorage from '../api/cmmApi/ostorage';
 import prccltcompany from '../api/priceApi/prccltcompany';
 import prccompany from '../api/priceApi/prccompany';
+import prccostcenter from '../api/priceApi/prccostcenter';
 import prcsdgroup from '../api/priceApi/prcsdgroup';
 import prcsdorg from '../api/priceApi/prcsdorg';
 import qmslevel from '../api/cmmApi/qmslevel';
@@ -45,6 +46,7 @@ export default {
     ostorage,
     prccltcompany,
     prccompany,
+    prccostcenter,
     prcsdgroup,
     prcsdorg,
     qmslevel,

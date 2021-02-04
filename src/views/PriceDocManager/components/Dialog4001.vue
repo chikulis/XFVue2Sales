@@ -29,7 +29,7 @@
                             <el-form-item label="制单日期" prop="docdate">
                                 <el-date-picker
                                     v-model="HDData.docdate"
-                                    class="entertrue"
+                                    disabled
                                     type="date"
                                     value-format="yyyy-MM-dd"
                                     placeholder="请选择"
@@ -102,7 +102,7 @@
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
-                            <el-form-item label="业务员" prop="sdgroup">
+                            <el-form-item label="业务员编号" prop="sdgroup">
                                 <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
                                 <PrcSDGroup
                                     ref="sdgroup"
@@ -140,6 +140,7 @@
                                     v-model="HDData.effbeginday"
                                     type="date"
                                     value-format="yyyy-MM-dd"
+                                    @change="effBeginDayChange"
                                     placeholder="请选择有效开始日期"
                                     style="width: 100%"
                                 ></el-date-picker>
@@ -158,7 +159,16 @@
                         </el-col>
                         <el-col :span="6">
                             <el-form-item label="视为到款" prop="payflag">
-                                <el-checkbox v-model="HDData.payflag" border true-label="1" false-label="0">备选项</el-checkbox>
+                                <el-checkbox
+                                    v-model="HDData.payflag"
+                                    :checked="loadPayFlag()"
+                                    disabled
+                                    border
+                                    true-label="1"
+                                    false-label="0"
+                                    style="width: 100%"
+                                    >备选项</el-checkbox
+                                >
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -167,18 +177,29 @@
                         <el-col :span="6">
                             <el-form-item label="收款部门编号" prop="cccode">
                                 <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                <PrcSDGroup
+                                <PrcCostCenter
                                     ref="cccode"
                                     :modelname="HDData.cccode"
                                     fieldname="cccode"
+                                    @companyidIsNull="companyidIsNull"
                                     @selectData="inputEnterEvent"
                                     @inputChangeEvent="inputChangeEvent"
-                                ></PrcSDGroup>
+                                ></PrcCostCenter>
                             </el-form-item>
                         </el-col>
                         <el-col :span="6">
                             <el-form-item label="收款部门名称" prop="ccname">
                                 <el-input disabled v-model="HDData.ccname" placeholder="收款部门名称"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="单据状态" prop="docstatus">
+                                <el-input disabled v-model="HDData.docstatus" placeholder="单据状态"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="收款单" prop="linkdoccode">
+                                <el-input disabled v-model="HDData.linkdoccode" placeholder="收款单"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -203,26 +224,25 @@
                         </el-col>
                         <el-col :span="6">
                             <el-form-item label="汇率" prop="hdexchange_rate">
-                                <el-input disabled v-model="HDData.hdexchange_rate" placeholder="汇率"></el-input>
-                            </el-form-item>
-                        </el-col>
-                        <el-col :span="6">
-                            <el-form-item label="单据状态" prop="docstatus">
-                                <el-input disabled v-model="HDData.docstatus" placeholder="单据状态"></el-input>
+                                <el-input class="entertrue" v-model="HDData.hdexchange_rate" placeholder="汇率"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
 
                     <el-row :gutter="20">
                         <el-col :span="6">
-                            <el-form-item label="实际收款日期" prop="pricedate">
-                                <el-date-picker
-                                    v-model="HDData.pricedate"
-                                    style="width: 100%"
-                                    type="date"
-                                    value-format="yyyy-MM-dd"
-                                    placeholder="请选择实际收款日期"
-                                ></el-date-picker>
+                            <el-form-item label="金额" prop="amount">
+                                <el-input class="entertrue" v-model="HDData.amount" @keyup.enter.native="calcAmount" placeholder="金额"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="本币金额" prop="natamount">
+                                <el-input v-model="HDData.natamount" disabled placeholder="本币金额"></el-input>
+                            </el-form-item>
+                        </el-col>
+                        <el-col :span="6">
+                            <el-form-item label="入账科目" prop="account">
+                                <el-input v-model="HDData.account" disabled placeholder="入账科目"></el-input>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -247,6 +267,9 @@
 
 
 <script>
+import base from '@utils/base';
+import axios from '@utils/request';
+
 export default {
     // 数据
     data() {
@@ -257,41 +280,35 @@ export default {
             // 数据
             HDData: {
                 doccode: '',
-                doctype: '收款单',
+                doctype: '在途款',
                 docdate: this.$moment().format('YYYY-MM-DD'),
-                formid: '',
+                formid: '33857',
                 companyid: '',
                 companyname: '',
-                refcode: '',
-                refformid: '',
-                oppocompanyid: '',
-                oppocompanyname: '',
-                objtype: '客户',
-                paymethod: '',
                 orgid: '',
                 orgname: '',
-                cashcode: '',
-                cashname: '',
+                oppocompanyid: '',
+                oppocompanyname: '',
                 sdgroup: '',
                 sdgroupname: '',
+                paymethod: this.getPayMethod(),
+                effbeginday: this.$moment().format('YYYY-MM-DD'),
+                effendday: this.$moment().add(30, 'd').format('YYYY-MM-DD'),
                 payflag: 1,
-                contractno: '',
-                projectno: '',
-                hdcurrency: '',
-                hdcurrencyname: '',
-                hdexchange_rate: '',
-                docstatus: '',
-                pricedate: this.$moment().format('YYYY-MM-DD'),
+                cccode: '',
+                ccname: '',
+                docstatus: '0',
+                linkdoccode: '',
+                hdcurrency: 'RMB',
+                hdcurrencyname: '人民币',
+                hdexchange_rate: '1',
+                amount: '0',
+                natamount: '0',
+                account: '113101',
                 hdtext: '',
                 entername: JSON.parse(localStorage.eleUser || '[]').username,
                 modifyname: JSON.parse(localStorage.eleUser || '[]').username
             },
-
-            objTypeOptions: [
-                { label: '客户', value: '客户' },
-                { label: '供应商', value: '供应商' },
-                { label: '部门', value: '部门' }
-            ],
 
             payMethodOptions: [
                 { label: '现金', value: '现金' },
@@ -351,7 +368,6 @@ export default {
                     this.HDData.sdgroupname = data.row.sdgroupname;
                     if (this.HDData.oppocompanyname == '') {
                         this.$message.warning('当前公司不存在当前客户，请先检查！');
-                        break;
                     }
                     break;
                 case 'sdgroup':
@@ -359,10 +375,13 @@ export default {
                     this.HDData.sdgroup = data.row.sdgroup;
                     this.HDData.sdgroupname = data.row.sdgroupname;
                     break;
-                case 'cashcode':
-                    this.$refs.cashcode.str = data.row.cashacctcode;
-                    this.HDData.cashcode = data.row.cashacctcode;
-                    this.HDData.cashname = data.row.cashacctname;
+                case 'cccode':
+                    this.$refs.cccode.str = data.row.cccode;
+                    this.HDData.cccode = data.row.cccode;
+                    this.HDData.ccname = data.row.ccname;
+                    if (this.HDData.ccname == '') {
+                        this.$message.warning('部门未输入，请检查！');
+                    }
                     break;
                 case 'hdcurrency':
                     this.$refs.hdcurrency.str = data.row.currency;
@@ -392,9 +411,9 @@ export default {
                     this.HDData.sdgroup = '';
                     this.HDData.sdgroupname = '';
                     break;
-                case 'cashcode':
-                    this.HDData.cashcode = '';
-                    this.HDData.cashname = '';
+                case 'cccode':
+                    this.HDData.cccode = '';
+                    this.HDData.ccname = '';
                     break;
                 case 'hdcurrency':
                     this.HDData.hdcurrency = '';
@@ -423,54 +442,39 @@ export default {
                 });
         },
 
-        refCodeChange() {
-            this.$refs.companyid.str = '';
-            this.HDData.companyid = '';
-            this.HDData.companyname = '';
-            this.$refs.orgid.str = '';
-            this.HDData.orgid = '';
-            this.HDData.orgname = '';
-            this.$refs.oppocompanyid.str = '';
-            this.HDData.oppocompanyid = '';
-            this.HDData.oppocompanyname = '';
-            this.$refs.sdgroup.str = '';
-            this.HDData.sdgroup = '';
-            this.HDData.sdgroupname = '';
-            this.$refs.hdcurrency.str = '';
-            this.HDData.hdcurrency = '';
-            this.HDData.hdcurrencyname = '';
-            this.HDData.hdexchange_rate = '';
+        getPayMethod() {
+            axios
+                .post(`${base.iPriceUrl}/_sysdict/GetDataByDictid`, { dictid: '-3700' })
+                .then((res) => {
+                    if (res.code == 200) {
+                        if (res.total > 0) {
+                            let arr = [];
+                            for (var i in res.rows) {
+                                arr.push({ label: res.rows[i].dictvalue, value: res.rows[i].intervalue });
+                            }
+                            console.log(arr);
+                            this.payMethodOptions = arr;
+                        }
+                    }
+                })
+                .catch(() => {});
+            return '';
         },
 
-        refCodeEnter() {
-            if (this.HDData.refcode == '') {
-                this.$message.warning('请输入正确的单据号，请检查！');
-                return;
+        effBeginDayChange() {
+            this.HDData.effendday = this.$moment(this.HDData.effbeginday).add(2, 'd').format('YYYY-MM-DD');
+        },
+
+        loadPayFlag() {
+            if (this.HDData.payflag == 1) {
+                return true;
+            } else {
+                return false;
             }
-            this.$api.fcashdoc.getDataByDocCode(this.HDData.refcode).then((res) => {
-                if (res.total == 0) {
-                    this.$message.warning('请输入正确的单据号，请检查！');
-                    return;
-                }
-                this.HDData.refcode = res.rows[0].doccode;
-                this.HDData.refformid = res.rows[0].formid;
-                this.$refs.companyid.str = res.rows[0].companyid;
-                this.HDData.companyid = res.rows[0].companyid;
-                this.HDData.companyname = res.rows[0].companyname;
-                this.$refs.orgid.str = res.rows[0].orgid;
-                this.HDData.orgid = res.rows[0].orgid;
-                this.HDData.orgname = res.rows[0].orgname;
-                this.$refs.oppocompanyid.str = res.rows[0].oppocompanyid;
-                this.HDData.oppocompanyid = res.rows[0].oppocompanyid;
-                this.HDData.oppocompanyname = res.rows[0].oppocompanyname;
-                this.$refs.sdgroup.str = res.rows[0].sdgroup;
-                this.HDData.sdgroup = res.rows[0].sdgroup;
-                this.HDData.sdgroupname = res.rows[0].sdgroupname;
-                this.$refs.hdcurrency.str = res.rows[0].hdcurrency;
-                this.HDData.hdcurrency = res.rows[0].hdcurrency;
-                this.HDData.hdcurrencyname = res.rows[0].hdcurrencyname;
-                this.HDData.hdexchange_rate = res.rows[0].hdexchange_rate;
-            });
+        },
+
+        calcAmount(){
+            this.HDData.natamount = Number(this.HDData.amount) * Number(this.HDData.hdexchange_rate);
         },
 
         companyidIsNull(fieldname) {
@@ -481,11 +485,8 @@ export default {
                 case 'oppocompanyid':
                     this.$refs.oppocompanyid.searchform.companyid = this.HDData.companyid;
                     break;
-                case 'cashcode':
-                    this.$refs.cashcode.searchform.companyid = this.HDData.companyid;
-                    if (this.HDData.formid == '') {
-                        this.$refs.cashcode.searchform.formid = this.HDData.formid = 3105;
-                    }
+                case 'cccode':
+                    this.$refs.cccode.searchform.companyid = this.HDData.companyid;
                     break;
             }
         }
