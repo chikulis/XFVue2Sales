@@ -27,7 +27,7 @@ import slscontracthd from '../api/SalesApi/slscontracthd';
 import slssalesorderhd from '../api/SalesApi/slssalesorderhd';
 import slssalesorderitem from '../api/SalesApi/slssalesorderitem';
 import spricelist from '../api/cmmApi/spricelist';
-import vcltcompany from '../api/cmmApi/vcltcompany';
+import vcltcompany from '../api/SalesApi/vcltcompany';
 
 export default {
     currency,

@@ -18,22 +18,23 @@
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="单据号" prop="DocCode">
-                                        <el-input disabled v-model="HDData.DocCode"></el-input>
+                                    <el-form-item label="单据号" prop="doccode">
+                                        <el-input disabled v-model="HDData.doccode"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="单据状态" prop="DocStatus">
-                                        <el-input disabled v-model="HDData.DocStatus"></el-input>
+                                    <el-form-item label="单据状态" prop="docstatus">
+                                        <el-input disabled v-model="HDData.docstatus"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="公司代码" prop="Companyid">
+                                    <el-form-item label="公司代码" prop="companyid">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
                                         <Ocompany
-                                            ref="Companyid"
-                                            :modelname="HDData.Companyid"
-                                            fieldname="Companyid"
+                                            ref="companyid"
+                                            :modelname="HDData.companyid"
+                                            fieldname="companyid"
+                                            @select="a"
                                             @inputEnterEvent="inputEnterEvent"
                                             @cellDBLClickEvent="inputEnterEvent"
                                             @importClickEvent="inputEnterEvent"
@@ -180,7 +181,7 @@
                                 <el-col :span="6">
                                     <el-form-item label="经销商代码" prop="Cltcode2">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                        <Vcltcompany
+                                        <SaleCltCompany
                                             ref="Cltcode2"
                                             :modelname="HDData.Cltcode2"
                                             fieldname="Cltcode2"
@@ -188,7 +189,7 @@
                                             @cellDBLClickEvent="inputEnterEvent"
                                             @importClickEvent="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
-                                        ></Vcltcompany>
+                                        ></SaleCltCompany>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">

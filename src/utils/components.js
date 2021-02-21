@@ -20,11 +20,11 @@ import PrcSDGroup from "@components/Dialog/price/PrcSDGroup"; // 结算--业务�
 import PrcSDOrg from "@components/Dialog/price/PrcSDOrg"; // 结算--组织列表组件
 import PrcCltCompany from "@components/Dialog/price/PrcCltCompany"; // 结算--客户列表组件
 import QMSlevel from "@components/Dialog/QMSlevel"; // 质量码清单列表组件
+import SaleCltCompany from "@components/Dialog/sale/SaleCltCompany"; // 经销商列表组件
 import Scltgeneral from "@components/Dialog/Scltgeneral"; // 客户列表组件
 import Slscontracthd from "@components/Dialog/Slscontracthd"; // 合同组件
 import Slscltproject from "@components/Dialog/Slscltproject"; // 客户项目组件
 import Spricelist from "@components/Dialog/Spricelist"; // 物料价目表  
-import Vcltcompany from "@components/Dialog/Vcltcompany"; // 经销商列表组件
 // import Typedata from "@components/Dialog/Typedata";//机型
 // import Pvndgeneral from "@components/Dialog/Pvndgeneral"; // 供应商列表组件
 // import Gpaytype from "@components/Dialog/Gpaytype"; // 付款方式列表组件
@@ -76,11 +76,11 @@ export default (Vue) => {
         Vue.component("PrcSDOrg", PrcSDOrg);
         Vue.component("PrcCltCompany", PrcCltCompany);
         Vue.component("QMSlevel", QMSlevel);
+        Vue.component("SaleCltCompany", SaleCltCompany);
         Vue.component("Scltgeneral", Scltgeneral);
         Vue.component("Slscontracthd", Slscontracthd);
         Vue.component("Slscltproject", Slscltproject);
         Vue.component("Spricelist", Spricelist);
-        Vue.component("Vcltcompany", Vcltcompany);
         // Vue.component("Typedata", Typedata),
         // Vue.component("Pvndgeneral", Pvndgeneral),
         // Vue.component("Gpaytype", Gpaytype),
