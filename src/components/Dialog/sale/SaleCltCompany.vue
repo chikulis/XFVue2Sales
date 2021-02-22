@@ -8,7 +8,7 @@
             v-model="str"
             @keyup.enter.native="inputEnterEvent"
             @input="inputChangeEvent"
-            placeholder="请输入经销商编号"
+            :placeholder="placeholder"
         >
             <i
                 slot="suffix"
@@ -109,7 +109,8 @@ export default {
     // 传递参数
     props: {
         modelname: String,
-        postdata: Object,
+        fieldname: String,
+        placeholder: String,
         //是否必填
         entertrue: { type: Boolean, default: true },
         //是否禁用
@@ -124,7 +125,7 @@ export default {
         // 查询方法
         fetchTableData() {
             this.commEntity.options.loading = true;
-            this.$api.vcltcompany
+            this.$api.salecltcompany
                 .getDataByPage(
                     this.commEntity.pagination.pageIndex,
                     this.commEntity.pagination.pageSize,
@@ -142,9 +143,10 @@ export default {
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
-                this.searchform.companyid = this.postdata.companyid;
-                this.searchform.cltcode = this.postdata.cltcode;
+                //查询条件赋值
+                this.$emit('companyidIsNull', this.fieldname);
                 this.searchform.parentcltcode = this.str;
+
                 this.show = true;
                 this.fetchTableData();
             }
@@ -152,7 +154,7 @@ export default {
 
         // 回车事件
         inputEnterEvent() {
-            this.$api.vcltcompany
+            this.$api.salecltcompany
                 .getDataByPage(
                     this.commEntity.pagination.pageIndex,
                     this.commEntity.pagination.pageSize,
@@ -168,7 +170,7 @@ export default {
                         this.show = true;
                         return;
                     }
-                    this.$emit('selectData', { row: res.rows[0], fieldname: this.postdata.fieldname });
+                    this.$emit('selectData', { row: res.rows[0], fieldname: this.fieldname });
                 });
         },
 
@@ -180,7 +182,7 @@ export default {
         // 双击事件
         cellDBLClickEvent(row) {
             this.show = false;
-            this.$emit('selectData', { row: row.row, fieldname: this.postdata.fieldname });
+            this.$emit('selectData', { row: row.row, fieldname: this.fieldname });
         },
 
         // 选定操作
@@ -190,11 +192,11 @@ export default {
                 return;
             }
             this.show = false;
-            this.$emit('selectData', { row: this.clickrow, fieldname: this.postdata.fieldname });
+            this.$emit('selectData', { row: this.clickrow, fieldname: this.fieldname });
         },
         // input值监听
         inputChangeEvent() {
-            this.$emit('inputChangeEvent', this.postdata.fieldname);
+            this.$emit('inputChangeEvent', this.fieldname);
         }
     }
 };

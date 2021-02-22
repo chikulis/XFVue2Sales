@@ -19,44 +19,42 @@
                             <el-row :gutter="20">
                                 <el-col :span="6">
                                     <el-form-item label="单据号" prop="doccode">
-                                        <el-input disabled v-model="HDData.doccode"></el-input>
+                                        <el-input disabled v-model="HDData.doccode" placeholder=""></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="单据状态" prop="docstatus">
-                                        <el-input disabled v-model="HDData.docstatus"></el-input>
+                                        <el-input disabled v-model="HDData.docstatus" placeholder="单据状态"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="公司代码" prop="companyid">
+                                    <el-form-item label="销售公司编号" prop="companyid">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                        <Ocompany
+                                        <SaleCompany
                                             ref="companyid"
                                             :modelname="HDData.companyid"
                                             fieldname="companyid"
-                                            @select="a"
-                                            @inputEnterEvent="inputEnterEvent"
-                                            @cellDBLClickEvent="inputEnterEvent"
-                                            @importClickEvent="inputEnterEvent"
+                                            placeholder="请输入销售公司编号"
+                                            @selectData="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
-                                        ></Ocompany>
+                                        ></SaleCompany>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="公司名称" prop="CompanyName">
-                                        <el-input disabled v-model="HDData.CompanyName"></el-input>
+                                    <el-form-item label="销售公司名称" prop="companyname">
+                                        <el-input disabled v-model="HDData.companyname" placeholder="请输入销售公司名称"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="订单类别" prop="SLSType">
+                                    <el-form-item label="订单类别" prop="slstype">
                                         <el-select
                                             class="entertrue"
-                                            v-model="HDData.SLSType"
+                                            v-model="HDData.slstype"
                                             disabled
-                                            placeholder="请选择"
+                                            placeholder="请选择订单类别"
                                             style="width: 100%"
                                         >
                                             <el-option
@@ -70,11 +68,11 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="单据类型" prop="DocType">
+                                    <el-form-item label="单据类型" prop="doctype">
                                         <el-select
                                             class="entertrue"
-                                            v-model="HDData.DocType"
-                                            placeholder="请选择"
+                                            v-model="HDData.doctype"
+                                            placeholder="请选择单据类型"
                                             @change="docTypeChangeEvent"
                                             style="width: 100%"
                                         >
@@ -95,46 +93,49 @@
                                             ref="sdgroup"
                                             :modelname="HDData.sdgroup"
                                             fieldname="sdgroup"
-                                            @inputEnterEvent="inputEnterEvent"
-                                            @cellDBLClickEvent="inputEnterEvent"
-                                            @importClickEvent="inputEnterEvent"
+                                            placeholder="请输入销售公司编号"
+                                            @selectData="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
                                         ></Osdgroup>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="业务员姓名" prop="sdgroupname">
-                                        <el-input disabled v-model="HDData.sdgroupname"></el-input>
+                                        <el-input disabled v-model="HDData.sdgroupname" placeholder="请输入业务员姓名"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="单据日期" prop="DocDate">
+                                    <el-form-item label="单据日期" prop="docdate">
                                         <el-date-picker
-                                            v-model="HDData.DocDate"
+                                            v-model="HDData.docdate"
                                             class="entertrue"
                                             style="width: 100%"
                                             type="date"
+                                            value-format="yyyy-MM-dd"
+                                            placeholder="请选择单据日期"
                                         ></el-date-picker>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="提货交货" prop="DelDate">
+                                    <el-form-item label="提货交货" prop="deldate">
                                         <el-date-picker
-                                            v-model="HDData.DelDate"
+                                            v-model="HDData.deldate"
                                             class="entertrue"
                                             style="width: 100%"
                                             type="date"
+                                            value-format="yyyy-MM-dd"
+                                            placeholder="请选择提货交货日期"
                                         ></el-date-picker>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="铝锭取价">
+                                    <el-form-item label="铝锭取价" prop="alpricemethod">
                                         <el-select
                                             class="entertrue"
-                                            v-model="HDData.AlpriceMethod"
+                                            v-model="HDData.alpricemethod"
                                             placeholder="请选择"
                                             @change="alpriceMethodChangeEvent"
                                             style="width: 100%"
@@ -160,7 +161,7 @@
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="客户代码" prop="cltCode">
+                                    <el-form-item label="客户编号" prop="cltCode">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
                                         <Scltgeneral
                                             ref="cltCode"
@@ -179,7 +180,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="经销商代码" prop="Cltcode2">
+                                    <el-form-item label="经销商编号" prop="Cltcode2">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
                                         <SaleCltCompany
                                             ref="Cltcode2"
@@ -201,7 +202,7 @@
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="开票代码" prop="prncltcode">
+                                    <el-form-item label="开票编号" prop="prncltcode">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
                                         <Scltgeneral
                                             ref="prncltcode"
@@ -220,7 +221,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="销售组织代码" prop="sdorgid">
+                                    <el-form-item label="销售组织编号" prop="sdorgid">
                                         <el-input disabled v-model="HDData.sdorgid"></el-input>
                                     </el-form-item>
                                 </el-col>
@@ -233,7 +234,7 @@
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="提货仓库代码" prop="stcode">
+                                    <el-form-item label="提货仓库编号" prop="stcode">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
                                         <Ostorage
                                             ref="stcode"
@@ -252,7 +253,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="供货公司代码" prop="SupplyCompanyid">
+                                    <el-form-item label="供货公司编号" prop="SupplyCompanyid">
                                         <el-input disabled v-model="HDData.SupplyCompanyid"></el-input>
                                     </el-form-item>
                                 </el-col>
@@ -265,7 +266,7 @@
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="工厂代码" prop="SupplyAbbrName">
+                                    <el-form-item label="工厂编号" prop="SupplyAbbrName">
                                         <el-input disabled v-model="HDData.SupplyAbbrName"></el-input>
                                     </el-form-item>
                                 </el-col>
@@ -275,7 +276,7 @@
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="价目表代码" prop="Plistid">
+                                    <el-form-item label="价目表编号" prop="Plistid">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
                                         <Spricelist
                                             ref="Plistid"
@@ -294,7 +295,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="结算方式代码" prop="settlemethodid">
+                                    <el-form-item label="结算方式编号" prop="settlemethodid">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
                                         <Gsettlemethod
                                             ref="settlemethodid"
@@ -316,7 +317,7 @@
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="币种代码" prop="hdcurrency">
+                                    <el-form-item label="币种编号" prop="hdcurrency">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
                                         <Currencyrate
                                             ref="hdcurrency"
@@ -407,7 +408,7 @@
 
                             <!-- <el-row :gutter="20">
                                 <el-col :span="6" :offset="6">
-                                    <el-form-item label="标签类别代码" prop="sdgroup">
+                                    <el-form-item label="标签类别编号" prop="sdgroup">
                                         <Osdgroup
                                             ref="sdgroup"
                                             v-model="HDData.sdgroup"
@@ -430,7 +431,7 @@
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="工程代码" prop="ProjectNo">
+                                    <el-form-item label="工程编号" prop="ProjectNo">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
                                         <Slscltproject
                                             ref="ProjectNo"
@@ -469,7 +470,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="客编体系代码" prop="citt">
+                                    <el-form-item label="客编体系编号" prop="citt">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
                                         <Gopcodesystem
                                             ref="citt"
@@ -509,7 +510,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="支付方式代码" prop="paymentCode">
+                                    <el-form-item label="支付方式编号" prop="paymentCode">
                                         <Osdgroup
                                             ref="paymentCode"
                                             :modelname="HDData.paymentCode"
@@ -551,7 +552,7 @@
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="提货方式代码" prop="picktype">
+                                    <el-form-item label="提货方式编号" prop="picktype">
                                         <Osdgroup
                                             ref="picktype"
                                             :modelname="HDData.picktype"
@@ -569,7 +570,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="铝锭来源代码" prop="ProcMethodId">
+                                    <el-form-item label="铝锭来源编号" prop="ProcMethodId">
                                         <Osdgroup
                                             ref="ProcMethodId"
                                             :modelname="HDData.ProcMethodId"
@@ -590,7 +591,7 @@
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="税费类型代码" prop="VatType">
+                                    <el-form-item label="税费类型编号" prop="VatType">
                                         <Ocompany
                                             ref="VatType"
                                             :modelname="HDData.VatType"
@@ -725,18 +726,18 @@ export default {
             btnCalcAlPriceDisabled: false,
             // 数据
             HDData: {
-                FormID: 21101,
-                DocCode: '',
-                DocStatus: 0,
-                Companyid: JSON.parse(localStorage.eleUser || '[]').companyid,
-                CompanyName: JSON.parse(localStorage.eleUser || '[]').companyName,
-                SLSType: 'P',
-                DocType: '',
+                formid: 21101,
+                doccode: '',
+                docstatus: 0,
+                companyid: JSON.parse(localStorage.eleUser || '[]').companyid,
+                companyname: JSON.parse(localStorage.eleUser || '[]').companyName,
+                slstype: 'P',
+                doctype: '',
                 sdgroup: '',
                 sdgroupname: '',
-                DocDate: this.$moment().format('YYYY-MM-DD'),
-                DelDate: '',
-                AlpriceMethod: '',
+                docdate: this.$moment().format('YYYY-MM-DD'),
+                deldate: '',
+                alpricemethod: '',
                 usertxthd3: JSON.parse(localStorage.eleUser || '[]').companyid,
                 cltCode: '',
                 cltName: '',
@@ -816,18 +817,18 @@ export default {
     // 操作方法
     methods: {
         // 选择公司事件
-        inputEnterEvent(row, fieldname) {
-            console.log(row);
-            switch (fieldname) {
-                case 'Companyid':
-                    this.$refs.Companyid.str = row.companyid;
-                    this.HDData.Companyid = row.companyid;
-                    this.HDData.CompanyName = row.companyname;
+        inputEnterEvent(data) {
+            console.log(data);
+            switch (data.fieldname) {
+                case 'companyid':
+                    this.$refs.companyid.str = data.row.companyid;
+                    this.HDData.companyid = data.row.companyid;
+                    this.HDData.companyname = data.row.companyname;
                     break;
                 case 'sdgroup':
-                    this.$refs.sdgroup.str = row.sdgroup;
-                    this.HDData.sdgroup = row.sdgroup;
-                    this.HDData.sdgroupname = row.sdgroupname;
+                    this.$refs.sdgroup.str = data.row.sdgroup;
+                    this.HDData.sdgroup = data.row.sdgroup;
+                    this.HDData.sdgroupname = data.row.sdgroupname;
                     break;
                 case 'cltCode':
                     this.$refs.cltCode.str = row.cltcode;
@@ -912,17 +913,19 @@ export default {
         // 监听input事件
         inputChangeEvent(fieldname) {
             switch (fieldname) {
-                //     case 'Companyid':
-                //         this.searchform.companyid = '';
-                //         this.searchform.companyname = '';
-                //         this.searchform.sdgroup = '';
-                //         this.searchform.sdgroupname = '';
-                //         break;
-                //     case 'stcode':
-                //         this.searchform.stcode = '';
-                //         this.searchform.stname = '';
-                //         this.searchform.plantid = '';
-                //         break;
+                case 'companyid':
+                    this.HDData.companyid = '';
+                    this.HDData.companyname = '';
+                    break;
+                case 'sdgroup':
+                    this.HDData.sdgroup = '';
+                    this.HDData.sdgroupname = '';
+                    break;
+                // case 'stcode':
+                //     this.searchform.stcode = '';
+                //     this.searchform.stname = '';
+                //     this.searchform.plantid = '';
+                //     break;
                 case 'settlemethodid':
                     this.$refs.settlemethodid.searchform.settlemethodid = '';
                     this.$refs.settlemethodid.searchform.settlemethodname = '';
@@ -980,20 +983,21 @@ export default {
         },
 
         getOptionsData() {
-            //
-            axios.get(`${base.iSalesUrl}/sls_saletype/GetAll`).then((res) => {
-                for (var i in res.rows) {
-                    this.slsTypeOptions.push({ label: res.rows[i].saletypename, value: res.rows[i].saletypecode });
+            // 获取订单类别
+            this.$api.slssaletype.getAll().then((res) => {
+                for (var index in res.rows) {
+                    this.slsTypeOptions.push({ label: res.rows[index].saletypename, value: res.rows[index].saletypecode });
                 }
             });
 
-            axios.get(`${base.iSalesUrl}/sls_saledoctype/GetDataInActived`).then((res) => {
-                for (var i in res.rows) {
+            // 获取单据类型
+            this.$api.slssaledoctype.getAllLeftJoinOCompany().then((res) => {
+                for (var index in res.rows) {
                     this.docTypeOptions.push({
-                        label: res.rows[i].doctypename,
-                        value: res.rows[i].doccodetype,
-                        defcompanyid: res.rows[i].defcompanyid,
-                        defcompanyname: res.rows[i].defcompanyname
+                        label: res.rows[index].doctypename,
+                        value: res.rows[index].doccodetype,
+                        defcompanyid: res.rows[index].defcompanyid,
+                        defcompanyname: res.rows[index].defcompanyname
                     });
                 }
             });
@@ -1080,34 +1084,34 @@ export default {
         },
 
         docTypeChangeEvent(value) {
-            for (var i in this.docTypeOptions) {
-                if (this.docTypeOptions[i].value == value) {
-                    this.$refs.Companyid.str = this.docTypeOptions[i].defcompanyid;
-                    this.HDData.Companyid = this.docTypeOptions[i].defcompanyid;
-                    this.HDData.CompanyName = this.docTypeOptions[i].defcompanyname;
+            for (var index in this.docTypeOptions) {
+                if (this.docTypeOptions[index].value == value) {
+                    this.$refs.companyid.str = this.docTypeOptions[index].defcompanyid;
+                    this.HDData.companyid = this.docTypeOptions[index].defcompanyid;
+                    this.HDData.companyname = this.docTypeOptions[index].defcompanyname;
                 }
             }
 
             if (value == '32') {
-                this.HDData.AlpriceMethod = '1';
+                this.HDData.alpricemethod = '1';
             }
 
-            this.controlAlPrice(this.HDData.DocType, this.HDData.AlpriceMethod);
+            this.controlAlPrice(this.HDData.doctype, this.HDData.alpricemethod);
         },
 
         alpriceMethodChangeEvent(value) {
-            this.controlAlPrice(this.HDData.DocType, this.HDData.AlpriceMethod);
+            this.controlAlPrice(this.HDData.DocType, this.HDData.alpricemethod);
         },
 
-        controlAlPrice(docType, alpriceMethod) {
-            if (alpriceMethod == '1') {
+        controlAlPrice(docType, alpricemethod) {
+            if (alpricemethod == '1') {
                 this.HDData.AlPriceDate = '';
                 this.AlPriceDateDiabled = true;
                 if (docType == '32') this.AlPriceDiabled = false;
                 else this.AlPriceDiabled = true;
                 this.btnCalcAlPriceDisabled = true;
-            } else if (alpriceMethod == '2' || alpriceMethod == '6') {
-                if (this.HDData.AlPriceDate == '') this.HDData.AlPriceDate = this.HDData.DocDate;
+            } else if (alpricemethod == '2' || alpricemethod == '6') {
+                if (this.HDData.AlPriceDate == '') this.HDData.AlPriceDate = this.HDData.docdate;
                 this.AlPriceDateDiabled = false;
                 if (docType == '32') this.AlPriceDiabled = false;
                 else this.AlPriceDiabled = true;

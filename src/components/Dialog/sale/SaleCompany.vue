@@ -1,4 +1,4 @@
-<!-- 客户列表 组件 -->
+<!-- 公司列表 组件 -->
 <template>
     <div class="dialog">
         <!-- input框 -->
@@ -8,7 +8,7 @@
             v-model="str"
             @keyup.enter.native="inputEnterEvent"
             @input="inputChangeEvent"
-            placeholder="客户编号"
+            :placeholder="placeholder"
         >
             <i
                 slot="suffix"
@@ -18,21 +18,16 @@
             ></i>
         </el-input>
         <!-- dialog组件 -->
-        <el-dialog ref="dialogs" title="客户列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="70%">
+        <el-dialog ref="dialogs" title="公司列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="70%">
             <el-row :gutter="10">
-                <el-col :span="8">
-                    <el-form-item label="客户编号" prop="cltcode">
-                        <el-input v-model="searchform.cltcode" placeholder="客户编号" @input="fetchTableData"></el-input>
+                <el-col :span="9">
+                    <el-form-item label="公司编号" prop="companyid">
+                        <el-input v-model="searchform.companyid" placeholder="请输入公司编号" @input="fetchTableData"></el-input>
                     </el-form-item>
                 </el-col>
-                <el-col :span="8">
-                    <el-form-item label="客户名称" prop="cltname">
-                        <el-input v-model="searchform.cltname" placeholder="客户名称" @input="fetchTableData"></el-input>
-                    </el-form-item>
-                </el-col>
-                <el-col :span="8">
-                    <el-form-item label="父客户编号" prop="parentcltcode">
-                        <el-input v-model="searchform.parentcltcode" placeholder="父客户编号" @input="fetchTableData"></el-input>
+                <el-col :span="9">
+                    <el-form-item label="公司名称" prop="companyname">
+                        <el-input v-model="searchform.companyname" placeholder="请输入公司名称" @input="fetchTableData"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -57,9 +52,9 @@
         </el-dialog>
     </div>
 </template>
-    
-    
-    <script>
+  
+  
+  <script>
 export default {
     data() {
         return {
@@ -75,19 +70,16 @@ export default {
             // 表格数据
             tableData: [],
 
+            //搜索
             searchform: {
-                cltcode: '',
-                cltname: '',
-                parentcltcode: ''
+                companyid: '',
+                companyname: ''
             },
 
             // 表格字段
             tableColumn: [
-                { field: 'cltcode', title: '客户编号' },
-                { field: 'cltname', title: '客户名称', align: 'left' },
-                { field: 'clttype', title: '客户类型' },
-                { field: 'parentcltcode', title: '父客户编号' },
-                { field: 'parentcltname', title: '父客户名称', align: 'left' }
+                { field: 'companyid', title: '公司编号' },
+                { field: 'companyname', title: '公司名称', align: 'left' }
             ],
 
             // 选中的数据
@@ -99,6 +91,7 @@ export default {
     props: {
         modelname: String,
         fieldname: String,
+        placeholder: String,
         //是否必填
         entertrue: { type: Boolean, default: true },
         //是否禁用
@@ -113,8 +106,8 @@ export default {
         // 查询方法
         fetchTableData() {
             this.commEntity.options.loading = true;
-            this.$api.scltgeneral
-                .getDataLeftJoinOSDOrgByPage(
+            this.$api.salecompany
+                .getDataByPage(
                     this.commEntity.pagination.pageIndex,
                     this.commEntity.pagination.pageSize,
                     this.commEntity.sort,
@@ -131,6 +124,8 @@ export default {
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
+                this.searchform.companyid = '';
+                this.searchform.companyname = '';
                 this.show = true;
                 this.fetchTableData();
             }
@@ -138,9 +133,9 @@ export default {
 
         // 回车事件
         inputEnterEvent() {
-            this.searchform.cltcode = this.str;
-            this.$api.scltgeneral
-                .getDataLeftJoinOSDOrgByPage(
+            this.searchform.companyid = this.str;
+            this.$api.salecompany
+                .getDataByPage(
                     this.commEntity.pagination.pageIndex,
                     this.commEntity.pagination.pageSize,
                     this.commEntity.sort,
@@ -179,6 +174,7 @@ export default {
             this.show = false;
             this.$emit('selectData', { row: this.clickrow, fieldname: this.fieldname });
         },
+
         // input值监听
         inputChangeEvent() {
             this.$emit('inputChangeEvent', this.fieldname);

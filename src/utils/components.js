@@ -8,7 +8,6 @@ import DocStatusImg from "@components/DocStatusImg";
 import EditTable from "@components/EditTable";
 import Gopcodesystem from "@components/Dialog/Gopcodesystem"; // 客户对照系统列表组件
 import Gsettlemethod from "@components/Dialog/Gsettlemethod"; // 重量结算方式列表组件
-import Ocompany from "@components/Dialog/Ocompany"; // 公司列表组件
 import Osdgroup from "@components/Dialog/Osdgroup"; // 业务员列表组件
 import Ostorage from "@components/Dialog/Ostorage"; // 仓库列表组件
 import PrcAccctCodeAccessList from "@components/Dialog/price/PrcAccctCodeAccessList"; // 结算--公司会计科目列表组件
@@ -21,7 +20,8 @@ import PrcSDOrg from "@components/Dialog/price/PrcSDOrg"; // 结算--组织列�
 import PrcCltCompany from "@components/Dialog/price/PrcCltCompany"; // 结算--客户列表组件
 import QMSlevel from "@components/Dialog/QMSlevel"; // 质量码清单列表组件
 import SaleCltCompany from "@components/Dialog/sale/SaleCltCompany"; // 经销商列表组件
-import Scltgeneral from "@components/Dialog/Scltgeneral"; // 客户列表组件
+import SaleCltGeneral from "@components/Dialog/sale/SaleCltGeneral"; // 客户列表组件
+import SaleCompany from "@components/Dialog/sale/SaleCompany"; // 公司列表组件
 import Slscontracthd from "@components/Dialog/Slscontracthd"; // 合同组件
 import Slscltproject from "@components/Dialog/Slscltproject"; // 客户项目组件
 import Spricelist from "@components/Dialog/Spricelist"; // 物料价目表  
@@ -64,7 +64,6 @@ export default (Vue) => {
         Vue.component("EditTable", EditTable);
         Vue.component("Gopcodesystem", Gopcodesystem);
         Vue.component("Gsettlemethod", Gsettlemethod);
-        Vue.component("Ocompany", Ocompany);
         Vue.component("Osdgroup", Osdgroup);
         Vue.component("Ostorage", Ostorage);
         Vue.component("PrcAccctCodeAccessList", PrcAccctCodeAccessList);
@@ -77,7 +76,8 @@ export default (Vue) => {
         Vue.component("PrcCltCompany", PrcCltCompany);
         Vue.component("QMSlevel", QMSlevel);
         Vue.component("SaleCltCompany", SaleCltCompany);
-        Vue.component("Scltgeneral", Scltgeneral);
+        Vue.component("SaleCltGeneral", SaleCltGeneral);
+        Vue.component("SaleCompany", SaleCompany);
         Vue.component("Slscontracthd", Slscontracthd);
         Vue.component("Slscltproject", Slscltproject);
         Vue.component("Spricelist", Spricelist);

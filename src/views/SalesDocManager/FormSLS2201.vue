@@ -46,40 +46,44 @@
                         </el-col>
 
                         <el-col :span="6">
-                            <el-form-item label="公司编号" prop="companyid">
-                                <Ocompany
-                                    ref="ocompany"
+                            <el-form-item label="公司" prop="companyid">
+                                <SaleCompany
+                                    ref="companyid"
                                     :modelname="searchform.companyid"
                                     fieldname="companyid"
+                                    placeholder="请输入公司编号"
                                     :entertrue="false"
                                     @selectData="inputEnterEvent"
                                     @inputChangeEvent="inputChangeEvent"
-                                ></Ocompany>
+                                ></SaleCompany>
                             </el-form-item>
                         </el-col>
                     </el-row>
 
                     <el-row :gutter="10">
                         <el-col :span="6">
-                            <el-form-item label="客户编号" prop="cltcode">
-                                <Scltgeneral
-                                    ref="scltgeneral"
+                            <el-form-item label="客户" prop="cltcode">
+                                <SaleCltGeneral
+                                    ref="cltcode"
                                     :modelname="searchform.cltcode"
                                     fieldname="cltcode"
+                                    placeholder="请输入客户编号"
                                     :entertrue="false"
                                     @selectData="inputEnterEvent"
                                     @inputChangeEvent="inputChangeEvent"
-                                ></Scltgeneral>
+                                ></SaleCltGeneral>
                             </el-form-item>
                         </el-col>
 
                         <el-col :span="6">
                             <el-form-item label="经销商" prop="cltcode2">
                                 <SaleCltCompany
-                                    ref="salecltcompany"
+                                    ref="cltcode2"
                                     :modelname="searchform.cltcode2"
-                                    :postdata="{ fieldname: 'cltcode2', companyid: this.$refs.ocompany.str, cltcode: this.$refs.scltgeneral.str }"
+                                    fieldname="cltcode2"
+                                    placeholder="请输入经销商编号"
                                     :entertrue="false"
+                                    @companyidIsNull="companyidIsNull"
                                     @selectData="inputEnterEvent"
                                     @inputChangeEvent="inputChangeEvent"
                                 ></SaleCltCompany>
@@ -87,28 +91,30 @@
                         </el-col>
 
                         <el-col :span="6">
-                            <el-form-item label="供货公司" prop="cltcode">
-                                <Scltgeneral
-                                    ref="1"
-                                    :modelname="searchform.cltcode"
-                                    @inputEnterEvent="inputEnterEvent"
-                                    @cellDBLClickEvent="inputEnterEvent"
-                                    @importClickEvent="inputEnterEvent"
+                            <el-form-item label="供货公司" prop="supplycompanyid">
+                                <SaleCompany
+                                    ref="supplycompanyid"
+                                    :modelname="searchform.supplycompanyid"
+                                    fieldname="supplycompanyid"
+                                    placeholder="请输入供货公司编号"
+                                    :entertrue="false"
+                                    @selectData="inputEnterEvent"
                                     @inputChangeEvent="inputChangeEvent"
-                                ></Scltgeneral>
+                                ></SaleCompany>
                             </el-form-item>
                         </el-col>
 
                         <el-col :span="6">
-                            <el-form-item label="制单公司" prop="cltcode">
-                                <Scltgeneral
-                                    ref="2"
-                                    :modelname="searchform.cltcode"
-                                    @inputEnterEvent="inputEnterEvent"
-                                    @cellDBLClickEvent="inputEnterEvent"
-                                    @importClickEvent="inputEnterEvent"
+                            <el-form-item label="制单公司" prop="usertxthd3">
+                                <SaleCompany
+                                    ref="usertxthd3"
+                                    :modelname="searchform.usertxthd3"
+                                    fieldname="usertxthd3"
+                                    placeholder="请输入制单公司编号"
+                                    :entertrue="false"
+                                    @selectData="inputEnterEvent"
                                     @inputChangeEvent="inputChangeEvent"
-                                ></Scltgeneral>
+                                ></SaleCompany>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -156,12 +162,15 @@
 
 <script>
 import Dialog2201 from '@views/SalesDocManager/components/Dialog2201'; //引用 Dialog
+
 export default {
     // 数据
     data() {
         return {
             commEntity: this.$api.identity.getCommEntity(),
+
             tableData: [],
+
             // 查询参数
             searchform: {
                 startdate: this.$moment().subtract('days', 60).format('YYYY-MM-DD'),
@@ -170,12 +179,14 @@ export default {
                 companyid: '',
                 cltcode: '',
                 cltcode2: '',
-                docstatus: '',
+                supplycompanyid: '',
+                usertxthd3: '',
                 entername: '',
                 self: false,
                 blscrap: '',
                 ifblscrap: true
             },
+
             columns: [
                 {
                     field: 'doccode',
@@ -288,6 +299,7 @@ export default {
                     this.commEntity.options.loading = false;
                 });
         },
+
         // 表格双击事件
         cellDBLClickEvent(row) {
             this.$router.push({
@@ -302,13 +314,6 @@ export default {
 
         // 新增按钮事件
         addTableData() {
-            // this.$router.push({
-            //   name: "211010",
-            //   params: {
-            //     formid: 211010,
-            //     multipleSelection:null
-            //   }
-            // });
             this.commEntity.dialog.show = false;
             this.$nextTick(() => {
                 this.commEntity.dialog.options = 'add';
@@ -321,12 +326,24 @@ export default {
         inputEnterEvent(data) {
             switch (data.fieldname) {
                 case 'companyid':
-                    this.$refs.ocompany.str = data.row.companyid;
+                    this.$refs.companyid.str = data.row.companyid;
                     this.searchform.companyid = data.row.companyid;
                     break;
                 case 'cltcode':
-                    this.$refs.scltgeneral.str = data.row.cltcode;
+                    this.$refs.cltcode.str = data.row.cltcode;
                     this.searchform.cltcode = data.row.cltcode;
+                    break;
+                case 'cltcode2':
+                    this.$refs.cltcode2.str = data.row.parentcltcode;
+                    this.searchform.cltcode2 = data.row.parentcltcode;
+                    break;
+                case 'supplycompanyid':
+                    this.$refs.supplycompanyid.str = data.row.companyid;
+                    this.searchform.supplycompanyid = data.row.companyid;
+                    break;
+                case 'usertxthd3':
+                    this.$refs.usertxthd3.str = data.row.companyid;
+                    this.searchform.usertxthd3 = data.row.companyid;
                     break;
             }
         },
@@ -335,6 +352,15 @@ export default {
         inputChangeEvent() {
             this.searchform.cltcode = '';
             this.searchform.cltname = '';
+        },
+
+        companyidIsNull(fieldname) {
+            switch (fieldname) {
+                case 'cltcode2':
+                    this.$refs.cltcode2.searchform.companyid = this.$refs.companyid.str;
+                    this.$refs.cltcode2.searchform.cltcode = this.$refs.cltcode.str;
+                    break;
+            }
         }
     },
 
