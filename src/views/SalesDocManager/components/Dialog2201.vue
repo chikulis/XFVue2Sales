@@ -19,12 +19,12 @@
                             <el-row :gutter="20">
                                 <el-col :span="6">
                                     <el-form-item label="单据号" prop="doccode">
-                                        <el-input disabled v-model="HDData.doccode" placeholder=""></el-input>
+                                        <el-input class="entertrue" disabled v-model="HDData.doccode" placeholder=""></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="单据状态" prop="docstatus">
-                                        <el-input disabled v-model="HDData.docstatus" placeholder="单据状态"></el-input>
+                                        <el-input class="entertrue" disabled v-model="HDData.docstatus" placeholder="单据状态"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
@@ -42,7 +42,12 @@
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="销售公司名称" prop="companyname">
-                                        <el-input disabled v-model="HDData.companyname" placeholder="请输入销售公司名称"></el-input>
+                                        <el-input
+                                            class="entertrue"
+                                            disabled
+                                            v-model="HDData.companyname"
+                                            placeholder="请输入销售公司名称"
+                                        ></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -101,7 +106,12 @@
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="业务员姓名" prop="sdgroupname">
-                                        <el-input disabled v-model="HDData.sdgroupname" placeholder="请输入业务员姓名"></el-input>
+                                        <el-input
+                                            class="entertrue"
+                                            disabled
+                                            v-model="HDData.sdgroupname"
+                                            placeholder="请输入业务员姓名"
+                                        ></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -136,12 +146,12 @@
                                         <el-select
                                             class="entertrue"
                                             v-model="HDData.alpricemethod"
-                                            placeholder="请选择"
-                                            @change="alpriceMethodChangeEvent"
+                                            placeholder="请选择铝锭取价方式"
+                                            @change="alPriceMethodChangeEvent"
                                             style="width: 100%"
                                         >
                                             <el-option
-                                                v-for="item in AlpriceMethodOptions"
+                                                v-for="item in alPriceMethodOptions"
                                                 :key="item.value"
                                                 :label="item.label"
                                                 :value="item.value"
@@ -151,8 +161,13 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="制单公司">
-                                        <el-input v-model="HDData.usertxthd3" disabled></el-input>
+                                    <el-form-item label="制单公司" prop="usertxthd3">
+                                        <el-input
+                                            class="entertrue"
+                                            v-model="HDData.usertxthd3"
+                                            disabled
+                                            placeholder="请输入制单公司编号"
+                                        ></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -161,41 +176,50 @@
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="客户编号" prop="cltCode">
+                                    <el-form-item label="客户编号" prop="cltcode">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                        <Scltgeneral
-                                            ref="cltCode"
-                                            :modelname="HDData.cltCode"
-                                            fieldname="cltCode"
-                                            @inputEnterEvent="inputEnterEvent"
-                                            @cellDBLClickEvent="inputEnterEvent"
-                                            @importClickEvent="inputEnterEvent"
+                                        <SaleCltGeneral
+                                            ref="cltcode"
+                                            :modelname="HDData.cltcode"
+                                            fieldname="cltcode"
+                                            placeholder="请输入客户编号"
+                                            @selectData="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
-                                        ></Scltgeneral>
+                                        ></SaleCltGeneral>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="客户名称" prop="cltName">
-                                        <el-input disabled v-model="HDData.cltName"></el-input>
+                                    <el-form-item label="客户名称" prop="cltname">
+                                        <el-input
+                                            class="entertrue"
+                                            disabled
+                                            v-model="HDData.cltname"
+                                            placeholder="请输入客户名称"
+                                        ></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="经销商编号" prop="Cltcode2">
+                                    <el-form-item label="经销商编号" prop="cltcode2">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
                                         <SaleCltCompany
-                                            ref="Cltcode2"
-                                            :modelname="HDData.Cltcode2"
-                                            fieldname="Cltcode2"
-                                            @inputEnterEvent="inputEnterEvent"
-                                            @cellDBLClickEvent="inputEnterEvent"
-                                            @importClickEvent="inputEnterEvent"
+                                            ref="cltcode2"
+                                            :modelname="HDData.cltcode2"
+                                            fieldname="cltcode2"
+                                            placeholder="请输入经销商编号"
+                                            @getSearchValue="getSearchValue"
+                                            @selectData="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
                                         ></SaleCltCompany>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="经销商名称" prop="CltName2">
-                                        <el-input disabled v-model="HDData.CltName2"></el-input>
+                                    <el-form-item label="经销商名称" prop="cltname2">
+                                        <el-input
+                                            class="entertrue"
+                                            disabled
+                                            v-model="HDData.cltname2"
+                                            placeholder="请输入经销商名称"
+                                        ></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -204,30 +228,39 @@
                                 <el-col :span="6">
                                     <el-form-item label="开票编号" prop="prncltcode">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                        <Scltgeneral
+                                        <SaleCltGeneral
                                             ref="prncltcode"
                                             :modelname="HDData.prncltcode"
                                             fieldname="prncltcode"
-                                            @inputEnterEvent="inputEnterEvent"
-                                            @cellDBLClickEvent="inputEnterEvent"
-                                            @importClickEvent="inputEnterEvent"
+                                            placeholder="请输入开票公司编号"
+                                            @selectData="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
-                                        ></Scltgeneral>
+                                        ></SaleCltGeneral>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="开票名称" prop="prncltName">
-                                        <el-input class="entertrue" v-model="HDData.prncltName"></el-input>
+                                    <el-form-item label="开票名称" prop="prncltname">
+                                        <el-input class="entertrue" v-model="HDData.prncltname" placeholder="请输入开票公司名称"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="销售组织编号" prop="sdorgid">
-                                        <el-input disabled v-model="HDData.sdorgid"></el-input>
+                                        <el-input
+                                            class="entertrue"
+                                            disabled
+                                            v-model="HDData.sdorgid"
+                                            placeholder="请输入销售组织编号"
+                                        ></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="销售组织名称" prop="sdorgname">
-                                        <el-input disabled v-model="HDData.sdorgname"></el-input>
+                                        <el-input
+                                            class="entertrue"
+                                            disabled
+                                            v-model="HDData.sdorgname"
+                                            placeholder="请输入销售组织名称"
+                                        ></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -236,38 +269,57 @@
                                 <el-col :span="6">
                                     <el-form-item label="提货仓库编号" prop="stcode">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                        <Ostorage
+                                        <SaleStorage
                                             ref="stcode"
                                             :modelname="HDData.stcode"
                                             fieldname="stcode"
-                                            @inputEnterEvent="inputEnterEvent"
-                                            @cellDBLClickEvent="inputEnterEvent"
-                                            @importClickEvent="inputEnterEvent"
+                                            placeholder="请输入仓库编号"
+                                            @selectData="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
-                                        ></Ostorage>
+                                        ></SaleStorage>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="提货仓库名称" prop="stname">
-                                        <el-input disabled v-model="HDData.stname"></el-input>
+                                        <el-input
+                                            class="entertrue"
+                                            disabled
+                                            v-model="HDData.stname"
+                                            placeholder="请输入仓库名称"
+                                        ></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="供货公司编号" prop="SupplyCompanyid">
-                                        <el-input disabled v-model="HDData.SupplyCompanyid"></el-input>
+                                    <el-form-item label="供货公司编号" prop="supplycompanyid">
+                                        <el-input
+                                            class="entertrue"
+                                            disabled
+                                            v-model="HDData.supplycompanyid"
+                                            placeholder="请输入供货公司编号"
+                                        ></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="供货名称" prop="SupplyCompanyname">
-                                        <el-input disabled v-model="HDData.SupplyCompanyname"></el-input>
+                                    <el-form-item label="供货公司名称" prop="supplycompanyname">
+                                        <el-input
+                                            class="entertrue"
+                                            disabled
+                                            v-model="HDData.supplycompanyname"
+                                            placeholder="请输入供货公司名称"
+                                        ></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="工厂编号" prop="SupplyAbbrName">
-                                        <el-input disabled v-model="HDData.SupplyAbbrName"></el-input>
+                                    <el-form-item label="工厂编号" prop="supplyabbrname">
+                                        <el-input
+                                            class="entertrue"
+                                            disabled
+                                            v-model="HDData.supplyabbrname"
+                                            placeholder="请输入工厂编号"
+                                        ></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -276,22 +328,26 @@
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="价目表编号" prop="Plistid">
+                                    <el-form-item label="价目表编号" prop="plistid">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
                                         <Spricelist
-                                            ref="Plistid"
-                                            :modelname="HDData.Plistid"
-                                            fieldname="Plistid"
-                                            @inputEnterEvent="inputEnterEvent"
-                                            @cellDBLClickEvent="inputEnterEvent"
-                                            @importClickEvent="inputEnterEvent"
+                                            ref="plistid"
+                                            :modelname="HDData.plistid"
+                                            fieldname="plistid"
+                                            placeholder="请输入价目表编号"
+                                            @selectData="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
                                         ></Spricelist>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="价目表名称" prop="PlistName">
-                                        <el-input disabled v-model="HDData.PlistName"></el-input>
+                                    <el-form-item label="价目表名称" prop="plistname">
+                                        <el-input
+                                            class="entertrue"
+                                            disabled
+                                            v-model="HDData.plistname"
+                                            placeholder="请输入价目表名称"
+                                        ></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
@@ -438,7 +494,7 @@
                                             :modelname="HDData.ProjectNo"
                                             :entertrue="false"
                                             fieldname="ProjectNo"
-                                            :cltcode="HDData.cltCode"
+                                            :cltcode="HDData.cltcode"
                                             @inputEnterEvent="inputEnterEvent"
                                             @cellDBLClickEvent="inputEnterEvent"
                                             @importClickEvent="inputEnterEvent"
@@ -447,8 +503,8 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="工程名称" prop="ProjectName">
-                                        <el-input disabled v-model="HDData.ProjectName"></el-input>
+                                    <el-form-item label="工程名称" prop="projectname">
+                                        <el-input disabled v-model="HDData.projectname"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
@@ -537,6 +593,7 @@
                                             v-model="HDData.AlPriceDate"
                                             style="width: 100%"
                                             type="date"
+                                            value-format="yyyy-MM-dd"
                                         ></el-date-picker>
                                     </el-form-item>
                                 </el-col>
@@ -546,7 +603,7 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-button :disabled="this.btnCalcAlPriceDisabled" size="mini">计算铝锭价</el-button>
+                                    <el-button :disabled="this.btnCalcAlPriceDisabled" size="mini" @click="dsadaa">计算铝锭价</el-button>
                                 </el-col>
                             </el-row>
 
@@ -711,6 +768,7 @@
 <script>
 import base from '@utils/base'; // 导入接口域名列表
 import axios from '@utils/request';
+import { isEmpty } from 'xe-utils/methods';
 
 export default {
     // 数据
@@ -739,21 +797,21 @@ export default {
                 deldate: '',
                 alpricemethod: '',
                 usertxthd3: JSON.parse(localStorage.eleUser || '[]').companyid,
-                cltCode: '',
-                cltName: '',
-                Cltcode2: '',
-                CltName2: '',
+                cltcode: '',
+                cltname: '',
+                cltcode2: '',
+                cltname2: '',
                 prncltcode: '',
-                prncltName: '',
+                prncltname: '',
                 sdorgid: '',
                 sdorgname: '',
                 stcode: '',
                 stname: '',
-                SupplyCompanyid: '',
-                SupplyCompanyname: '',
-                SupplyAbbrName: '',
-                Plistid: '',
-                PlistName: '',
+                supplycompanyid: '',
+                supplycompanyname: '',
+                supplyabbrname: '',
+                plistid: '',
+                plistname: '',
                 settlemethodid: '',
                 settlemethodname: '',
                 hdcurrency: '',
@@ -767,7 +825,7 @@ export default {
                 FollowCode: '',
                 FollowName: '',
                 ProjectNo: '',
-                ProjectName: '',
+                projectname: '',
                 cprj: '',
                 ScrapRate: '',
                 citt: '',
@@ -783,7 +841,7 @@ export default {
             },
             slsTypeOptions: [],
             docTypeOptions: [],
-            AlpriceMethodOptions: [],
+            alPriceMethodOptions: [],
             docType2Options: [
                 {
                     value: '工程订单',
@@ -814,6 +872,7 @@ export default {
         this.getOptionsData();
         console.log(this.hdData);
     },
+
     // 操作方法
     methods: {
         // 选择公司事件
@@ -830,43 +889,42 @@ export default {
                     this.HDData.sdgroup = data.row.sdgroup;
                     this.HDData.sdgroupname = data.row.sdgroupname;
                     break;
-                case 'cltCode':
-                    this.$refs.cltCode.str = row.cltcode;
-                    this.HDData.cltCode = row.cltcode;
-                    this.HDData.cltName = row.cltname;
-                    this.$refs.Cltcode2.str = row.parentcltcode;
-                    this.HDData.Cltcode2 = row.parentcltcode;
-                    this.HDData.CltName2 = row.parentcltname;
-                    this.$refs.prncltcode.str = row.cltcode;
-                    this.HDData.prncltcode = row.cltcode;
-                    this.HDData.prncltName = row.cltname;
-                    this.HDData.sdorgid = row.sdorgid;
-                    this.HDData.sdorgname = row.sdorgname;
-                    this.HDData.ScrapRate = row.scraprate;
-                    this.getDocType2();
+                case 'cltcode':
+                    this.$refs.cltcode.str = data.row.cltcode;
+                    this.HDData.cltcode = data.row.cltcode;
+                    this.HDData.cltname = data.row.cltname;
+                    this.$refs.cltcode2.str = data.row.parentcltcode;
+                    this.HDData.cltcode2 = data.row.parentcltcode;
+                    this.HDData.cltname2 = data.row.parentcltname;
+                    this.$refs.prncltcode.str = data.row.cltcode;
+                    this.HDData.prncltcode = data.row.cltcode;
+                    this.HDData.prncltname = data.row.cltname;
+                    this.HDData.sdorgid = data.row.sdorgid;
+                    this.HDData.sdorgname = data.row.sdorgname;
+                    this.HDData.ScrapRate = data.row.scraprate;
                     break;
-                case 'Cltcode2':
-                    this.$refs.Cltcode2.str = row.parentcltcode;
-                    this.HDData.Cltcode2 = row.parentcltcode;
-                    this.HDData.CltName2 = row.parentcltname;
+                case 'cltcode2':
+                    this.$refs.cltcode2.str = data.row.parentcltcode;
+                    this.HDData.cltcode2 = data.row.parentcltcode;
+                    this.HDData.cltname2 = data.row.parentcltname;
                     break;
                 case 'prncltcode':
-                    this.$refs.prncltcode.str = row.cltcode;
-                    this.HDData.prncltcode = row.cltcode;
-                    this.HDData.prncltName = row.cltname;
+                    this.$refs.prncltcode.str = data.row.cltcode;
+                    this.HDData.prncltcode = data.row.cltcode;
+                    this.HDData.prncltname = data.row.cltname;
                     break;
                 case 'stcode':
-                    this.$refs.stcode.str = row.stcode;
-                    this.HDData.stcode = row.stcode;
-                    this.HDData.stname = row.stname;
-                    this.HDData.SupplyCompanyid = row.companyid;
-                    this.HDData.SupplyCompanyname = row.companyname;
-                    this.HDData.SupplyAbbrName = row.plantid;
+                    this.$refs.stcode.str = data.row.stcode;
+                    this.HDData.stcode = data.row.stcode;
+                    this.HDData.stname = data.row.stname;
+                    this.HDData.supplycompanyid = data.row.companyid;
+                    this.HDData.supplycompanyname = data.row.companyname;
+                    this.HDData.supplyabbrname = data.row.plantid;
                     break;
-                case 'Plistid':
-                    this.$refs.Plistid.str = row.plistid;
-                    this.HDData.Plistid = row.plistid;
-                    this.HDData.PlistName = row.plistname;
+                case 'plistid':
+                    this.$refs.plistid.str = data.row.plistid;
+                    this.HDData.plistid = data.row.plistid;
+                    this.HDData.plistname = data.row.plistname;
                     break;
                 case 'settlemethodid':
                     this.$refs.settlemethodid.str = row.settlemethodid;
@@ -892,7 +950,7 @@ export default {
                 case 'ProjectNo':
                     this.$refs.ProjectNo.str = row.projectno;
                     this.HDData.ProjectNo = row.projectno;
-                    this.HDData.ProjectName = row.projectname;
+                    this.HDData.projectname = row.projectname;
                     this.HDData.cprj = row.cprj;
                     this.getDocType2();
                     break;
@@ -910,6 +968,7 @@ export default {
                     break;
             }
         },
+
         // 监听input事件
         inputChangeEvent(fieldname) {
             switch (fieldname) {
@@ -921,11 +980,36 @@ export default {
                     this.HDData.sdgroup = '';
                     this.HDData.sdgroupname = '';
                     break;
-                // case 'stcode':
-                //     this.searchform.stcode = '';
-                //     this.searchform.stname = '';
-                //     this.searchform.plantid = '';
-                //     break;
+                case 'cltcode':
+                    this.HDData.cltcode = '';
+                    this.HDData.cltname = '';
+                    this.getDocType2();
+                    break;
+                case 'cltcode2':
+                    this.$api.salecltgeneral
+                        .getDataLeftJoinOSDOrgByPage(1, 1, '', '', { parentcltcode: this.$refs.cltcode2.str })
+                        .then((res) => {
+                            if (res.total > 0) {
+                                this.$refs.cltcode2.str = res.rows[0].parentcltcode;
+                                this.HDData.cltcode2 = res.rows[0].parentcltcode;
+                                this.HDData.cltname2 = res.rows[0].parentcltname;
+                            } else {
+                                this.HDData.cltcode2 = '';
+                                this.HDData.cltname2 = '';
+                            }
+                        });
+                    break;
+                case 'prncltcode':
+                    this.HDData.prncltcode = '';
+                    break;
+                case 'stcode':
+                    this.HDData.stcode = '';
+                    this.HDData.stname = '';
+                    break;
+                case 'plistid':
+                    this.HDData.plistid = '';
+                    this.HDData.plistname = '';
+                    break;
                 case 'settlemethodid':
                     this.$refs.settlemethodid.searchform.settlemethodid = '';
                     this.$refs.settlemethodid.searchform.settlemethodname = '';
@@ -954,11 +1038,11 @@ export default {
                     this.$refs.ContractNo.$refs.companyId.searchform.companyid = '';
                     this.$refs.ContractNo.$refs.companyId.searchform.companyname = '';
                     this.$refs.ContractNo.searchform.companyId = '';
-                    this.$refs.ContractNo.$refs.cltCode.str = '';
-                    this.$refs.ContractNo.$refs.cltCode.searchform.cltcode = '';
-                    this.$refs.ContractNo.$refs.cltCode.searchform.cltname = '';
-                    this.$refs.ContractNo.$refs.cltCode.searchform.parentcltcode = '';
-                    this.$refs.ContractNo.searchform.cltCode = '';
+                    this.$refs.ContractNo.$refs.cltcode.str = '';
+                    this.$refs.ContractNo.$refs.cltcode.searchform.cltcode = '';
+                    this.$refs.ContractNo.$refs.cltcode.searchform.cltname = '';
+                    this.$refs.ContractNo.$refs.cltcode.searchform.parentcltcode = '';
+                    this.$refs.ContractNo.searchform.cltcode = '';
                     this.$refs.ContractNo.$refs.settleMethodId.str = '';
                     this.$refs.ContractNo.$refs.settleMethodId.searchform.settlemethodid = '';
                     this.$refs.ContractNo.$refs.settleMethodId.searchform.settlemethodname = '';
@@ -970,12 +1054,14 @@ export default {
             }
             console.log(fieldname);
         },
+
         // 选择跟单员事件
         FollowCodeEnterEvent(row) {
             this.$refs.FollowCode.str = row.sdgroup;
             this.HDData.FollowCode = row.sdgroup;
             this.HDData.FollowName = row.sdgroupname;
         },
+
         // 监听跟单员员事件
         FollowCodeChangeEvent() {
             this.searchform.FollowCode = '';
@@ -1002,16 +1088,17 @@ export default {
                 }
             });
 
-            axios.get(`${base.iSalesUrl}/_sysdict/GetData?dictid=-275105`).then((res) => {
-                for (var i in res.rows) {
-                    this.AlpriceMethodOptions.push({ label: res.rows[i].dictvalue, value: res.rows[i].intervalue });
+            // 获取铝锭取价方式
+            this.$api.salesysdict.getDataByDictId('-275105').then((res) => {
+                for (var index in res.rows) {
+                    this.alPriceMethodOptions.push({ label: res.rows[index].dictvalue, value: res.rows[index].intervalue });
                 }
             });
 
             //获取省份
             axios.get(`${base.is}/oprovince/GetAll`).then((res) => {
                 for (var i in res.rows) {
-                    this.AlpriceMethodOptions.push({ label: res.rows[i].dictvalue, value: res.rows[i].intervalue });
+                    this.alPriceMethodOptions.push({ label: res.rows[i].dictvalue, value: res.rows[i].intervalue });
                 }
             });
         },
@@ -1099,21 +1186,21 @@ export default {
             this.controlAlPrice(this.HDData.doctype, this.HDData.alpricemethod);
         },
 
-        alpriceMethodChangeEvent(value) {
-            this.controlAlPrice(this.HDData.DocType, this.HDData.alpricemethod);
+        alPriceMethodChangeEvent(value) {
+            this.controlAlPrice(this.HDData.doctype, this.HDData.alpricemethod);
         },
 
-        controlAlPrice(docType, alpricemethod) {
+        controlAlPrice(doctype, alpricemethod) {
             if (alpricemethod == '1') {
                 this.HDData.AlPriceDate = '';
                 this.AlPriceDateDiabled = true;
-                if (docType == '32') this.AlPriceDiabled = false;
+                if (doctype == '32') this.AlPriceDiabled = false;
                 else this.AlPriceDiabled = true;
                 this.btnCalcAlPriceDisabled = true;
             } else if (alpricemethod == '2' || alpricemethod == '6') {
                 if (this.HDData.AlPriceDate == '') this.HDData.AlPriceDate = this.HDData.docdate;
                 this.AlPriceDateDiabled = false;
-                if (docType == '32') this.AlPriceDiabled = false;
+                if (doctype == '32') this.AlPriceDiabled = false;
                 else this.AlPriceDiabled = true;
                 this.btnCalcAlPriceDisabled = false;
             } else {
@@ -1126,21 +1213,40 @@ export default {
         },
 
         getDocType2() {
-            axios
-                .get(
-                    `${base.iSalesUrl}/sls_salesorderhd/GetDocType2?projectname=` +
-                        this.HDData.ProjectName +
-                        `&cltcode=` +
-                        this.HDData.cltCode +
-                        `&cltname=` +
-                        this.HDData.cltName
-                )
-                .then((res) => {
-                    // console.log(res.rows[0].doctype2);
-                    if (res.rows[0].doctype2 != null) {
-                        this.HDData.DocType2 = res.rows[0].doctype2;
-                    }
-                });
+            this.$api.slssalesorderhd.getDocType2(this.HDData.projectname, this.$refs.cltcode.str, this.HDData.cltname).then((res) => {
+                // console.log(res.rows[0].doctype2);
+                if (res.rows[0].doctype2 != null) {
+                    this.HDData.DocType2 = res.rows[0].doctype2;
+                }
+            });
+        },
+
+        getSearchValue(fieldname) {
+            switch (fieldname) {
+                case 'cltcode2':
+                    this.$refs.cltcode2.searchform.companyid = this.$refs.companyid.str;
+                    this.$refs.cltcode2.searchform.cltcode = this.$refs.cltcode.str;
+                    break;
+            }
+        },
+
+        dsadaa() {
+            let alpricemethod = this.HDData.alpricemethod;
+            if (isEmpty(alpricemethod)) {
+                alert('a');
+                return;
+            }
+
+            if (alpricemethod == '2') {
+                alert('2');
+                if (1 == 1) {
+                    return;
+                }
+                this.HDData.AlPrice = '';
+            } else if (alpricemethod == '6') {
+                var asad = this.$moment().weekday(this.HDData.AlPriceDate);
+                alert(asad);
+            }
         }
     }
 };

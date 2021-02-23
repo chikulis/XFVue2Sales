@@ -3,11 +3,12 @@
     <div class="dialog">
         <!-- input框 -->
         <el-input
-            :class="{ entertrue: isEntertrue }"
-            :disabled="isDisable"
+            :class="{ entertrue: entertrue }"
+            :disabled="disable"
             v-model="str"
             @keyup.enter.native="inputEnterEvent"
             @input="inputChangeEvent"
+            :placeholder="placeholder"
         >
             <i
                 slot="suffix"
@@ -17,21 +18,21 @@
             ></i>
         </el-input>
         <!-- dialog组件 -->
-        <el-dialog ref="dialogs" title="仓库列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="800px">
+        <el-dialog ref="dialogs" title="仓库列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="70%">
             <el-row :gutter="10">
                 <el-col :span="8">
                     <el-form-item label="仓库编号" prop="stcode">
-                        <el-input v-model="searchform.stcode" @input="fetchTableData"></el-input>
+                        <el-input v-model="searchform.stcode" placeholder="请输入仓库编号" @input="fetchTableData"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="仓库名称" prop="stname">
-                        <el-input v-model="searchform.stname" @input="fetchTableData"></el-input>
+                        <el-input v-model="searchform.stname" placeholder="请输入仓库名称" @input="fetchTableData"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="工厂编号" prop="plantid">
-                        <el-input v-model="searchform.plantid" @input="fetchTableData"></el-input>
+                        <el-input v-model="searchform.plantid" placeholder="请输入工厂编号" @input="fetchTableData"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -108,10 +109,13 @@ export default {
 
     // 传递参数
     props: {
-        modelname: '',
-        fieldname: '',
-        entertrue: { default: true },
-        disable: { default: false }
+        modelname: String,
+        fieldname: String,
+        placeholder: String,
+        //是否必填
+        entertrue: { type: Boolean, default: true },
+        //是否禁用
+        disable: { type: Boolean, default: false }
     },
 
     // 创建完成
@@ -122,39 +126,50 @@ export default {
         // 查询方法
         fetchTableData() {
             this.commEntity.options.loading = true;
-            //this.str 查询参数
-            this.$api.ostorage.getVoStorage(this.searchform).then((res) => {
-                this.tableData = res.rows;
-                this.commEntity.pagination.total = res.total;
-                this.commEntity.options.loading = false;
-            });
+            this.$api.salestorage
+                .getDataByPage(
+                    this.commEntity.pagination.pageIndex,
+                    this.commEntity.pagination.pageSize,
+                    this.commEntity.sort,
+                    this.commEntity.order,
+                    this.searchform
+                )
+                .then((res) => {
+                    this.tableData = res.rows;
+                    this.commEntity.pagination.total = res.total;
+                    this.commEntity.options.loading = false;
+                });
         },
 
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
-                //一条数据直接赋值
-                if (this.tableData.length == 1) {
-                    this.show = false;
-                    this.$emit('importClickEvent', this.tableData[0]);
-                    this.tableData = [];
-                } else {
-                    this.show = true;
-                }
+                this.show = true;
                 this.fetchTableData();
             }
         },
 
         // 回车事件
         inputEnterEvent() {
-            this.$api.ostorage.getVoStorage(this.searchform).then((res) => {
-                if (res.total != 1) {
-                    this.fetchTableData();
-                    this.show = true;
-                    return;
-                }
-                this.$emit('inputEnterEvent', res.rows[0], this.fieldname);
-            });
+            this.searchform.stcode = this.str;
+            this.$api.salestorage
+                .getDataByPage(
+                    this.commEntity.pagination.pageIndex,
+                    this.commEntity.pagination.pageSize,
+                    this.commEntity.sort,
+                    this.commEntity.order,
+                    this.searchform
+                )
+                .then((res) => {
+                    if (res.total != 1) {
+                        this.tableData = res.rows;
+                        this.commEntity.pagination.total = res.total;
+                        this.commEntity.options.loading = false;
+                        this.show = true;
+                        return;
+                    }
+                    this.$emit('selectData', { row: res.rows[0], fieldname: this.fieldname });
+                });
         },
 
         // 单击事件
@@ -165,7 +180,7 @@ export default {
         // 双击事件
         cellDBLClickEvent(row) {
             this.show = false;
-            this.$emit('cellDBLClickEvent', row.row, this.fieldname);
+            this.$emit('selectData', { row: row.row, fieldname: this.fieldname });
         },
 
         // 选定操作
@@ -175,19 +190,11 @@ export default {
                 return;
             }
             this.show = false;
-            this.$emit('importClickEvent', this.clickrow, this.fieldname);
+            this.$emit('selectData', { row: this.clickrow, fieldname: this.fieldname });
         },
         // input值监听
         inputChangeEvent() {
             this.$emit('inputChangeEvent', this.fieldname);
-        }
-    },
-    computed: {
-        isEntertrue() {
-            return this.entertrue;
-        },
-        isDisable() {
-            return this.disable;
         }
     }
 };

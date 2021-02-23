@@ -9,7 +9,6 @@ import EditTable from "@components/EditTable";
 import Gopcodesystem from "@components/Dialog/Gopcodesystem"; // 客户对照系统列表组件
 import Gsettlemethod from "@components/Dialog/Gsettlemethod"; // 重量结算方式列表组件
 import Osdgroup from "@components/Dialog/Osdgroup"; // 业务员列表组件
-import Ostorage from "@components/Dialog/Ostorage"; // 仓库列表组件
 import PrcAccctCodeAccessList from "@components/Dialog/price/PrcAccctCodeAccessList"; // 结算--公司会计科目列表组件
 import PrcCashAccount from "@components/Dialog/price/PrcCashAccount"; // 结算--资金账户列表组件
 import PrcCompany from "@components/Dialog/price/PrcCompany"; // 结算--公司列表组件
@@ -22,6 +21,7 @@ import QMSlevel from "@components/Dialog/QMSlevel"; // 质量码清单列表组�
 import SaleCltCompany from "@components/Dialog/sale/SaleCltCompany"; // 经销商列表组件
 import SaleCltGeneral from "@components/Dialog/sale/SaleCltGeneral"; // 客户列表组件
 import SaleCompany from "@components/Dialog/sale/SaleCompany"; // 公司列表组件
+import SaleStorage from "@components/Dialog/sale/SaleStorage"; // 仓库列表组件
 import Slscontracthd from "@components/Dialog/Slscontracthd"; // 合同组件
 import Slscltproject from "@components/Dialog/Slscltproject"; // 客户项目组件
 import Spricelist from "@components/Dialog/Spricelist"; // 物料价目表  
@@ -65,7 +65,6 @@ export default (Vue) => {
         Vue.component("Gopcodesystem", Gopcodesystem);
         Vue.component("Gsettlemethod", Gsettlemethod);
         Vue.component("Osdgroup", Osdgroup);
-        Vue.component("Ostorage", Ostorage);
         Vue.component("PrcAccctCodeAccessList", PrcAccctCodeAccessList);
         Vue.component("PrcCashAccount", PrcCashAccount);
         Vue.component("PrcCompany", PrcCompany);
@@ -78,6 +77,7 @@ export default (Vue) => {
         Vue.component("SaleCltCompany", SaleCltCompany);
         Vue.component("SaleCltGeneral", SaleCltGeneral);
         Vue.component("SaleCompany", SaleCompany);
+        Vue.component("SaleStorage", SaleStorage);
         Vue.component("Slscontracthd", Slscontracthd);
         Vue.component("Slscltproject", Slscltproject);
         Vue.component("Spricelist", Spricelist);

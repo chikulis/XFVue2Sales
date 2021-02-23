@@ -13,7 +13,6 @@ import mid_menu from '../api/sysAdmin/mid_menu';
 import mid_module from '../api/sysAdmin/mid_module';
 import osdgroup from '../api/cmmApi/osdgroup';
 import osdorg from '../api/cmmApi/osdorg';
-import ostorage from '../api/cmmApi/ostorage';
 import prccltcompany from '../api/priceApi/prccltcompany';
 import prccompany from '../api/priceApi/prccompany';
 import prccostcenter from '../api/priceApi/prccostcenter';
@@ -23,6 +22,8 @@ import qmslevel from '../api/cmmApi/qmslevel';
 import salecltcompany from '../api/SalesApi/salecltcompany';
 import salecltgeneral from '../api/SalesApi/salecltgeneral';
 import salecompany from '../api/SalesApi/salecompany';
+import salestorage from '../api/SalesApi/salestorage';
+import salesysdict from '../api/SalesApi/salesysdict';
 import slscltproject from '../api/SalesApi/slscltproject';
 import slscontracthd from '../api/SalesApi/slscontracthd';
 import slssaledoctype from '../api/SalesApi/slssaledoctype';
@@ -44,7 +45,6 @@ export default {
     mid_module,
     osdgroup,
     osdorg,
-    ostorage,
     prccltcompany,
     prccompany,
     prccostcenter,
@@ -54,6 +54,8 @@ export default {
     salecltcompany,
     salecltgeneral,
     salecompany,
+    salestorage,
+    salesysdict,
     slscontracthd,
     slscltproject,
     slssaledoctype,

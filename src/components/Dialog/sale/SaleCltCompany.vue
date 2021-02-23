@@ -144,7 +144,7 @@ export default {
         showdiolog() {
             if (!this.disable) {
                 //查询条件赋值
-                this.$emit('companyidIsNull', this.fieldname);
+                this.$emit('getSearchValue', this.fieldname);
                 this.searchform.parentcltcode = this.str;
 
                 this.show = true;
@@ -154,6 +154,7 @@ export default {
 
         // 回车事件
         inputEnterEvent() {
+            this.searchform.parentcltcode = this.str;
             this.$api.salecltcompany
                 .getDataByPage(
                     this.commEntity.pagination.pageIndex,

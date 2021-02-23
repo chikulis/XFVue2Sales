@@ -83,7 +83,7 @@
                                     fieldname="cltcode2"
                                     placeholder="请输入经销商编号"
                                     :entertrue="false"
-                                    @companyidIsNull="companyidIsNull"
+                                    @getSearchValue="getSearchValue"
                                     @selectData="inputEnterEvent"
                                     @inputChangeEvent="inputChangeEvent"
                                 ></SaleCltCompany>
@@ -354,7 +354,7 @@ export default {
             this.searchform.cltname = '';
         },
 
-        companyidIsNull(fieldname) {
+        getSearchValue(fieldname) {
             switch (fieldname) {
                 case 'cltcode2':
                     this.$refs.cltcode2.searchform.companyid = this.$refs.companyid.str;
