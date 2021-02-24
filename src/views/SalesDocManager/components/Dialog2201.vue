@@ -357,16 +357,20 @@
                                             ref="settlemethodid"
                                             :modelname="HDData.settlemethodid"
                                             fieldname="settlemethodid"
-                                            @inputEnterEvent="inputEnterEvent"
-                                            @cellDBLClickEvent="inputEnterEvent"
-                                            @importClickEvent="inputEnterEvent"
+                                            placeholder="请输入结算方式编号"
+                                            @selectData="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
                                         ></Gsettlemethod>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="结算方式名称" prop="settlemethodname">
-                                        <el-input disabled v-model="HDData.settlemethodname"></el-input>
+                                        <el-input
+                                            class="entertrue"
+                                            disabled
+                                            v-model="HDData.settlemethodname"
+                                            placeholder="请输入结算方式名称"
+                                        ></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -379,9 +383,8 @@
                                             ref="hdcurrency"
                                             :modelname="HDData.hdcurrency"
                                             fieldname="hdcurrency"
-                                            @inputEnterEvent="inputEnterEvent"
-                                            @cellDBLClickEvent="inputEnterEvent"
-                                            @importClickEvent="inputEnterEvent"
+                                            placeholder="请输入结算方式编号"
+                                            @selectData="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
                                         ></Currencyrate>
                                     </el-form-item>
@@ -603,7 +606,9 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-button :disabled="this.btnCalcAlPriceDisabled" size="mini" @click="dsadaa">计算铝锭价</el-button>
+                                    <el-button :disabled="this.btnCalcAlPriceDisabled" size="mini" @click="calcAlPrice"
+                                        >计算铝锭价</el-button
+                                    >
                                 </el-col>
                             </el-row>
 
@@ -768,7 +773,7 @@
 <script>
 import base from '@utils/base'; // 导入接口域名列表
 import axios from '@utils/request';
-import { isEmpty } from 'xe-utils/methods';
+import { isEmpty, isNull, now } from 'xe-utils/methods';
 
 export default {
     // 数据
@@ -925,11 +930,12 @@ export default {
                     this.$refs.plistid.str = data.row.plistid;
                     this.HDData.plistid = data.row.plistid;
                     this.HDData.plistname = data.row.plistname;
+                    this.calcAlPrice();
                     break;
                 case 'settlemethodid':
-                    this.$refs.settlemethodid.str = row.settlemethodid;
-                    this.HDData.settlemethodid = row.settlemethodid;
-                    this.HDData.settlemethodname = row.settlemethodname;
+                    this.$refs.settlemethodid.str = data.row.settlemethodid;
+                    this.HDData.settlemethodid = data.row.settlemethodid;
+                    this.HDData.settlemethodname = data.row.settlemethodname;
                     break;
                 case 'hdcurrency':
                     this.$refs.hdcurrency.str = row.currency;
@@ -1011,8 +1017,7 @@ export default {
                     this.HDData.plistname = '';
                     break;
                 case 'settlemethodid':
-                    this.$refs.settlemethodid.searchform.settlemethodid = '';
-                    this.$refs.settlemethodid.searchform.settlemethodname = '';
+                    this.HDData.settlemethodid = '';
                     this.HDData.settlemethodname = '';
                     break;
                 case 'QMCode':
@@ -1230,22 +1235,51 @@ export default {
             }
         },
 
-        dsadaa() {
+        calcAlPrice() {
             let alpricemethod = this.HDData.alpricemethod;
             if (isEmpty(alpricemethod)) {
-                alert('a');
+                this.$message.warning('请选择铝锭取价方式！');
                 return;
             }
 
             if (alpricemethod == '2') {
-                alert('2');
-                if (1 == 1) {
+                if (isEmpty(this.HDData.hdcurrency)) {
+                    this.$message.warning('请先输入币种信息！');
                     return;
                 }
-                this.HDData.AlPrice = '';
+                this.$api.spricingmetaprice
+                    .getBilledPrice({ plistid: '', purdate: '', currency: '' })
+                    .then((res) => {
+                        if (res.total > 0) {
+                            // this.HDData.AlPrice = res.rows[0].avgvalue;
+                        }
+                    })
+                    .catch(() => {});
             } else if (alpricemethod == '6') {
-                var asad = this.$moment().weekday(this.HDData.AlPriceDate);
-                alert(asad);
+                // 对monment.week设置星期日为第一天，与后端同步
+                this.$moment.updateLocale('en', {
+                    week: {
+                        dow: 0, // 星期的第一天是星期日
+                        doy: 6 // 年份的第一周必须包含1月1日 (7 + 0 - 1)
+                    }
+                });
+                // 定义一个铝锭取价日期
+                let alPriceDate = this.$moment(this.HDData.AlPriceDate);
+                // 获取铝锭取价日期所在星期属于第几天
+                let asad = alPriceDate.weekday();
+                // 获取铝锭取价日期所在星期的第一天
+                let begindate = alPriceDate.subtract(asad, 'days').format('YYYY-MM-DD');
+                // 获取铝锭取价日期所在星期最后一天，由于moment源数据会改变，直接+6就好
+                let enddate = alPriceDate.add(6, 'days').format('YYYY-MM-DD');
+                // 获取铝锭周平均价
+                this.$api.spricingmetaprice
+                    .getBilledPriceAvg({ begindate, enddate, plistid: '001' })
+                    .then((res) => {
+                        if (res.total > 0) {
+                            this.HDData.AlPrice = res.rows[0].avgvalue;
+                        }
+                    })
+                    .catch(() => {});
             }
         }
     }

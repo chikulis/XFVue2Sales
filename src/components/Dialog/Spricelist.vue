@@ -58,12 +58,9 @@ export default {
             tableData: [],
 
             //搜索
-            // searchform: {
-            //     companyid: '',
-            //     parentcltcode: '',
-            //     parentcltname: '',
-            //     cltcode: ''
-            // },
+            searchform: {
+                plistid: ''
+            },
 
             // 表格字段
             tableColumn: [
@@ -105,16 +102,25 @@ export default {
         // 查询方法
         fetchTableData() {
             this.commEntity.options.loading = true;
-            this.$api.spricelist.getAll().then((res) => {
-                this.tableData = res.rows;
-                this.commEntity.pagination.total = res.total;
-                this.commEntity.options.loading = false;
-            });
+            this.$api.spricelist
+                .getDataByPage(
+                    this.commEntity.pagination.pageIndex,
+                    this.commEntity.pagination.pageSize,
+                    this.commEntity.sort,
+                    this.commEntity.order,
+                    this.searchform
+                )
+                .then((res) => {
+                    this.tableData = res.rows;
+                    this.commEntity.pagination.total = res.total;
+                    this.commEntity.options.loading = false;
+                });
         },
 
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
+                this.searchform.plistid = '';
                 this.show = true;
                 this.fetchTableData();
             }
@@ -122,17 +128,26 @@ export default {
 
         // 回车事件
         inputEnterEvent() {
-            this.$api.spricelist.getAll().then((res) => {
-                console.log(res);
-                if (res.total != 1) {
-                    this.tableData = res.rows;
-                    this.commEntity.pagination.total = res.total;
-                    this.commEntity.options.loading = false;
-                    this.show = true;
-                    return;
-                }
-                this.$emit('selectData', { row: res.rows[0], fieldname: this.fieldname });
-            });
+            this.searchform.plistid = this.str;
+            this.$api.spricelist
+                .getDataByPage(
+                    this.commEntity.pagination.pageIndex,
+                    this.commEntity.pagination.pageSize,
+                    this.commEntity.sort,
+                    this.commEntity.order,
+                    this.searchform
+                )
+                .then((res) => {
+                    console.log(res);
+                    if (res.total != 1) {
+                        this.tableData = res.rows;
+                        this.commEntity.pagination.total = res.total;
+                        this.commEntity.options.loading = false;
+                        this.show = true;
+                        return;
+                    }
+                    this.$emit('selectData', { row: res.rows[0], fieldname: this.fieldname });
+                });
         },
 
         // 单击事件

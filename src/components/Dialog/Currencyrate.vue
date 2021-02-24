@@ -22,7 +22,7 @@
                 <el-col :span="9">
                     <el-form-item label="时间" prop="settlemethodid">
                         <el-date-picker
-                            v-model="searchform.currencydate"
+                            v-model="searchform.date"
                             style="width: 100%"
                             type="date"
                             value-format="yyyy-MM-dd"
@@ -71,7 +71,7 @@ export default {
 
             //搜索
             searchform: {
-                currencydate: this.$moment().format('YYYY-MM-DD'),
+                date: this.$moment().format('YYYY-MM-DD'),
                 currency: ''
             },
 
@@ -123,7 +123,7 @@ export default {
             this.searchform.currency = '';
             this.commEntity.options.loading = true;
             //this.str 查询参数
-            this.$api.currency.getDataLeftJoinCurrencySet(this.searchform).then((res) => {
+            this.$api.slssalesorderhd.GetCurrencyRate(this.searchform).then((res) => {
                 this.tableData = res.rows;
                 this.commEntity.pagination.total = res.total;
                 this.commEntity.options.loading = false;
@@ -146,7 +146,7 @@ export default {
             }
             //str回车事件，searchform的curcurency要等于str
             this.searchform.currency = this.str;
-            this.$api.currency.getDataLeftJoinCurrencySet(this.searchform).then((res) => {
+            this.$api.slssalesorderhd.GetCurrencyRate(this.searchform).then((res) => {
                 if (res.total != 1) {
                     if (res.total == 0) {
                         this.$message.warning('当前币种编号输入不正确，请检查！');

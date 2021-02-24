@@ -54,6 +54,11 @@ const slssalesorderhd = {
 		return axios.post(`${base.iSalesUrl}/sls_salesorderhd/GetDocType2`, { projectname, cltcode, cltname });
 	},
 
+	// 获取订单类型2
+	GetCurrencyRate(searchform) {
+		return axios.post(`${base.iSalesUrl}/sls_salesorderhd/GetCurrencyRate`, searchform);
+	},
+
 	// 实体类
 	addFormData() {
 		return {

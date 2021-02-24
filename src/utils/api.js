@@ -31,6 +31,7 @@ import slssalesorderhd from '../api/SalesApi/slssalesorderhd';
 import slssalesorderitem from '../api/SalesApi/slssalesorderitem';
 import slssaletype from '../api/SalesApi/slssaletype';
 import spricelist from '../api/cmmApi/spricelist';
+import spricingmetaprice from '../api/cmmApi/spricingmetaprice';
 
 export default {
     currency,
@@ -62,5 +63,6 @@ export default {
     slssalesorderhd,
     slssalesorderitem,
     slssaletype,
-    spricelist
+    spricelist,
+    spricingmetaprice
 }
