@@ -132,6 +132,9 @@ export default {
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
+                for (var item in this.searchform) {
+                    this.searchform[item] = '';
+                }
                 this.show = true;
                 this.fetchTableData();
             }

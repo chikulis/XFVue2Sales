@@ -124,6 +124,9 @@ export default {
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
+                for (var item in this.searchform) {
+                    this.searchform[item] = '';
+                }
                 this.show = true;
                 this.fetchTableData();
             }
@@ -172,7 +175,7 @@ export default {
             this.show = false;
             this.$emit('selectData', { row: this.clickrow, fieldname: this.fieldname });
         },
-        
+
         // input值监听
         inputChangeEvent() {
             this.$emit('inputChangeEvent', this.fieldname);

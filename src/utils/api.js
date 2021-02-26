@@ -22,10 +22,10 @@ import qmslevel from '../api/cmmApi/qmslevel';
 import salecltcompany from '../api/SalesApi/salecltcompany';
 import salecltgeneral from '../api/SalesApi/salecltgeneral';
 import salecompany from '../api/SalesApi/salecompany';
+import salecontracthd from '../api/SalesApi/salecontracthd';
 import salestorage from '../api/SalesApi/salestorage';
 import salesysdict from '../api/SalesApi/salesysdict';
-import slscltproject from '../api/SalesApi/slscltproject';
-import slscontracthd from '../api/SalesApi/slscontracthd';
+import slscltproject from '../api/cmmApi/slscltproject';
 import slssaledoctype from '../api/SalesApi/slssaledoctype';
 import slssalesorderhd from '../api/SalesApi/slssalesorderhd';
 import slssalesorderitem from '../api/SalesApi/slssalesorderitem';
@@ -55,9 +55,9 @@ export default {
     salecltcompany,
     salecltgeneral,
     salecompany,
+    salecontracthd,
     salestorage,
     salesysdict,
-    slscontracthd,
     slscltproject,
     slssaledoctype,
     slssalesorderhd,

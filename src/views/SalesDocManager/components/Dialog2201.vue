@@ -94,14 +94,14 @@
                                 <el-col :span="6">
                                     <el-form-item label="业务员" prop="sdgroup">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                        <Osdgroup
+                                        <OSDGroup
                                             ref="sdgroup"
                                             :modelname="HDData.sdgroup"
                                             fieldname="sdgroup"
                                             placeholder="请输入销售公司编号"
                                             @selectData="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
-                                        ></Osdgroup>
+                                        ></OSDGroup>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
@@ -379,24 +379,34 @@
                                 <el-col :span="6">
                                     <el-form-item label="币种编号" prop="hdcurrency">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                        <Currencyrate
+                                        <SaleCurrency
                                             ref="hdcurrency"
                                             :modelname="HDData.hdcurrency"
                                             fieldname="hdcurrency"
-                                            placeholder="请输入结算方式编号"
+                                            placeholder="请输入币种编号"
                                             @selectData="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
-                                        ></Currencyrate>
+                                        ></SaleCurrency>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="币种名称" prop="hdCurrencyName">
-                                        <el-input disabled v-model="HDData.hdCurrencyName"></el-input>
+                                    <el-form-item label="币种名称" prop="hdcurrencyname">
+                                        <el-input
+                                            class="entertrue"
+                                            disabled
+                                            v-model="HDData.hdcurrencyname"
+                                            placeholder="请输入币种名称"
+                                        ></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="汇率" prop="hdcurrencyrate">
-                                        <el-input disabled v-model="HDData.hdcurrencyrate"></el-input>
+                                        <el-input
+                                            class="entertrue"
+                                            disabled
+                                            v-model="HDData.hdcurrencyrate"
+                                            placeholder="请输入币种汇率"
+                                        ></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -405,22 +415,26 @@
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="质量码" prop="QMCode">
+                                    <el-form-item label="质量码" prop="qmcode">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                        <QMSlevel
-                                            ref="QMCode"
-                                            :modelname="HDData.QMCode"
-                                            fieldname="QMCode"
-                                            @inputEnterEvent="inputEnterEvent"
-                                            @cellDBLClickEvent="inputEnterEvent"
-                                            @importClickEvent="inputEnterEvent"
+                                        <QMSLevel
+                                            ref="qmcode"
+                                            :modelname="HDData.qmcode"
+                                            fieldname="qmcode"
+                                            placeholder="请输入质量码"
+                                            @selectData="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
-                                        ></QMSlevel>
+                                        ></QMSLevel>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="质量体系" prop="QMName">
-                                        <el-input disabled v-model="HDData.QMName"></el-input>
+                                    <el-form-item label="质量体系" prop="qmname">
+                                        <el-input
+                                            class="entertrue"
+                                            disabled
+                                            v-model="HDData.qmname"
+                                            placeholder="请输入质量体系名称"
+                                        ></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -430,8 +444,8 @@
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="订单类型2" prop="DocType2">
-                                        <el-select v-model="HDData.DocType2" clearable placeholder="请选择" style="width: 100%">
+                                    <el-form-item label="订单类型2" prop="doctype2">
+                                        <el-select v-model="HDData.doctype2" clearable placeholder="请选择订单类型2" style="width: 100%">
                                             <el-option
                                                 v-for="item in docType2Options"
                                                 :key="item.value"
@@ -444,31 +458,27 @@
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="跟单员" prop="FollowCode">
+                                    <el-form-item label="跟单员" prop="followcode">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                        <Osdgroup
-                                            ref="FollowCode"
-                                            :modelname="HDData.FollowCode"
+                                        <OSDGroup
+                                            ref="followcode"
+                                            :modelname="HDData.followcode"
+                                            fieldname="followcode"
+                                            placeholder="请输入跟单员编号"
                                             :entertrue="false"
-                                            fieldname="FollowCode"
-                                            @inputEnterEvent="inputEnterEvent"
-                                            @cellDBLClickEvent="inputEnterEvent"
-                                            @importClickEvent="inputEnterEvent"
+                                            @selectData="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
-                                        ></Osdgroup>
+                                        ></OSDGroup>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
-                                    <el-form-item label="跟单员姓名" prop="FollowName">
-                                        <el-input disabled v-model="HDData.FollowName"></el-input>
+                                    <el-form-item label="跟单员姓名" prop="followname">
+                                        <el-input disabled v-model="HDData.followname" placeholder="请输入跟单员姓名"></el-input>
                                     </el-form-item>
                                 </el-col>
-                            </el-row>
-
-                            <!-- <el-row :gutter="20">
-                                <el-col :span="6" :offset="6">
-                                    <el-form-item label="标签类别编号" prop="sdgroup">
-                                        <Osdgroup
+                                <el-col :span="6">
+                                    <el-form-item label="标签类别编号" prop="labeltype">
+                                        <!-- <OSDGroup
                                             ref="sdgroup"
                                             v-model="HDData.sdgroup"
                                             :modelname="HDData.sdgroup"
@@ -476,52 +486,46 @@
                                             @cellDBLClickEvent="inputEnterEvent"
                                             @importClickEvent="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
-                                        ></Osdgroup>
+                                        ></OSDGroup> -->
                                     </el-form-item>
                                 </el-col>
-                                <el-col :span="6">
-                                    <el-form-item label="标签类别名称" prop="sdgroupname">
-                                        <el-input disabled v-model="HDData.sdgroupname"></el-input>
-                                    </el-form-item>
-                                </el-col>
-                            </el-row> -->
+                            </el-row>
 
                             <el-divider content-position="left">开票资料</el-divider>
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="工程编号" prop="ProjectNo">
+                                    <el-form-item label="工程编号" prop="projectno">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                        <Slscltproject
-                                            ref="ProjectNo"
-                                            :modelname="HDData.ProjectNo"
+                                        <SLSCltProject
+                                            ref="projectno"
+                                            :modelname="HDData.projectno"
+                                            fieldname="projectno"
+                                            placeholder="请输入工程编号"
                                             :entertrue="false"
-                                            fieldname="ProjectNo"
-                                            :cltcode="HDData.cltcode"
-                                            @inputEnterEvent="inputEnterEvent"
-                                            @cellDBLClickEvent="inputEnterEvent"
-                                            @importClickEvent="inputEnterEvent"
+                                            @getSearchValue="getSearchValue"
+                                            @selectData="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
-                                        ></Slscltproject>
+                                        ></SLSCltProject>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="工程名称" prop="projectname">
-                                        <el-input disabled v-model="HDData.projectname"></el-input>
+                                        <el-input disabled v-model="HDData.projectname" placeholder="请输入工程名称"></el-input>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="项目号" prop="cprj">
-                                        <el-input disabled v-model="HDData.cprj"></el-input>
+                                        <el-input disabled v-model="HDData.cprj" placeholder="请输入项目号"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
 
                             <el-row :gutter="20">
                                 <el-col :span="6">
-                                    <el-form-item label="客户接收损耗率" prop="ScrapRate">
+                                    <el-form-item label="客户接收损耗率" prop="scraprate">
                                         <el-input-number
-                                            v-model="HDData.ScrapRate"
+                                            v-model="HDData.scraprate"
                                             :precision="2"
                                             :step="0.01"
                                             style="width: 100%"
@@ -531,21 +535,20 @@
                                 <el-col :span="6">
                                     <el-form-item label="客编体系编号" prop="citt">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                        <Gopcodesystem
+                                        <GOPCodeSystem
                                             ref="citt"
                                             :modelname="HDData.citt"
-                                            :entertrue="false"
                                             fieldname="citt"
-                                            @inputEnterEvent="inputEnterEvent"
-                                            @cellDBLClickEvent="inputEnterEvent"
-                                            @importClickEvent="inputEnterEvent"
+                                            placeholder="请输入客编体系编号"
+                                            :entertrue="false"
+                                            @selectData="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
-                                        ></Gopcodesystem>
+                                        ></GOPCodeSystem>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="客编体系名称" prop="cittname">
-                                        <el-input disabled v-model="HDData.cittname"></el-input>
+                                        <el-input disabled v-model="HDData.cittname" placeholder="请输入客编体系名称"></el-input>
                                     </el-form-item>
                                 </el-col>
                             </el-row>
@@ -556,21 +559,20 @@
                                 <el-col :span="6">
                                     <el-form-item label="合同号" prop="ContractNo">
                                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                                        <Slscontracthd
+                                        <SaleContractHD
                                             ref="ContractNo"
                                             :modelname="HDData.ContractNo"
-                                            :entertrue="false"
                                             fieldname="ContractNo"
-                                            @inputEnterEvent="inputEnterEvent"
-                                            @cellDBLClickEvent="inputEnterEvent"
-                                            @importClickEvent="inputEnterEvent"
+                                            placeholder="请输入客编体系编号"
+                                            :entertrue="false"
+                                            @selectData="inputEnterEvent"
                                             @inputChangeEvent="inputChangeEvent"
-                                        ></Slscontracthd>
+                                        ></SaleContractHD>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="支付方式编号" prop="paymentCode">
-                                        <Osdgroup
+                                        <OSDGroup
                                             ref="paymentCode"
                                             :modelname="HDData.paymentCode"
                                             :entertrue="false"
@@ -578,7 +580,7 @@
                                             @cellDBLClickEvent="FollowCodeEnterEvent"
                                             @importClickEvent="FollowCodeEnterEvent"
                                             @inputChangeEvent="FollowCodeChangeEvent"
-                                        ></Osdgroup>
+                                        ></OSDGroup>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
@@ -615,7 +617,7 @@
                             <el-row :gutter="20">
                                 <el-col :span="6">
                                     <el-form-item label="提货方式编号" prop="picktype">
-                                        <Osdgroup
+                                        <OSDGroup
                                             ref="picktype"
                                             :modelname="HDData.picktype"
                                             :entertrue="false"
@@ -623,7 +625,7 @@
                                             @cellDBLClickEvent="FollowCodeEnterEvent"
                                             @importClickEvent="FollowCodeEnterEvent"
                                             @inputChangeEvent="FollowCodeChangeEvent"
-                                        ></Osdgroup>
+                                        ></OSDGroup>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
@@ -633,7 +635,7 @@
                                 </el-col>
                                 <el-col :span="6">
                                     <el-form-item label="铝锭来源编号" prop="ProcMethodId">
-                                        <Osdgroup
+                                        <OSDGroup
                                             ref="ProcMethodId"
                                             :modelname="HDData.ProcMethodId"
                                             :entertrue="false"
@@ -641,7 +643,7 @@
                                             @cellDBLClickEvent="FollowCodeEnterEvent"
                                             @importClickEvent="FollowCodeEnterEvent"
                                             @inputChangeEvent="FollowCodeChangeEvent"
-                                        ></Osdgroup>
+                                        ></OSDGroup>
                                     </el-form-item>
                                 </el-col>
                                 <el-col :span="6">
@@ -820,19 +822,20 @@ export default {
                 settlemethodid: '',
                 settlemethodname: '',
                 hdcurrency: '',
-                hdCurrencyName: '',
+                hdcurrencyname: '',
                 hdcurrencyrate: '',
-                QMCode: '',
-                QMName: '',
+                qmcode: '',
+                qmname: '',
 
                 //选填部分
-                DocType2: '',
-                FollowCode: '',
-                FollowName: '',
-                ProjectNo: '',
+                doctype2: '',
+                followcode: '',
+                followname: '',
+                labeltype: '',
+                projectno: '',
                 projectname: '',
                 cprj: '',
-                ScrapRate: '',
+                scraprate: '',
                 citt: '',
                 cittname: '',
                 ContractNo: '',
@@ -906,7 +909,7 @@ export default {
                     this.HDData.prncltname = data.row.cltname;
                     this.HDData.sdorgid = data.row.sdorgid;
                     this.HDData.sdorgname = data.row.sdorgname;
-                    this.HDData.ScrapRate = data.row.scraprate;
+                    this.HDData.scraprate = data.row.scraprate;
                     break;
                 case 'cltcode2':
                     this.$refs.cltcode2.str = data.row.parentcltcode;
@@ -938,32 +941,32 @@ export default {
                     this.HDData.settlemethodname = data.row.settlemethodname;
                     break;
                 case 'hdcurrency':
-                    this.$refs.hdcurrency.str = row.currency;
-                    this.HDData.hdcurrency = row.currency;
-                    this.HDData.hdCurrencyName = row.currencyname;
-                    this.HDData.hdcurrencyrate = row.exchange_rate;
+                    this.$refs.hdcurrency.str = data.row.currency;
+                    this.HDData.hdcurrency = data.row.currency;
+                    this.HDData.hdcurrencyname = data.row.currencyname;
+                    this.HDData.hdcurrencyrate = data.row.exchange_rate;
                     break;
-                case 'QMCode':
-                    this.$refs.QMCode.str = row.levelcode;
-                    this.HDData.QMCode = row.levelcode;
-                    this.HDData.QMName = row.levelname;
+                case 'qmcode':
+                    this.$refs.qmcode.str = data.row.levelcode;
+                    this.HDData.qmcode = data.row.levelcode;
+                    this.HDData.qmname = data.row.levelname;
                     break;
-                case 'FollowCode':
-                    this.$refs.FollowCode.str = row.sdgroup;
-                    this.HDData.FollowCode = row.sdgroup;
-                    this.HDData.FollowName = row.sdgroupname;
+                case 'followcode':
+                    this.$refs.followcode.str = data.row.sdgroup;
+                    this.HDData.followcode = data.row.sdgroup;
+                    this.HDData.followname = data.row.sdgroupname;
                     break;
-                case 'ProjectNo':
-                    this.$refs.ProjectNo.str = row.projectno;
-                    this.HDData.ProjectNo = row.projectno;
-                    this.HDData.projectname = row.projectname;
-                    this.HDData.cprj = row.cprj;
+                case 'projectno':
+                    this.$refs.projectno.str = data.row.projectcode;
+                    this.HDData.projectno = data.row.projectcode;
+                    this.HDData.projectname = data.row.projectname;
+                    this.HDData.cprj = data.row.cprj;
                     this.getDocType2();
                     break;
                 case 'citt':
-                    this.$refs.citt.str = row.citt;
-                    this.HDData.citt = row.citt;
-                    this.HDData.cittname = row.cittname;
+                    this.$refs.citt.str = data.row.citt;
+                    this.HDData.citt = data.row.citt;
+                    this.HDData.cittname = data.row.cittname;
                     break;
                 case 'ContractNo':
                     this.$refs.ContractNo.str = row.doccode;
@@ -1020,19 +1023,25 @@ export default {
                     this.HDData.settlemethodid = '';
                     this.HDData.settlemethodname = '';
                     break;
-                case 'QMCode':
-                    this.$refs.QMCode.searchform.levelcode = '';
-                    this.$refs.QMCode.searchform.levelname = '';
-                    this.HDData.QMName = '';
+                case 'hdcurrency':
+                    this.HDData.hdcurrency = '';
+                    this.HDData.hdcurrencyname = '';
+                    this.HDData.hdcurrencyrate = '';
                     break;
-                case 'FollowCode':
-                    this.$refs.FollowCode.searchform.sdgroup = '';
-                    this.$refs.FollowCode.searchform.sdgroupname = '';
-                    this.HDData.FollowName = '';
+                case 'qmcode':
+                    this.HDData.qmcode = '';
+                    this.HDData.qmname = '';
+                    break;
+                case 'followcode':
+                    this.HDData.followcode = '';
+                    this.HDData.followname = '';
+                    break;
+                case 'projectno':
+                    this.HDData.projectno = '';
+                    this.HDData.projectname = '';
                     break;
                 case 'citt':
-                    this.$refs.citt.searchform.citt = '';
-                    this.$refs.citt.searchform.cittname = '';
+                    this.HDData.citt = '';
                     this.HDData.cittname = '';
                     break;
                 case 'ContractNo':
@@ -1221,7 +1230,7 @@ export default {
             this.$api.slssalesorderhd.getDocType2(this.HDData.projectname, this.$refs.cltcode.str, this.HDData.cltname).then((res) => {
                 // console.log(res.rows[0].doctype2);
                 if (res.rows[0].doctype2 != null) {
-                    this.HDData.DocType2 = res.rows[0].doctype2;
+                    this.HDData.doctype2 = res.rows[0].doctype2;
                 }
             });
         },
@@ -1231,6 +1240,9 @@ export default {
                 case 'cltcode2':
                     this.$refs.cltcode2.searchform.companyid = this.$refs.companyid.str;
                     this.$refs.cltcode2.searchform.cltcode = this.$refs.cltcode.str;
+                    break;
+                case 'projectno':
+                    this.$refs.projectno.searchform.cltcode = this.$refs.cltcode.str;
                     break;
             }
         },

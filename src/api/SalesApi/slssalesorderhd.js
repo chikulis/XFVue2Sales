@@ -55,8 +55,8 @@ const slssalesorderhd = {
 	},
 
 	// 获取订单类型2
-	GetCurrencyRate(searchform) {
-		return axios.post(`${base.iSalesUrl}/sls_salesorderhd/GetCurrencyRate`, searchform);
+	GetCurrencyRate(page, rows, sort, order, searchform) {
+		return axios.post(`${base.iSalesUrl}/sls_salesorderhd/GetCurrencyRate?page=` + page + '&rows=' + rows + '&sort=' + sort + '&order=' + order, searchform);
 	},
 
 	// 实体类

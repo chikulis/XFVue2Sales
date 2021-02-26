@@ -3,11 +3,12 @@
     <div class="dialog">
         <!-- input框 -->
         <el-input
-            :class="{ entertrue: isEntertrue }"
-            :disabled="isDisable"
+            :class="{ entertrue: entertrue }"
+            :disabled="disable"
             v-model="str"
             @keyup.enter.native="inputEnterEvent"
             @input="inputChangeEvent"
+            :placeholder="placeholder"
         >
             <i
                 slot="suffix"
@@ -17,15 +18,16 @@
             ></i>
         </el-input>
         <!-- dialog组件 -->
-        <el-dialog ref="dialogs" title="币种汇率列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="800px">
+        <el-dialog ref="dialogs" title="币种汇率列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="70%">
             <el-row :gutter="10">
                 <el-col :span="9">
-                    <el-form-item label="时间" prop="settlemethodid">
+                    <el-form-item label="查询日期" prop="date">
                         <el-date-picker
                             v-model="searchform.date"
                             style="width: 100%"
                             type="date"
                             value-format="yyyy-MM-dd"
+                            placeholder="请选择查询日期"
                             @change="fetchTableData"
                         ></el-date-picker>
                     </el-form-item>
@@ -71,8 +73,8 @@ export default {
 
             //搜索
             searchform: {
-                date: this.$moment().format('YYYY-MM-DD'),
-                currency: ''
+                currency: '',
+                date: this.$moment().format('YYYY-MM-DD')
             },
 
             // 表格字段
@@ -108,7 +110,10 @@ export default {
     props: {
         modelname: String,
         fieldname: String,
+        placeholder: String,
+        //是否必填
         entertrue: { type: Boolean, default: true },
+        //是否禁用
         disable: { type: Boolean, default: false }
     },
 
@@ -119,20 +124,28 @@ export default {
     methods: {
         // 查询方法
         fetchTableData() {
-            //普通查询清空searchform的curcurency条件
-            this.searchform.currency = '';
             this.commEntity.options.loading = true;
             //this.str 查询参数
-            this.$api.slssalesorderhd.GetCurrencyRate(this.searchform).then((res) => {
-                this.tableData = res.rows;
-                this.commEntity.pagination.total = res.total;
-                this.commEntity.options.loading = false;
-            });
+            this.$api.slssalesorderhd
+                .GetCurrencyRate(
+                    this.commEntity.pagination.pageIndex,
+                    this.commEntity.pagination.pageSize,
+                    this.commEntity.sort,
+                    this.commEntity.order,
+                    this.searchform
+                )
+                .then((res) => {
+                    this.tableData = res.rows;
+                    this.commEntity.pagination.total = res.total;
+                    this.commEntity.options.loading = false;
+                });
         },
 
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
+                //普通查询清空searchform的curcurency条件
+                this.searchform.currency = '';
                 this.show = true;
                 this.fetchTableData();
             }
@@ -146,20 +159,28 @@ export default {
             }
             //str回车事件，searchform的curcurency要等于str
             this.searchform.currency = this.str;
-            this.$api.slssalesorderhd.GetCurrencyRate(this.searchform).then((res) => {
-                if (res.total != 1) {
-                    if (res.total == 0) {
-                        this.$message.warning('当前币种编号输入不正确，请检查！');
+            this.$api.slssalesorderhd
+                .GetCurrencyRate(
+                    this.commEntity.pagination.pageIndex,
+                    this.commEntity.pagination.pageSize,
+                    this.commEntity.sort,
+                    this.commEntity.order,
+                    this.searchform
+                )
+                .then((res) => {
+                    if (res.total != 1) {
+                        if (res.total == 0) {
+                            this.$message.warning('当前币种编号输入不正确，请检查！');
+                            return;
+                        }
+                        this.tableData = res.rows;
+                        this.commEntity.pagination.total = res.total;
+                        this.commEntity.options.loading = false;
+                        this.show = true;
                         return;
                     }
-                    this.tableData = res.rows;
-                    this.commEntity.pagination.total = res.total;
-                    this.commEntity.options.loading = false;
-                    this.show = true;
-                    return;
-                }
-                this.$emit('selectData', { row: res.rows[0], fieldname: this.fieldname });
-            });
+                    this.$emit('selectData', { row: res.rows[0], fieldname: this.fieldname });
+                });
         },
 
         // 单击事件
@@ -185,14 +206,6 @@ export default {
         // input值监听
         inputChangeEvent() {
             this.$emit('inputChangeEvent', this.fieldname);
-        }
-    },
-    computed: {
-        isEntertrue() {
-            return this.entertrue;
-        },
-        isDisable() {
-            return this.disable;
         }
     }
 };

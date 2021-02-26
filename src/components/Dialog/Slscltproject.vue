@@ -3,11 +3,12 @@
     <div class="dialog">
         <!-- input框 -->
         <el-input
-            :class="{ entertrue: isEntertrue }"
-            :disabled="isDisable"
+            :class="{ entertrue: entertrue }"
+            :disabled="disable"
             v-model="str"
             @keyup.enter.native="inputEnterEvent"
             @input="inputChangeEvent"
+            :placeholder="placeholder"
         >
             <i
                 slot="suffix"
@@ -17,30 +18,37 @@
             ></i>
         </el-input>
         <!-- dialog组件 -->
-        <el-dialog ref="dialogs" title="客户项目列表" append-to-body :visible.sync="show" :close-on-click-modal="false" width="800px">
+        <el-dialog
+            ref="dialogs"
+            title="客户项目列表"
+            append-to-body
+            :visible.sync="show"
+            :close-on-click-modal="false"
+            @opened="handleOpened"
+            width="70%"
+        >
             <el-row :gutter="10">
                 <el-col :span="8">
-                    <el-form-item label="客户代码" prop="cltcode">
+                    <el-form-item label="客户编号" prop="cltcode">
                         <!-- 整合下面方法，fieldname为字段名称，用于区分 -->
-                        <Scltgeneral
+                        <SaleCltGeneral
                             ref="cltcode"
                             :modelname="searchform.cltcode"
                             fieldname="cltcode"
-                            @inputEnterEvent="searchformInputEnterEvent"
-                            @cellDBLClickEvent="searchformInputEnterEvent"
-                            @importClickEvent="searchformInputEnterEvent"
+                            placeholder="请输入客户编号"
+                            @selectData="searchformInputEnterEvent"
                             @inputChangeEvent="searchformInputChangeEvent"
-                        ></Scltgeneral>
+                        ></SaleCltGeneral>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="客户名称" prop="cltname">
-                        <el-input disabled v-model="searchform.cltname"></el-input>
+                        <el-input disabled v-model="searchform.cltname" placeholder="请输入客户名称"></el-input>
                     </el-form-item>
                 </el-col>
                 <el-col :span="8">
                     <el-form-item label="工程项目名称" prop="projectname">
-                        <el-input v-model="searchform.projectname" @input="fetchTableData"></el-input>
+                        <el-input v-model="searchform.projectname" placeholder="请输入工程项目名称" @input="fetchTableData"></el-input>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -67,7 +75,7 @@
 </template>
   
   
-  <script>
+<script>
 export default {
     data() {
         return {
@@ -85,9 +93,9 @@ export default {
 
             // 搜索
             searchform: {
-                cltcode: this.cltcode,
+                cltcode: '',
                 cltname: '',
-                projectno: '',
+                projectcode: '',
                 projectname: ''
             },
 
@@ -138,32 +146,38 @@ export default {
 
     // 传递参数
     props: {
-        modelname: '',
-        fieldname: '',
-        cltcode: '',
-        entertrue: { default: true },
-        disable: { default: false }
+        modelname: String,
+        fieldname: String,
+        placeholder: String,
+        //是否必填
+        entertrue: { type: Boolean, default: true },
+        //是否禁用
+        disable: { type: Boolean, default: false }
     },
 
     // 创建完成
     created() {},
 
+    watch: {
+        //对seachform.clrcode进行监听，以便修改组件里已经初始化的str
+        'searchform.cltcode'(newVal) {
+            this.$refs.cltcode.str = newVal;
+        }
+    },
+
     // 执行方法
     methods: {
-        asdasda() {
-            console.log(this);
-            if (this.$refs.cltcode.str == '') {
-                this.$message.warning('请先输入客户信息');
-                return false;
-            } else {
-                return true;
-            }
+        // dialogs动画结束时查询
+        handleOpened() {
+            this.fetchTableData();
         },
 
         // 查询方法
         fetchTableData() {
-            // a = this.asdasda();
-            if (!this.asdasda()) {
+            if (this.searchform.cltcode == '') {
+                // 清空列表
+                this.tableData = [];
+                this.$message.warning('请先输入客户信息');
                 return;
             }
 
@@ -187,20 +201,24 @@ export default {
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
-                // //一条数据直接赋值
-                // if (this.tableData.length == 1) {
-                //     this.show = false;
-                //     this.$emit('importClickEvent', this.tableData[0]);
-                //     this.tableData = [];
-                // } else {
-                    this.show = true;
-                // }
-                this.fetchTableData();
+                for (var item in this.searchform) {
+                    this.searchform[item] = '';
+                }
+                this.$emit('getSearchValue', this.fieldname);
+                this.show = true;
+                // 由于查询中判断弹message处于dialogs动画前，所以改为动画结束时再查询
+                // this.fetchTableData();
             }
         },
 
         // 回车事件
         inputEnterEvent() {
+            this.$emit('getSearchValue', this.fieldname);
+            if (this.searchform.cltcode == '') {
+                this.$message.warning('请先输入客户信息！');
+                return;
+            }
+            this.searchform.projectcode = this.str;
             this.$api.slscltproject
                 .getDataByPage(
                     this.commEntity.pagination.pageIndex,
@@ -210,14 +228,14 @@ export default {
                     this.searchform
                 )
                 .then((res) => {
-                    this.tableData = res.rows;
-                    this.commEntity.pagination.total = res.total;
-                    this.commEntity.options.loading = false;
                     if (res.total != 1) {
+                        this.tableData = res.rows;
+                        this.commEntity.pagination.total = res.total;
+                        this.commEntity.options.loading = false;
                         this.show = true;
                         return;
                     }
-                    this.$emit('inputEnterEvent', res.rows[0], this.fieldname);
+                    this.$emit('selectData', { row: res.rows[0], fieldname: this.fieldname });
                 });
         },
 
@@ -229,7 +247,7 @@ export default {
         // 双击事件
         cellDBLClickEvent(row) {
             this.show = false;
-            this.$emit('cellDBLClickEvent', row.row, this.fieldname);
+            this.$emit('selectData', { row: row.row, fieldname: this.fieldname });
         },
 
         // 选定操作
@@ -239,20 +257,21 @@ export default {
                 return;
             }
             this.show = false;
-            this.$emit('importClickEvent', this.clickrow, this.fieldname);
+            this.$emit('selectData', { row: this.clickrow, fieldname: this.fieldname });
         },
+
         // input值监听
         inputChangeEvent() {
             this.$emit('inputChangeEvent', this.fieldname);
         },
 
         // 选择客户编号事件
-        searchformInputEnterEvent(row, fieldname) {
-            switch (fieldname) {
+        searchformInputEnterEvent(data) {
+            switch (data.fieldname) {
                 case 'cltcode':
-                    this.$refs.cltcode.str = row.cltcode;
-                    this.searchform.cltcode = row.cltcode;
-                    this.searchform.cltname = row.cltname;
+                    this.$refs.cltcode.str = data.row.cltcode;
+                    this.searchform.cltcode = data.row.cltcode;
+                    this.searchform.cltname = data.row.cltname;
                     break;
             }
             this.fetchTableData();
@@ -260,18 +279,12 @@ export default {
 
         // 监听客户编号input事件
         searchformInputChangeEvent(fieldname) {
-            this.$refs.cltcode.searchform.cltcode = '';
-            this.$refs.cltcode.searchform.cltname = '';
-            this.$refs.cltcode.searchform.parentcltcode = '';
-            this.searchform.cltname = '';
-        }
-    },
-    computed: {
-        isEntertrue() {
-            return this.entertrue;
-        },
-        isDisable() {
-            return this.disable;
+            switch (fieldname) {
+                case 'cltcode':
+                    this.searchform.cltcode = '';
+                    this.searchform.cltname = '';
+                    break;
+            }
         }
     }
 };
