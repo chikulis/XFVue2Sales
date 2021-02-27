@@ -160,20 +160,7 @@ export default {
             tableData: [],
 
             // 搜索
-            searchform: {
-                begindate: this.$moment().subtract(3, 'y').format('YYYY-MM-DD'),
-                enddate: this.$moment().format('YYYY-MM-DD'),
-                companyid: '',
-                cltcode: '',
-                settlemethodid: '',
-                settlemethodname: '',
-                projectno: '',
-                projectname: '',
-                formid: '',
-                onlynew: false,
-                showall: false,
-                isservicedoc: false
-            },
+            searchform: this.getSearchFormData(),
 
             // 表格字段
             tableColumn: [
@@ -285,6 +272,23 @@ export default {
 
     // 执行方法
     methods: {
+        getSearchFormData() {
+            return {
+                begindate: this.$moment().subtract(3, 'y').format('YYYY-MM-DD'),
+                enddate: this.$moment().format('YYYY-MM-DD'),
+                companyid: JSON.parse(localStorage.eleUser || '[]').companyid,
+                cltcode: '',
+                settlemethodid: '',
+                settlemethodname: '',
+                projectno: '',
+                projectname: '',
+                formid: '',
+                onlynew: true,
+                showall: false,
+                isservicedoc: false
+            };
+        },
+
         // 查询方法
         fetchTableData() {
             this.commEntity.options.loading = true;
@@ -306,13 +310,13 @@ export default {
         // 打开diolog
         showdiolog() {
             if (!this.disable) {
-                for (var item in this.searchform) {
-                    if (typeof this.searchform[item] == 'string') {
-                        this.searchform[item] = '';
-                    }
+                this.searchform = this.getSearchFormData();
+                if (this.$refs.cltcode && this.$refs.cltcode.str != '') {
+                    this.$refs.cltcode.str = '';
                 }
-                // this.searchform.begindate = this.$moment().subtract(3, 'y').format('YYYY-MM-DD');
-                // this.searchform.enddate = this.$moment().format('YYYY-MM-DD');
+                if (this.$refs.settlemethodid && this.$refs.settlemethodid.str != '') {
+                    this.$refs.settlemethodid.str = '';
+                }
                 this.show = true;
                 this.fetchTableData();
             }
@@ -329,14 +333,14 @@ export default {
                     this.searchform
                 )
                 .then((res) => {
-                    this.tableData = res.rows;
-                    this.commEntity.pagination.total = res.total;
-                    this.commEntity.options.loading = false;
                     if (res.total != 1) {
+                        this.tableData = res.rows;
+                        this.commEntity.pagination.total = res.total;
+                        this.commEntity.options.loading = false;
                         this.show = true;
                         return;
                     }
-                    this.$emit('inputEnterEvent', res.rows[0], this.fieldname);
+                    this.$emit('selectData', { row: res.rows[0], fieldname: this.fieldname });
                 });
         },
 
@@ -348,7 +352,7 @@ export default {
         // 双击事件
         cellDBLClickEvent(row) {
             this.show = false;
-            this.$emit('cellDBLClickEvent', row.row, this.fieldname);
+            this.$emit('selectData', { row: row.row, fieldname: this.fieldname });
         },
 
         // 选定操作
@@ -358,7 +362,7 @@ export default {
                 return;
             }
             this.show = false;
-            this.$emit('importClickEvent', this.clickrow, this.fieldname);
+            this.$emit('selectData', { row: this.clickrow, fieldname: this.fieldname });
         },
         // input值监听
         inputChangeEvent() {
