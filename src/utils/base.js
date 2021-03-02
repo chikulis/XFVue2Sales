@@ -13,17 +13,19 @@ const base = {
     report: 'http://192.168.2.204:3001/report',
 
     // 正式接口
-    // sysadminurl: 'http://mt.xingfa.com:8501/sysadminapi/api',
-    // identityurl: 'http://mt.xingfa.com:8501/sysadminapi',
+    // sysAdminUrl: 'http://mt.xingfa.com:8501/sysadminapi/api',
+    // identityUrl: 'http://mt.xingfa.com:8501/sysadminapi',
 
     // itoolsurl: 'http://md.xingfa.com:8504/api/api',
 
     //https://localhost:44333/api/mid_menu/getall?dbid=a.weberp
 
     // 本地测试接口
-    sysadminurl: 'https://localhost:44333/api',
-    identityurl: 'https://localhost:44333/api',
-    iSalesurl: 'https://localhost:44333/api',
+    iCMMUrl: 'https://localhost:5005/api',
+    sysAdminUrl: 'https://localhost:5001/api',
+    identityUrl: 'https://localhost:5001/api',
+    iSalesUrl: 'https://localhost:5001/api',
+    iPriceUrl: 'https://localhost:5003/api',
     // itoolsurl: 'http://192.168.2.199:90/api'
 
 }

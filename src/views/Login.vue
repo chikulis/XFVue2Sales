@@ -66,7 +66,7 @@ export default {
             if(valid){
                 var usercode=this.param.usercode;
                 var password=this.param.password;
-                axios.post(`${this.$baseurl.identityurl}/identity?usercode=`+usercode+'&password='+password)
+                axios.post(`${this.$baseurl.identityUrl}/identity?usercode=`+usercode+'&password='+password)
                 .then(res=>{
                     const token=res.data.access_token;
                     if(token== undefined || token == "")

@@ -43,11 +43,13 @@ export default {
 
   created() {
     if (this.$route.params.formid == undefined) {
+      console.log(this.$route.path);
       this.getFomridMessage(
-        this.$route.path.substr(
-          this.$route.path.length - 4,
-          this.$route.path.length
-        )
+        // this.$route.path.substr(
+        //   this.$route.path.length  -4,
+        //   this.$route.path.length
+        // )  --- 原来的
+        this.$route.path.substr(1)
       );
     } else {
       this.getFomridMessage(this.$route.params.formid);

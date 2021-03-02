@@ -33,7 +33,7 @@ let identity={
     },
     
     getToken(params){
-        return axios.post(`${base.identityurl}`,params);
+        return axios.post(`${base.identityUrl}`,params);
     }
 }
 export default identity;
